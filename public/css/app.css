@@ -5,6 +5,7 @@
     width: 95%;
     font: 18px/1.5 sans-serif;
     background-color: rgba(155, 145, 135, 0.8);
+    backdrop-filter: blur(20px);
 }
 
 .example-wrapper code {
@@ -18,5 +19,6 @@ body, html {
     background-image:url('/img/nebula.jpg');
     background-size: cover;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     opacity: 0.9;
 }
