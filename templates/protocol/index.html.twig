@@ -9,6 +9,20 @@
 </style>
 
 <div class="example-wrapper">
+    {% block flash %}
+        <h3>Messages:</h3>
+    {% endblock%}
+
+    {{ protocol.protocolName }} <br>
+    {{ protocol.protocolMimeType }} <br>
+    {{ protocol.protocolSize }} <br>
+    {{ geraet }} <br>
+
+</div>
+
+
+
+<div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
     This friendly message is coming from:

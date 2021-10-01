@@ -15,43 +15,13 @@
         {% endblock %}
     </head>
     <body>
+    <div class="row">
+        <div class="col-sm-12">
+            {% include ('flash_messages.html.twig') %}
+        </div>
+    </div>
             {% block body %}
-                {% block flash %}
-                    {# read and display just one flash message type #}
-                    {% for message in app.flashes('notice') %}
-                        <div class="flash-notice">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        </div>
-                    {% endfor %}
 
-                    {% for message in app.flashes('notification') %}
-                        <div class="flash-notice">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        </div>
-                    {% endfor %}
-
-                    {# read and display several types of flash messages #}
-                    {% for label, messages in app.flashes(['success', 'warning']) %}
-                        {% for message in messages %}
-                            <div class="flash-{{ label }}">
-                                {{ message }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            </div>
-                        {% endfor %}
-                    {% endfor %}
-
-                    {# read and display all flash messages #}
-                    {% for label, messages in app.flashes %}
-                        {% for message in messages %}
-                            <div class="flash-{{ label }}">
-                                {{ message }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            </div>
-                        {% endfor %}
-                    {% endfor %}
-                {% endblock %}
             {% endblock %}
     </body>
 </html>

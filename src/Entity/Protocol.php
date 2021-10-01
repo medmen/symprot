@@ -71,18 +71,23 @@ class Protocol
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Geraet::class, mappedBy="protocol")
+     * @ORM\ManyToOne(targetEntity=Geraet::class, inversedBy="protocols")
+     * @ORM\JoinColumn(name="geraet_id", referencedColumnName="geraet_id", nullable=false)
      */
     private $geraet;
 
+
     public function __construct()
     {
-        $this->geraet = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __toString() {
+        return $this->protocolName;
     }
 
     public function getProtocolFile(): ?File
@@ -117,9 +122,47 @@ class Protocol
         return $this->protocolName;
     }
 
-    public function setProtocolName(?string $protocolName): void
+    public function setProtocolName(string $protocolName): self
     {
         $this->protocolName = $protocolName;
+
+        return $this;
+    }
+
+    public function getProtocolSize(): ?int
+    {
+        return $this->protocolSize;
+    }
+
+    public function setProtocolSize(int $protocolSize): self
+    {
+        $this->protocolSize = $protocolSize;
+
+        return $this;
+    }
+
+    public function getProtocolMimeType(): ?string
+    {
+        return $this->protocolMimeType;
+    }
+
+    public function setProtocolMimeType(string $protocolMimeType): self
+    {
+        $this->protocolMimeType = $protocolMimeType;
+
+        return $this;
+    }
+
+    public function getProtocolOrigName(): ?string
+    {
+        return $this->protocolOrigName;
+    }
+
+    public function setProtocolOrigName(string $protocolOrigName): self
+    {
+        $this->protocolOrigName = $protocolOrigName;
+
+        return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -134,64 +177,15 @@ class Protocol
         return $this;
     }
 
-    public function setProtocolSize(?int $protocolSize): void
-    {
-        $this->protocolSize = $protocolSize;
-    }
-
-    public function getProtocolSize(): ?int
-    {
-        return $this->protocolSize;
-    }
-
-    public function getProtocolOrigName(): ?string
-    {
-        return $this->protocolOrigName;
-    }
-
-    public function setProtocolOrigName(?string $protocolOrigName): void
-    {
-        $this->protocolOrigName = $protocolOrigName;
-    }
-
-    public function getProtocolMimeType(): ?string
-    {
-        return $this->protocolMimeType;
-    }
-
-    public function setProtocolMimeType(?string $protocolMimeType): void
-    {
-        $this->protocolMimeType = $protocolMimeType;
-    }
-
-    /**
-     * @return Collection|Geraet[]
-     */
-    public function getGeraet(): Collection
+    public function getGeraet(): ?Geraet
     {
         return $this->geraet;
     }
 
-    public function addGeraet(Geraet $geraet): self
+    public function setGeraet(?Geraet $geraet): self
     {
-        if (!$this->geraet->contains($geraet)) {
-            $this->geraet[] = $geraet;
-            $geraet->setProtocol($this);
-        }
+        $this->geraet = $geraet;
 
         return $this;
     }
-
-    public function removeGeraet(Geraet $geraet): self
-    {
-        if ($this->geraet->removeElement($geraet)) {
-            // set the owning side to null (unless already changed)
-            if ($geraet->getProtocol() === $this) {
-                $geraet->setProtocol(null);
-            }
-        }
-
-        return $this;
-    }
-
 }

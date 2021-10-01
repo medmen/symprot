@@ -32,12 +32,7 @@ class ProtocoluploadType extends AbstractType
                     ]
                 ]
             )
-            ->add('geraet', ChoiceType::class, [
-                'choices'  => [
-                    'CT' => 'CT',
-                    'MRT' => 'MRT',
-                ],
-            ])
+            ->add('geraet')
             ->add('save', SubmitType::class)
         ;
     }

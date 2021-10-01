@@ -19,6 +19,19 @@ class ProtocolRepository extends ServiceEntityRepository
         parent::__construct($registry, Protocol::class);
     }
 
+    public function findOneByIdWithGeraet(int $id): ?Protocol
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT p, g
+            FROM App\Entity\Protocol p
+            INNER JOIN p.geraet g
+            WHERE p.id = :id'
+        )->setParameter('id', $id);
+
+        return $query->getOneOrNullResult();
+    }
+
     // /**
     //  * @return Protocol[] Returns an array of Protocol objects
     //  */
