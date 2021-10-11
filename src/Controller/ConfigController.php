@@ -3,31 +3,36 @@
 namespace App\Controller;
 
 use App\Entity\Protocol;
-use App\Entity\Geraet;
 use App\Form\ProtocoluploadType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Config;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class ProtomuncherController extends AbstractController
+class ConfigController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/config", name="config")
      */
     public function index(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, NotifierInterface $notifier, SessionInterface $session): Response
     {
         // creates a protocol object and initialize
-        $protocol = new Protocol();
+        $config = new Config();
+        // always set default values
+        $config->setDebug(false);
+        $config->setLimitPages(0);
+        $config->setOutputFormat('dokuwiki');
+        $config->setStripUnits(true);
+
         $errors = array();
 
-
-        $form = $this->createForm(ProtocoluploadType::class, $protocol);
+        $form = $this->createForm(ConfigType::class, $config);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -61,13 +66,10 @@ class ProtomuncherController extends AbstractController
             return $this->redirectToRoute('process_upload', ['id' => $protocol->getId()]);
         }
 
-        $notifier->send(new Notification('Bitte eine Datei hochladen!', ['browser']));
 
-        return $this->render('protomuncher/upload.html.twig', [
-            'form' => $form->createView(),
-            'protocol' => $protocol,
-            'errors' => $errors,
-            'controller_name' => 'ConferenceController',
+        return $this->render('config/index.html.twig', [
+            'controller_name' => 'ConfigController',
         ]);
+
     }
 }

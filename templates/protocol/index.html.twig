@@ -13,14 +13,18 @@
         <h3>Messages:</h3>
     {% endblock%}
 
-    {{ protocol.protocolName }} <br>
-    {{ protocol.protocolMimeType }} <br>
-    {{ protocol.protocolSize }} <br>
+    {{ protocol}} <br>
     {{ geraet }} <br>
 
 </div>
 
-
+<div class="example-wrapper">
+    <textarea rows="5" cols="50">
+        {% for row in output %}
+            {{ dump(row) }}
+        {% endfor %}
+    </textarea>
+</div>
 
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>

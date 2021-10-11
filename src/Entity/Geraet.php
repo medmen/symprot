@@ -42,11 +42,6 @@ class Geraet
     private $parameters;
 
     /**
-     * @ORM\OneToMany(targetEntity=Helperfields::class, mappedBy="geraet", orphanRemoval=true)
-     */
-    private $helperfields;
-
-    /**
      * @ORM\OneToMany(targetEntity=Protocol::class, mappedBy="geraet", orphanRemoval=true)
      */
     private $protocols;
@@ -116,36 +111,6 @@ class Geraet
             // set the owning side to null (unless already changed)
             if ($parameter->getGeraet() === $this) {
                 $parameter->setGeraet(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Helperfields[]
-     */
-    public function getHelperfields(): Collection
-    {
-        return $this->helperfields;
-    }
-
-    public function addHelperfield(Helperfields $helperfield): self
-    {
-        if (!$this->helperfields->contains($helperfield)) {
-            $this->helperfields[] = $helperfield;
-            $helperfield->setGeraet($this);
-        }
-
-        return $this;
-    }
-
-    public function removeHelperfield(Helperfields $helperfield): self
-    {
-        if ($this->helperfields->removeElement($helperfield)) {
-            // set the owning side to null (unless already changed)
-            if ($helperfield->getGeraet() === $this) {
-                $helperfield->setGeraet(null);
             }
         }
 

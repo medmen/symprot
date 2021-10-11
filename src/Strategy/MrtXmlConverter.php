@@ -2,38 +2,37 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Strategy;
 
-use Monolog\Logger;
-use SimpleXMLElement;
-use XMLReader;
+use App\Repository\ParameterRepository;
+use App\Strategy\StrategyInterface;
+use \SimpleXMLElement;
+use \XMLReader;
 
-class MrtXmlConverter implements IConverter
+class MrtXmlConverter implements StrategyInterface
 {
-    private string $input;
-    private Logger $logger;
     private ConfigObject $config;
+    private ParameterRepository $parameterRepository;
+    private array $can_process_mimetype = ['application/xml', 'text/xml'];
 
-    //@TODO: add Config to constructor so we can change paths
-    public function __construct(Logger $logger, ConfigObject $config)
+    public function canProcess($data)
     {
-        $this->logger = $logger;
-        $this->logger->notice('Logger is now Ready in class ' . __CLASS__);
-        $this->config = $config;
+        return (
+            is_object($data) and
+            $data->geraet == 'MRT' and
+            in_array($data->mimetype, $this->can_process_mimetype)
+        );
     }
 
-    public function setinput(string $input): void
+    public function process($data)
     {
-        $this->input = $input;
-    }
+        return('doing MRT XML conversion');
 
-    public function convert(): array
-    {
         $return_arr = array();
         $countIx = 0;
-        $target_elements = $this->config->getParameters();
+        $target_elements = ParametersSelected();
         $xml = new XMLReader();
-        $xml->open($this->input);
+        $xml->open($data.filepath);
 
         /**
          * To use xmlReader easily we have to make sure we parse at the outermost level of repeating elements.

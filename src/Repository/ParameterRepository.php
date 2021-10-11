@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Parameter;
+use App\Entity\Geraet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,22 @@ class ParameterRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Parameter::class);
+    }
+
+    /**
+    * @return Parameter[] Returns an array of Parameter objects
+    */
+    public function findSelectedbyGeraetName(string $geraetname)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.parameter_selected = true')
+            ->innerJoin('p.geraet', 'g')
+            ->where('g.geraetName = :geraetname')
+            ->setParameter('geraetname', $geraetname)
+            ->orderBy('p.parameter_id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**

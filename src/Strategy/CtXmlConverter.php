@@ -1,37 +1,36 @@
 <?php
 
-namespace App\Service;
+namespace App\Strategy;
+
+use App\Strategy\StrategyInterface;
 
 use Monolog\Logger;
 use SimpleXMLElement;
 use XMLReader;
 
-class CtXmlConverter implements IConverter
+class CtXmlConverter implements StrategyInterface
 {
-    private string $input;
-    private Logger $logger;
     private ConfigObject $config;
+    private array $can_process_mimetype = ['application/xml', 'text/xml'];
 
-    //@TODO: add Config to constructor so we can change paths
-    public function __construct(Logger $logger, ConfigObject $config)
+    public function canProcess($data)
     {
-        $this->logger = $logger;
-        $this->logger->notice('Logger is now Ready in class ' . __CLASS__);
-        $this->config = $config;
+        return (
+            is_object($data) and
+            $data->geraet == 'CT' and
+            in_array($data->mimetype, $this->can_process_mimetype)
+        );
     }
 
-    public function setinput(string $input): void
+    public function process($data)
     {
-        $this->input = $input;
-    }
+        return('doing CT XML conversion');
 
-    public function convert(): array
-    {
         $return_arr = array();
         $countIx = 0;
-        $target_elements = $this->config->getParameters();
+        $target_elements = $this->getGeraet($data.geraet)->getParametersSelected();
         $xml = new XMLReader();
-        $xml->open($this->input);
+        $xml->open($data.filepath);
 
         /**
          * To use xmlReader easily we have to make sure we parse at the outermost level of repeating elements.

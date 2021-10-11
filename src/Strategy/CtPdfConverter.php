@@ -1,89 +1,33 @@
 <?php
 
-namespace App\Service;
+namespace App\Strategy;
 
 use KubAT\PhpSimple\HtmlDomParser;
 use TonchikTm\PdfToHtml\Pdf;
+use App\Strategy\StrategyInterface;
 
-class CtPdfConverter implements IConverter
+class CtPdfConverter implements StrategyInterface
 {
-    private $modality, $input, $logger, $config;
+    private ConfigObject $config;
+    private array $can_process_mimetype = ['application/pdf'];
 
-    //@TODO: add COnfig to constructor so we can change paths
-    function __construct(Logger $logger, ConfigObject $config)
+    public function canProcess($data)
     {
-        $this->logger = $logger;
-        $this->logger->notice('Logger is now Ready in class ' . __CLASS__);
-        $this->config = $config;
+        return (
+            is_object($data) and
+            $data->geraet == 'CT' and
+            in_array($data->mimetype, $this->can_process_mimetype)
+        );
     }
 
-    function setinput(string $input): void
+    public function process($data)
     {
-        $this->input = $input;
-    }
+        return('doing CT PDF conversion');
 
-    /**
-     * @param $limits
-     * @param $max
-     * @return array of integers holding page numbers
-     */
-    function get_limits($limits, $max): array
-    {
-        // see if limits holds a range
-        if (is_string($limits) and stristr($limits, '-')) {
-            [$start, $end] = explode('-', $limits);
-            $start = intval(trim($start));
-            $end = intval(trim($end));
+        $return_arr = array();
+        $countIx = 0;
+        $target_elements = $this->getGeraet($data.geraet)->getParametersSelected();
 
-            // sanity checks
-            if ($start < 0) {
-                $start = $start * -1;
-            }
-
-            if ($end < 0) {
-                $end = $end * -1;
-            }
-
-            if ($end > $max) {
-                $end = $max;
-            }
-
-            if ($start > $end) {
-                // switch numbers
-                $new_end = $start;
-                $start = $end;
-                $end = $new_end;
-            }
-
-            return (range($start, $end));
-        }
-
-        if (is_string($limits) and stristr($limits, ',')) {
-            $items = array_map(
-                function ($value) {
-                    return intval(trim($value)); // trim each value and turn into int
-                },
-                explode(',', $limits)
-            );
-            foreach ($items as $item) {
-                if ($item > $max) {
-                    unset($item);
-                }
-            }
-            return (array_unique($items)); // remove duplicate values
-        }
-
-        // assume its a single number
-        if (is_int($limits)) {
-            if ($limits > $max or 0 == $limits) {
-                $limits = $max;
-            }
-            return (array($limits));
-        }
-    }
-
-    function convert(): array
-    {
         $return = array();
         $pdf = new Pdf($this->input, [
             'pdftohtml_path' => '/usr/bin/pdftohtml -c',
@@ -317,4 +261,65 @@ class CtPdfConverter implements IConverter
     {
         return str_replace(str_split($charlist), '', $str);
     }
+
+    /**
+     * @param $limits
+     * @param $max
+     * @return array of integers holding page numbers
+     */
+    function get_limits($limits, $max): array
+    {
+        // see if limits holds a range
+        if (is_string($limits) and stristr($limits, '-')) {
+            [$start, $end] = explode('-', $limits);
+            $start = intval(trim($start));
+            $end = intval(trim($end));
+
+            // sanity checks
+            if ($start < 0) {
+                $start = $start * -1;
+            }
+
+            if ($end < 0) {
+                $end = $end * -1;
+            }
+
+            if ($end > $max) {
+                $end = $max;
+            }
+
+            if ($start > $end) {
+                // switch numbers
+                $new_end = $start;
+                $start = $end;
+                $end = $new_end;
+            }
+
+            return (range($start, $end));
+        }
+
+        if (is_string($limits) and stristr($limits, ',')) {
+            $items = array_map(
+                function ($value) {
+                    return intval(trim($value)); // trim each value and turn into int
+                },
+                explode(',', $limits)
+            );
+            foreach ($items as $item) {
+                if ($item > $max) {
+                    unset($item);
+                }
+            }
+            return (array_unique($items)); // remove duplicate values
+        }
+
+        // assume its a single number
+        if (is_int($limits)) {
+            if ($limits > $max or 0 == $limits) {
+                $limits = $max;
+            }
+            return (array($limits));
+        }
+    }
+
 }

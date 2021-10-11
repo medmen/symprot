@@ -100,6 +100,9 @@
     "jms/metadata": {
         "version": "2.5.1"
     },
+    "kub-at/php-simple-html-dom-parser": {
+        "version": "1.9.1"
+    },
     "laminas/laminas-code": {
         "version": "4.4.2"
     },
@@ -114,6 +117,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.11.0"
+    },
+    "pelago/emogrifier": {
+        "version": "v5.0.1"
     },
     "phar-io/manifest": {
         "version": "2.0.1"
@@ -658,6 +664,9 @@
     },
     "theseer/tokenizer": {
         "version": "1.2.0"
+    },
+    "tonchik-tm/pdf-to-html": {
+        "version": "1.1.0"
     },
     "twig/extra-bundle": {
         "version": "v3.3.1"

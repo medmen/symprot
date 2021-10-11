@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Config;
 use App\Entity\Geraet;
 use App\Entity\Helperfields;
 use App\Entity\Parameter;
@@ -37,7 +38,7 @@ class DashboardController extends AbstractDashboardController
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
         yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', 'index');
         yield MenuItem::linkToCrud('Geraete', 'fas fa-map-marker-alt', Geraet::class);
-        yield MenuItem::linkToCrud('Helferlein', 'fas fa-helperfields', Helperfields::class);
+        yield MenuItem::linkToCrud('Config', 'fas fa-helperfields', Config::class);
         yield MenuItem::linkToCrud('Parameter', 'fas fa-parameters', Parameter::class);
     }
 }

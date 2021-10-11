@@ -8,6 +8,7 @@ use App\Repository\ProtocolRepository;
 use App\Repository\GeraetRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -15,12 +16,23 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 
+use App\Strategy\StrategyInterface;
+use App\Strategy\Context;
+
 class ProtocolController extends AbstractController
 {
+    private $context, $kernel;
+
+    public function __construct(Context $context, KernelInterface $kernel)
+    {
+        $this->context = $context;
+        $this->kernel = $kernel->getProjectDir();
+    }
+
     /**
-     * @Route("/process_upload/{id}", name="process_upload")
+     * @Route("/process_upload/{id}", name="process_upload", methods={"GET"})
      */
-    public function index(int $id): Response
+    public function index(int $id, Context $context, NotifierInterface $notifier): Response
     {
         $protocol = $this->getDoctrine()
             ->getRepository(Protocol::class)
@@ -28,11 +40,38 @@ class ProtocolController extends AbstractController
 
         $geraet = ucfirst($protocol->getGeraet()->getGeraetName());
         $filetype = ucfirst(explode('/', $protocol->getProtocolMimeType())[1]);
+        $uploadDir = $this->getParameter('vich_uploader.mappings')['protocol_file']['uri_prefix'];
+        $filepath = $uploadDir.'/'.$protocol->getProtocolName();
+        $fullfilepath = $this->kernel.'/public'.$filepath;
 
-        // $notifier->send(new Notification('Thank you for the feedback; your comment will be posted after moderation.', ['browser']));
+        // make very sure file exists
+        if(false == file_exists($fullfilepath)) {
+            $errors[] = 'No file was uploaded or upload failed - please ask the Admin to check permissions for file upload!';
+            return $this->render('protocol/index.html.twig', [
+                'geraet' => $geraet,
+                'protocol' => $protocol->getProtocolName(),
+                'errors' => $errors,
+                'output' => 'Umwandlung fehlgeschlagen, '.$fullfilepath.' enthält keine Datei',
+                'controller_name' => 'ProtocolController',
+            ]);
+        }
+
+        // define new plain object for transport of necessary values
+        $data = new \stdClass;
+        $data->geraet = $geraet;
+        $data->mimetype = $protocol->getProtocolMimeType();
+        $data->filepath = $filepath;
+
+        $strategy = $this->context->handle($data);
+
+        $notifier->send(new Notification(
+            "<h2> Die Datei wurde hochgeladen.</h2>
+                    <p>Sie wird nun im Hintergrund analysiert und umgewandelt. <br>
+                    Die Ausgabe erfolgt im Fenster unten. <br>
+                    </p>",
+            ['browser']));
+
         $errors = [
-            'oops' => 'ein huhuh',
-            'fail' => 'Mist. EIn Fehler',
             'filetype' => $filetype,
         ];
 
@@ -40,25 +79,7 @@ class ProtocolController extends AbstractController
             'geraet' => $geraet,
             'protocol' => $protocol,
             'errors' => $errors,
-            'controller_name' => 'ProtocolController',
-        ]);
-    }
-
-    public function index2(Protocol $protocol, NotifierInterface $notifier, GeraetRepository $geraetRepository, SessionInterface $session, EntityManagerInterface $entityManager): Response
-    {
-
-        //$geraetname = $geraetRepository->find($protocol->getGeraet());
-
-        $notifier->send(new Notification('Thank you for the feedback; your comment will be posted after moderation.', ['browser']));
-        $errors = [
-            'oops' => 'ein huhuh',
-            'fail' => 'Mist. EIn Fehler',
-        ];
-
-        return $this->render('protocol/index.html.twig', [
-            'geraet' => $protocol->getGeraet(),
-            'protocol' => $protocol,
-            'errors' => $errors,
+            'output' => unserialize($strategy),
             'controller_name' => 'ProtocolController',
         ]);
     }
