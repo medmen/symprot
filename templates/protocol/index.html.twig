@@ -20,9 +20,12 @@
 
 <div class="example-wrapper">
     <textarea rows="5" cols="50">
+        {#
         {% for row in output %}
             {{ dump(row) }}
         {% endfor %}
+        #}
+        {{ output }}
     </textarea>
 </div>
 

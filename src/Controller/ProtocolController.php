@@ -18,6 +18,7 @@ use Symfony\Component\Notifier\NotifierInterface;
 
 use App\Strategy\StrategyInterface;
 use App\Strategy\Context;
+use App\Service\Formatter;
 
 class ProtocolController extends AbstractController
 {
@@ -62,7 +63,7 @@ class ProtocolController extends AbstractController
         $data->mimetype = $protocol->getProtocolMimeType();
         $data->filepath = $filepath;
 
-        $strategy = $this->context->handle($data);
+        $serialized_and_parsed_data = $this->context->handle($data);
 
         $notifier->send(new Notification(
             "<h2> Die Datei wurde hochgeladen.</h2>
@@ -75,11 +76,14 @@ class ProtocolController extends AbstractController
             'filetype' => $filetype,
         ];
 
+        $formatter = new Formatter('md');
+        $formatted_data = $formatter->format_pretty(unserialize($serialized_and_parsed_data));
+
         return $this->render('protocol/index.html.twig', [
             'geraet' => $geraet,
             'protocol' => $protocol,
             'errors' => $errors,
-            'output' => unserialize($strategy),
+            'output' => $formatted_data,
             'controller_name' => 'ProtocolController',
         ]);
     }
