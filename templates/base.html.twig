@@ -1,29 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
     <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Symprot transformiert Untersuchungs-Protokolle von Siemens-CTs & MRTs nach HTML, Markdown uvm. Natürlich nur der Teil der zählt :)" />
+        <meta name="author" content="Alexander Schuster" />
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+        <title>Symprot - Protokolle einfach sichten & dokumentieren!</title>
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
-            {# <link rel="stylesheet" href="/css/app.css">  #}
             <link rel="stylesheet" href="{{ asset('build/app.css') }}">
         {% endblock %}
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-            <script src="{{ asset('build/app.js') }}"
+            <script src="{{ asset('build/app.js') }}"></script>
         {% endblock %}
     </head>
-    <body>
-    <div class="row">
-        <div class="col-sm-12">
-            {% include ('flash_messages.html.twig') %}
-        </div>
-    </div>
-            {% block body %}
 
-            {% endblock %}
+    <body id="page-top">
+        <div class="main-wrapper">
+            <header >
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+                <div class="container px-4 px-lg-5">
+                    <div class="d-flex justify-content-center">
+                        <div class="text-center text-black-50 mx-auto">
+                            {% block title %}
+                                <h4>Siemens Untersuchungsptotokolle</h4>
+                                <h3>einfach</h3>
+                                <h4>sichten und dokumentieren</h4>
+                            {% endblock %}
+                        </div>
+                    </div>
+
+                    <div class="collapse col-xxl-3" id="flash-messages">
+                        {% include ('flash_messages.html.twig') %}
+                    </div>
+                    <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        Menu
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/{{ path('admin') }}">Admin</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/error">Fehlerseite</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            </header>
+
+            <section class="signup-section text-center" id="maincontent">
+                <div class="container px-4 px-lg-5 d-flex h-75 align-items-center justify-content-center">
+                    <div class="d-flex justify-content-center">
+                        <div class="text-center">
+                            {% block body %}
+
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Footer-->
+            <footer class="footer bg-black small text-center text-white-50" id="about">
+                <div class="container px-4 px-lg-5">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-lg-8">
+                            <h2 class="text-white mb-1">Copyright &copy; AS 2021</h2>
+                            <p class="text-white-50">
+                                Gemacht mit Symfony, Kaffee und dem <a href="https://startbootstrap.com/theme/grayscale/">Grayscale-Bootstrap-theme</a>.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- <img class="img-fluid" src="{{ asset('build/images/ipad.png') }}" alt="ein Ipad" /> -->
+                </div>
+            </footer>
+        </div>
     </body>
 </html>

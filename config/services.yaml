@@ -29,9 +29,17 @@ services:
         App\Strategy\StrategyInterface:
             tags: ['app.converter_strategy']
 
-    App\Strategy\Context:
-        # inject all services tagged with app.strategy as first argument
+        App\Formatter\FormatterStrategyInterface:
+            tags: ['app.formatter_strategy']
+
+    ### Adding converter strategies
+    App\Strategy\ConverterContext:
+        # inject all services tagged with app.converter_strategy as first argument
         arguments:
             - !tagged_iterator app.converter_strategy
 
-
+    ### Adding formatter strategies as well
+    App\Formatter\FormatterContext:
+        # inject all services tagged with app.formatter_strategy as first argument
+        arguments:
+            - !tagged_iterator app.formatter_strategy

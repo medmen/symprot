@@ -3,7 +3,7 @@ namespace App\Strategy;
 
 use App\Strategy\StrategyInterface;
 
-class Context
+class ConverterContext
 {
     private iterable $strategies = [];
 
@@ -26,6 +26,6 @@ class Context
         }
 
         // return false;
-        throw new \ApplicationLogicException('Could not find a converter for this data');
+        throw new \LogicException('Could not find a converter for this data');
     }
 }

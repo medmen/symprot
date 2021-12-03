@@ -17,23 +17,27 @@ use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 
 use App\Strategy\StrategyInterface;
-use App\Strategy\Context;
+use App\Strategy\ConverterContext;
+
 use App\Service\Formatter;
+use App\Formatter\FormatterContext;
+
 
 class ProtocolController extends AbstractController
 {
-    private $context, $kernel;
+    private $convertercontext, $formattercontext, $kernel;
 
-    public function __construct(Context $context, KernelInterface $kernel)
+    public function __construct(ConverterContext $convertercontext, FormatterContext $formattercontext, KernelInterface $kernel)
     {
-        $this->context = $context;
+        $this->convertercontext = $convertercontext;
+        $this->formattercontext = $formattercontext;
         $this->kernel = $kernel->getProjectDir();
     }
 
     /**
      * @Route("/process_upload/{id}", name="process_upload", methods={"GET"})
      */
-    public function index(int $id, Context $context, NotifierInterface $notifier): Response
+    public function index(int $id, ConverterContext $converterContext, FormatterContext $formattercontext, NotifierInterface $notifier): Response
     {
         $protocol = $this->getDoctrine()
             ->getRepository(Protocol::class)
@@ -63,7 +67,7 @@ class ProtocolController extends AbstractController
         $data->mimetype = $protocol->getProtocolMimeType();
         $data->filepath = $filepath;
 
-        $serialized_and_parsed_data = $this->context->handle($data);
+        $serialized_and_parsed_data = $this->convertercontext->handle($data);
 
         $notifier->send(new Notification(
             "<h2> Die Datei wurde hochgeladen.</h2>
@@ -76,8 +80,7 @@ class ProtocolController extends AbstractController
             'filetype' => $filetype,
         ];
 
-        $formatter = new Formatter('md');
-        $formatted_data = $formatter->format_pretty(unserialize($serialized_and_parsed_data));
+        $formatted_data = $this->formattercontext->handle($data, $serialized_and_parsed_data);
 
         return $this->render('protocol/index.html.twig', [
             'geraet' => $geraet,
