@@ -11707,6 +11707,9 @@ body {
 * own customizations to template
  */
 .output-wrapper { margin: 1em auto; background-color: rgba(255, 255, 255, 0.3);}
-.output-table {border: 1px solid; color: var(--bs-dark);}
-.output-table td {padding: 0.5rem; border: 1px solid; color: var(--bs-dark);}
-.output-table th {padding: 0.5rem; border: 2px solid; color: var(--bs-dark); font-weight: bold; font-size: large}
+.output-table {color: var(--bs-dark);}
+.output-table td {padding: 0.5rem; color: var(--bs-dark);}
+.output-table th {padding: 0.5rem; color: var(--bs-dark); font-weight: bold; font-size: large}
+.bordered {border: 1px solid;}
+.bordered td {border: 1px solid;}
+.bordered th {border: 1px solid;}

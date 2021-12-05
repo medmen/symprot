@@ -18,11 +18,11 @@ class FormatterContext
         $this->strategies[] = $strategy;
     }
 
-    public function handle($modality_and_mime, $serialized_payload)
+    public function handle($modality_and_mime, $serialized_payload, $format)
     {
         foreach ($this->strategies as $strategy) {
-            if ($strategy->canFormat($modality_and_mime)) {
-                return $strategy->format($serialized_payload);
+            if ($strategy->canFormat($modality_and_mime, $format)) {
+                return $strategy->format($serialized_payload, $format);
             }
         }
 

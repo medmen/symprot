@@ -10,6 +10,7 @@ use App\Repository\GeraetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,13 +26,14 @@ use App\Formatter\FormatterContext;
 
 class ProtocolController extends AbstractController
 {
-    private $convertercontext, $formattercontext, $kernel;
+    private $convertercontext, $formattercontext, $kernel, $format;
 
     public function __construct(ConverterContext $convertercontext, FormatterContext $formattercontext, KernelInterface $kernel)
     {
         $this->convertercontext = $convertercontext;
         $this->formattercontext = $formattercontext;
         $this->kernel = $kernel->getProjectDir();
+        $this->format = 'html';
     }
 
     /**
@@ -39,6 +41,10 @@ class ProtocolController extends AbstractController
      */
     public function index(int $id, ConverterContext $converterContext, FormatterContext $formattercontext, NotifierInterface $notifier): Response
     {
+
+        $request = Request::createFromGlobals();
+        $this->format = $request->query->get("format");
+
         $protocol = $this->getDoctrine()
             ->getRepository(Protocol::class)
             ->find($id);
@@ -80,7 +86,7 @@ class ProtocolController extends AbstractController
             'filetype' => $filetype,
         ];
 
-        $formatted_data = $this->formattercontext->handle($data, $serialized_and_parsed_data);
+        $formatted_data = $this->formattercontext->handle($data, $serialized_and_parsed_data, $this->format);
 
         return $this->render('protocol/index.html.twig', [
             'geraet' => $geraet,
