@@ -2,22 +2,62 @@
 
 {# templates/protomuncher/upload.html.twig #}
 
-{% block title %}Hello ProtomuncherController!{% endblock %}
+{% block title %}Bitte Protokoll-Datei hochladen!{% endblock %}
 
 {% block body %}
 
-    <div class="dx-4 d-flex justify-content-center text-white mx-auto mt-2 mb-5">
-        <h6>Messages:</h6>
+    <div id="messagecontainer" class="container dx-4 justify-content-center text-white mx-auto mt-2 mb-5">
         {% block flash %}
+            <h6>Messages:</h6>
         {% endblock%}
 
         {{ protocol.protocolFile }}
     </div>
 
-    <div class="container-fluid dx-4 d-flex justify-content-center text-white mx-auto mt-2 mb-5">
+    <div id="uploadcontainer" class="d-table dx-4 text-white mx-auto mt-2 mb-5">
+
         <h2>Protokoll hochladen</h2>
 
-        {{ form(form) }}
+        {{ form_start(form, {'method': 'POST'}) }}
+        <div class="list-group-item-danger">
+            {{ form_errors(form) }}
+        </div>
+
+        <div class="d-table-row">
+            <div class="d-table-cell" >
+                {{ form_label(form.protocolFile) }}
+            </div>
+            <div class="d-table-cell" id="file_upload">
+                {{ form_widget(form.protocolFile) }}
+            </div>
+            <div class="form-error list-group-item-danger">
+                {{ form_errors(form.protocolFile) }}
+            </div>
+            <div class="form-control">
+                {{ form_help(form.protocolFile) }}
+            </div>
+        </div>
+
+        <div class="d-table-row">
+            <div class="d-table-cell">
+                {{ form_label(form.geraet) }}
+            </div>
+            <div class="d-table-cell" id="file_upload_geraet">
+                {{ form_widget(form.geraet) }}
+            </div>
+        </div>
+
+        <div class="d-table-row">
+            <div class="d-table-cell" >
+            </div>
+            <div class="d-table-cell" >
+                {{ form_row(form.save, { 'label': 'Abschicken' }) }}
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+
+        {# {{ form(form) }} #}
 
     </div>
 

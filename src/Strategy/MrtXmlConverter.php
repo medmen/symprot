@@ -26,7 +26,7 @@ class MrtXmlConverter implements StrategyInterface
 
     public function process($data)
     {
-        return('doing MRT XML conversion');
+        return(array('not_yet_implemented' => 'doing MRT XML conversion'));
 
         $return_arr = array();
         $countIx = 0;

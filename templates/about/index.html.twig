@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AboutController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="bg-light bg-opacity-75">
+    <h1>About SymProt </h1>
+
+    <h2>Was?</h2>
+    Symprot ist eine Übersetzer-App. Gemacht zum Übersetzen von MRT- und CT-Untersuchungs-Protokollen.<br>
+    Diese Protokolle schlummern in den Datenbanken der entsprechenden Geräte, besitzen oft hunderte Parameter und werden immer dann interessant, wenn
+    <ul>
+        <li>neue Mitarbeiter sich in die Abteilung einarbeiten müssen</li>
+        <li>Audits und Zertifizierungen nach Details zu bestimmten Untersuchungen verlangen</li>
+        <li>Untersuchungs-Sequenzen verbessert und im Detail mit anderen verglichen werden sollen</li>
+        <li>Mediziner wissenschaftliche Erkenntnisse publizieren möchten</li>
+    </ul>
+
+    Symprot will helfen, diese Informationen auf einfache Weise aus den Geräten zu extrahieren und die benötigten Details kompakt und übersichtlich darzustellen.
+
+    <h2>Wie?</h2>
+    Symprot ist kein Hacker-Werkzeug, es greift nicht auf Medizinische Gerätschaften zu.
+    Es verarbeitet Untersuchungsprotokolle, sowie sie die Geräte bereitstellen:
+    <ul>
+        <li>als riesige, unübersichtliche PDF-Ausdrucke </li>
+        <li>als xml-Dateien</li>
+        <li>als HTML-Dateien</li>
+        <li>und dank seiner modularen Architektur potenziell als jedes erdenkliche Ausgangsformat</li>
+    </ul>
+
+    SymProt extrahiert aus der Datenflut die gewünschten Untersuchungsparameter und bereitet diese wieder neu auf.
+    Die Ausgabe kann wieder in beliebigen Formaten erfolgen, implementiert sind HTML und Markdown..
+
+    <h2>Historie</h2>
+    Gestartet ist das Projekt unter dem Namen "protomuncher" irgendwann gegen 2010.
+    Ich suchte damals nach einer Möglichkeit, die Untersuchungsprotokolle zweier MRTs vergleichen zu können um sie zu harmonisieren.
+    Medizinische Geräte waren und sind eher verschlossen bezüglich solcher Informationen, damals kam ich an die Protokolle nur in Form
+    ellenlanger PDF-Dateien mit hunderten Parametern pro Untersuchungssequenz.
+    PDF-Dateien sind von Natur aus eher unstrukturiert, "relevante" Parameter daraus reproduzierbar zu extrahieren war eine Herausforderung.
+    Hilfe kam in Form des Programms PDF2HTML, das aus dem PDF komplexe HTMl-Dokumente mit reproduzierbaren Tags für "Namen" und "Werte" der Sequenzparameter erzeugen konnte.
+    Diese konnte ich mithilfe der PHP-Programmiersprache und des SimpleHTMLDom-Pakets "auslesen".
+
+    Nach und nach kamen Protokolle für CTs dazu, neue Geräte-Generationen stellten um auf neue Ausgabe-Formate wie XML (was das Auslesen der Protokolle extrem vereinfacht)
+    und ich beschloss, die Ausgabe der Protokolle für das Abteilungsinterne Wiki auf Markdown umzustellen.
+    Die Bedienbarkeit von protomuncher war von Anfang an eher schlecht und es häuften sich kleine Fehler die schwer zu finden und zu beheben waren.
+
+    Also beschloss ich 2019, Protomuncher nach "modernem" Progammdesign umzuschreiben. Das Ergebnis ist heute noch auf github verfügbar, leider
+    weiterhin grafisch unschön und die Konfiguration eher holperig - aber der Programmcode sollte sich deutlich besser warten und erweitern lassen.
+    Letztlich waren diverse Gründe dafür verantwortlich, den Code in ein modernes Framework zu überführen - nach reichlich Recherche fiel meine Wahl auf symfony.
+    Damit einher ging die Umbenennung in SymProt, die Aussicht auf ein schickes Äußeres, eine komfortable Konfiguration und eine bessere Wartbarkeit des Programms -
+    leider auch ein deutlich gewachsenes Download-Volumen.
+
+</div>
+{% endblock %}

@@ -12,9 +12,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class CtXml2MdFormatter implements FormatterStrategyInterface
 {
     private $logger, $can_process_mimetype, $valid_formats;
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $procLogger)
     {
-        $this->logger = $logger;
+        $this->logger = $procLogger;
         $this->can_process_mimetype = ['application/xml', 'text/xml'];
         $this->format = 'md';
     }

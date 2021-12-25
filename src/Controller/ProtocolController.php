@@ -33,7 +33,6 @@ class ProtocolController extends AbstractController
         $this->convertercontext = $convertercontext;
         $this->formattercontext = $formattercontext;
         $this->kernel = $kernel->getProjectDir();
-        $this->format = 'html';
     }
 
     /**
@@ -43,7 +42,7 @@ class ProtocolController extends AbstractController
     {
 
         $request = Request::createFromGlobals();
-        $this->format = $request->query->get("format");
+        $this->format = $request->query->get("format") ?? 'html'; // make sure we have a default
 
         $protocol = $this->getDoctrine()
             ->getRepository(Protocol::class)

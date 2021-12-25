@@ -23,11 +23,11 @@ class CtXmlConverter implements StrategyInterface
     private $entityManager, $params, $logger, $kernel, $target_params;
     private $filepath; // holds full path to input pdf
 
-    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $logger, KernelInterface $kernel)
+    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernel)
     {
         $this->entityManager = $entityManager;
         $this->params = $params;
-        $this->logger = $logger;
+        $this->logger = $procLogger;
         $this->kernel = $kernel->getProjectDir();
     }
 
@@ -96,10 +96,12 @@ class CtXmlConverter implements StrategyInterface
 
         $prod = array();
         while ($xml->name == 'Folder') {
+            $this->logger->debug('XMLReader found Folder element, processing this with SimpleXML');
             $element = new SimpleXMLElement($xml->readOuterXML()); //
 
             // skip Siemens standard protocols
             if (stristr(strval($element->FolderName), 'siemens')) {
+                $this->logger->info('Skipping Siemens protocol');
                 continue;
             }
 
@@ -111,25 +113,32 @@ class CtXmlConverter implements StrategyInterface
             foreach ($element->Body as $body) {
                 $bodysize = strval($body->BodySize);
                 $prod['bodysize'] = $bodysize;
+                $this->logger->debug('parsing bodysize '.$bodysize);
 
                 if(@count($body->Region) < 1) {
+                    $this->logger->debug('bodysize holds no regions --> skip it');
                     continue;
                 }
                 foreach ($body->Region as $reg) {
                     $region = strval($reg->RegionName);
                     $prod['region'] = $region;
+                    $this->logger->debug('parsing region '.$region);
 
                     foreach ($reg->Protocol as $prot) {
                         $protocol = strval($prot->ProtocolName);
                         $prod['protocol'] = $protocol;
+                        $this->logger->debug('parsing protocol '.$protocol);
 
                         foreach ($prot->ScanEntry as $ser) {
                             $scantype = $ser->attributes(); // can be used to discriminate topo from scan
                             $series = strval($ser->ReconJob->SeriesDescription);
                             $prod['series'] = $series;
+                            $this->logger->debug('parsing series '.$series);
 
                             foreach ($ser->children() as $potential) {
                                 if ($scantype->ScanType = "Topo") {
+                                    $this->logger->debug('this is a topogram');
+
                                     // do stuff only valid for Topo
                                 }
 
@@ -137,6 +146,7 @@ class CtXmlConverter implements StrategyInterface
                                     $param_name = strtolower($potential->getName());
                                     $param_value = strval(strtolower($potential));
                                     $prod['param'][$param_name] = $param_value;
+                                    $this->logger->debug('parsing parameter '.$param_name);
                                 }
                             }
                             $return_arr[] = $prod;

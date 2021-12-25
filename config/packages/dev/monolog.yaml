@@ -1,5 +1,11 @@
 monolog:
+    channels: ['proc']
     handlers:
+        proc:
+            type: stream
+            path: "%kernel.logs_dir%/proc.log"
+            level: debug
+            channels: ["proc"]
         main:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
@@ -7,9 +13,9 @@ monolog:
             channels: ["!event"]
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
-        #firephp:
-        #    type: firephp
-        #    level: info
+        firephp:
+            type: firephp
+            level: info
         #chromephp:
         #    type: chromephp
         #    level: info

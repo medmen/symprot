@@ -12,9 +12,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class CtXml2HtmlFormatter implements FormatterStrategyInterface
 {
     private $logger, $can_process_mimetype, $format;
-    public function __construct(LoggerInterface $logger)
+
+    public function __construct(LoggerInterface $procLogger)
     {
-        $this->logger = $logger;
+        $this->logger = $procLogger;
         $this->can_process_mimetype = ['application/xml', 'text/xml'];
         $this->format = 'html';
     }
@@ -23,7 +24,7 @@ class CtXml2HtmlFormatter implements FormatterStrategyInterface
     {
         return (
             is_object($data) and
-            $data->geraet == 'CT' and
+            // $data->geraet == 'CT' and
             in_array($data->mimetype, $this->can_process_mimetype) and
             $format == $this->format
         );

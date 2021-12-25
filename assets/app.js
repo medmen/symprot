@@ -11,7 +11,7 @@ import './styles/googlefonts_nonito.css';
 import './styles/googlefonts_varela-round.css';
 import './styles/app.scss';
 
-const $ = require('jquery');
+// const $ = require('jquery');
 require('bootstrap');
 
 import bsCustomFileInput from 'bs-custom-file-input';
@@ -20,7 +20,6 @@ import bsCustomFileInput from 'bs-custom-file-input';
 import './bootstrap.js';
 // load scripts for templating
 import './template_scripts';
-import './fontawesome_5.15.4';
 
 bsCustomFileInput.init();
 

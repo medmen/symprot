@@ -20,11 +20,11 @@ class MrtPdfConverter implements StrategyInterface
     private $entityManager, $params, $logger, $kernel, $target_params;
     private $filepath; // holds full path to input pdf
 
-    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $logger, KernelInterface $kernel)
+    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernel)
     {
         $this->entityManager = $entityManager;
         $this->params = $params;
-        $this->logger = $logger;
+        $this->logger = $procLogger;
         $this->kernel = $kernel->getProjectDir();
     }
 
