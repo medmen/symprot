@@ -1,0 +1,96 @@
+/var/www/php/symprot/templates/about/index.html.twig
+    Warning:Warning:line (7)Selector example-wrapper is never used
+/var/www/php/symprot/src/Formatter/CtXml2HtmlFormatter.php
+    Warning:Warning:line (7)'ext-http' is missing in composer.json
+    Warning:Warning:line (14)Property is only written but never read
+/var/www/php/symprot/src/Formatter/CtXml2MdFormatter.php
+    Warning:Warning:line (7)'ext-http' is missing in composer.json
+    Warning:Warning:line (14)Property is only written but never read
+/var/www/php/symprot/src/Strategy/MrtXmlConverter.php
+    Warning:Warning:line (9)'ext-simplexml' is missing in composer.json
+    Warning:Warning:line (10)'ext-xmlreader' is missing in composer.json
+    Warning:Warning:line (14)Undefined class 'ConfigObject'
+    Warning:Warning:line (31)Unreachable statement
+    Warning:Warning:line (33)Undefined function 'ParametersSelected'
+    Warning:Warning:line (34)'ext-xmlreader' is missing in composer.json
+    Warning:Warning:line (35)Undefined constant 'filepath'
+    Warning:Warning:line (41)Statement has empty body
+    Warning:Warning:line (45)'ext-simplexml' is missing in composer.json
+/var/www/php/symprot/src/Strategy/CtXmlConverter.php
+    Warning:Warning:line (16)'ext-simplexml' is missing in composer.json
+    Warning:Warning:line (17)'ext-xmlreader' is missing in composer.json
+    Warning:Warning:line (23)Property is only written but never read
+    Warning:Warning:line (75)Missing Service
+    Warning:Warning:line (75)Missing Service
+    Warning:Warning:line (75)Missing Service
+    Warning:Warning:line (87)'ext-xmlreader' is missing in composer.json
+    Warning:Warning:line (94)Statement has empty body
+    Warning:Warning:line (100)'ext-simplexml' is missing in composer.json
+/var/www/php/symprot/templates/base.html.twig
+    Warning:Warning:line (9)Cannot resolve file 'favicon.ico'
+/var/www/php/symprot/src/Strategy/CtPdfConverter.php
+    Warning:Warning:line (20)Property is only written but never read
+    Warning:Warning:line (20)Property is only written but never read
+    Warning:Warning:line (20)Property is only written but never read
+    Warning:Warning:line (20)Property is only read but never written
+    Warning:Warning:line (114)Unreachable statement
+    Warning:Warning:line (140)Missing Service
+    Warning:Warning:line (140)Missing Service
+    Warning:Warning:line (140)Missing Service
+    Warning:Warning:line (229)Undefined function 'check_if_changed'
+    Error:Error:line (229)Undefined variable '$region'
+    Warning:Warning:line (231)Undefined function 'parse_region'
+    Warning:Warning:line (237)Undefined function 'check_if_changed'
+    Error:Error:line (237)Undefined variable '$protocol'
+    Warning:Warning:line (239)Undefined function 'parse_protocol'
+    Warning:Warning:line (244)Undefined function 'check_if_changed'
+    Error:Error:line (244)Undefined variable '$sequence'
+    Warning:Warning:line (246)Undefined function 'parse_sequence'
+    Warning:Warning:line (249)Undefined function 'parse_row'
+    Error:Error:line (256)Undefined variable '$output'
+    Warning:Warning:line (331)Obsolete attribute
+/var/www/php/symprot/assets/styles/style.css
+    Warning:Warning:line (45)Property --bs-white duplicates property --bs-white
+    Warning:Warning:line (56)Property --bs-white-rgb duplicates property --bs-white-rgb
+    Warning:Warning:line (57)Property --bs-black-rgb duplicates property --bs-black-rgb
+    Warning:Warning:line (83)Selector matches unknown element main-wrapper
+    Error:Error:line (94)Cannot resolve '--bs-body-text-align' custom property
+    Warning:Warning:line (170)Unknown CSS property '-webkit-text-decoration'
+    Warning:Warning:line (173)Unknown CSS property '-webkit-text-decoration-skip-ink'
+    Error:Error:line (429)Unknown pseudo selector '-webkit-datetime-edit-fields-wrapper'
+    Error:Error:line (430)Unknown pseudo selector '-webkit-datetime-edit-text'
+    Error:Error:line (431)Unknown pseudo selector '-webkit-datetime-edit-minute'
+    Error:Error:line (432)Unknown pseudo selector '-webkit-datetime-edit-hour-field'
+    Error:Error:line (433)Unknown pseudo selector '-webkit-datetime-edit-day-field'
+    Error:Error:line (434)Unknown pseudo selector '-webkit-datetime-edit-month-field'
+    Error:Error:line (435)Unknown pseudo selector '-webkit-datetime-edit-year-field'
+    Warning:Warning:line (695)Unit of measure '%' is redundant
+    Warning:Warning:line (904)Unit of measure '%' is redundant
+    Warning:Warning:line (1,117)Unit of measure '%' is redundant
+    Warning:Warning:line (1,330)Unit of measure '%' is redundant
+    Warning:Warning:line (1,543)Unit of measure '%' is redundant
+    Warning:Warning:line (1,756)Unit of measure '%' is redundant
+    Error:Error:line (2,406)Unknown pseudo selector '-moz-color-swatch'
+    Error:Error:line (2,705)Unknown pseudo selector '-moz-placeholder-shown'
+    Error:Error:line (2,725)Unknown pseudo selector '-moz-placeholder-shown'
+    Error:Error:line (4,237)Cannot resolve '--bs-scroll-height' custom property
+    Warning:Warning:line (4,752)Unit of measure '%' is redundant
+    Warning:Warning:line (4,797)Unknown CSS property 'overflow-anchor'
+    Error:Error:line (4,909)Cannot resolve '--bs-breadcrumb-divider' custom property
+    Error:Error:line (5,610)Mismatched property value ([[<length> | <percentage>] && [border-box | content-box]?] | available | -moz-available | min-content | -moz-min-content | max-content | -moz-max-content | fit-content | -moz-fit-content | auto | [initial | inherit | unset | revert])
+    Error:Error:line (5,610)Mismatched property value (<length> | <percentage> | auto | [initial | inherit | unset | revert])
+    Warning:Warning:line (5,932)Property text-align is overwritten
+    Warning:Warning:line (5,933)Property text-align overwrites property text-align
+    Warning:Warning:line (6,034)Property text-align is overwritten
+    Warning:Warning:line (6,035)Property text-align overwrites property text-align
+    Error:Error:line (6,572)Mismatched property value ([<url> | -webkit-gradient() | none]# | [initial | inherit | unset | revert])
+    Warning:Warning:line (6,582)Unit of measure '%' is redundant
+    Warning:Warning:line (6,583)Unit of measure '%' is redundant
+    Warning:Warning:line (6,589)Unit of measure '%' is redundant
+    Warning:Warning:line (6,590)Unit of measure '%' is redundant
+    Error:Error:line (11,498)Mismatched property value (<color> | [initial | inherit | unset | revert])
+    Error:Error:line (11,583)Mismatched property value (<box># | [initial | inherit | unset | revert])
+/var/www/php/symprot/src/Strategy/MrtPdfConverter.php
+    Warning:Warning:line (132)Missing Service
+    Warning:Warning:line (132)Missing Service
+    Warning:Warning:line (132)Missing Service
