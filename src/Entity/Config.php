@@ -14,7 +14,7 @@ class Config
     public function __construct() {
         $this->debug = false;
         $this->limitPages = 0;
-        $this->outputFormat=['dokuwiki'];
+        $this->outputFormat= 'md';
         $this->stripUnits=true;
     }
 
@@ -41,9 +41,9 @@ class Config
     private $debug;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="string")
      */
-    private $outputFormat = [];
+    private $outputFormat;
 
     public function getId(): ?int
     {
@@ -86,12 +86,12 @@ class Config
         return $this;
     }
 
-    public function getOutputFormat(): ?array
+    public function getOutputFormat(): ?string
     {
         return $this->outputFormat;
     }
 
-    public function setOutputFormat(array $outputFormat): self
+    public function setOutputFormat(string $outputFormat): self
     {
         $this->outputFormat = $outputFormat;
 
@@ -106,7 +106,7 @@ class Config
     public function setDefaults() {
         $this->debug = false;
         $this->limitPages = 0;
-        $this->outputFormat=['dokuwiki'];
-        $this->stripUnits=true;
+        $this->outputFormat = 'md';
+        $this->stripUnits = true;
     }
 }

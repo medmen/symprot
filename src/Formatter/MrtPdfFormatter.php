@@ -37,7 +37,14 @@ class MrtPdfFormatter
 
     public function format($serialized_payload)
     {
-        return(var_export(unserialize($serialized_payload), true));
+        $proto_arr = unserialize($serialized_payload);
+
+        // treat errors
+        if(isset($proto_arr['error'])) {
+            return('<h1 class="error error-message">'.$proto_arr['error'].'</h1>');
+        }
+
+        return(var_export($proto_arr, true));
     }
 
     public function format_pretty(array $data): string

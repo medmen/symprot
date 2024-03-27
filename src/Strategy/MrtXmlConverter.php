@@ -4,16 +4,30 @@ declare(strict_types=1);
 
 namespace App\Strategy;
 
+use App\Entity\Config;
+use App\Entity\Parameter;
 use App\Repository\ParameterRepository;
 use App\Strategy\StrategyInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use \SimpleXMLElement;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use \XMLReader;
 
 class MrtXmlConverter implements StrategyInterface
 {
-    private ConfigObject $config;
+    private Config $config;
     private ParameterRepository $parameterRepository;
     private array $can_process_mimetype = ['application/xml', 'text/xml'];
+
+    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernel)
+    {
+        $this->entityManager = $entityManager;
+        $this->params = $params;
+        $this->logger = $procLogger;
+        $this->kernel = $kernel->getProjectDir();
+    }
 
     public function canProcess($data)
     {
@@ -24,15 +38,55 @@ class MrtXmlConverter implements StrategyInterface
         );
     }
 
-    public function process($data)
+    private function trim_with_star(string $value) {
+        return trim(str_replace("*", '', $value));
+    }
+
+    public function process($data) : string
     {
-        return(array('not_yet_implemented' => 'doing MRT XML conversion'));
+        // return(serialize(array('error' => 'MRT XML conversion is not_yet_implemented')));
+
+        // get all parameters we selected for chosen geraet
+        $target_elements = $this->entityManager
+            ->getRepository(Parameter::class)
+            ->findSelectedbyGeraetName($data->geraet);
+
+        // get the config
+        $config = $this->entityManager
+            ->getRepository(Config::class)
+            ->find(1);
+        // ->findOneBy(array('selected' => true));
+
+        if(false == (is_object($config) or count((array)$config) < 1)) {
+            $config = new Config();
+        }
+
+        $this->config = $config->getDefaults();
+
+        foreach($target_elements as $param) {
+            // reduce parameters to nameonly, turn to lowercase
+            $target_params[] = strtolower($param->getParameterName());
+        }
+        // store target params in object so we can retrieve from other functions
+        $this->target_params = $target_params;
+
+        // clean up
+        unset($target_elements, $target_params);
+
+        // get paths
+        $protocol_path = $this->params->get('app.path.protocols');
+        $target_path = $this->kernel.'/public'.$protocol_path;
+        $this->filepath = $this->kernel.'/public'.$data->filepath;
+
+        $this->logger->info('doing MRT PDF conversion with parameters '.implode(' | ', $this->target_params));
 
         $return_arr = array();
         $countIx = 0;
-        $target_elements = ParametersSelected();
+        $proto_cnt = 0;
+        $last_sequence = '';
+
         $xml = new XMLReader();
-        $xml->open($data.filepath);
+        $xml->open($this->filepath);
 
         /**
          * To use xmlReader easily we have to make sure we parse at the outermost level of repeating elements.
@@ -44,31 +98,45 @@ class MrtXmlConverter implements StrategyInterface
         while ($xml->name == 'PrintProtocol') {
             $element = new SimpleXMLElement($xml->readInnerXML()); //
 
+            // Step 1: extract protocol info from header
             $proto_path = explode('\\', strval($element->SubStep->ProtHeaderInfo->HeaderProtPath));
+            $region = trim($proto_path[3]);
+            $actual_sequence = trim(str_replace("*", '', $proto_path[6]));
+            if($actual_sequence == 'localizer' and $last_sequence != 'localizer'){
+                $proto_cnt++;
+            }
+            $protocol = trim($proto_path[4] . '-' . $proto_path[5]).'-'.$proto_cnt;
 
             $prod = array(
-                'region' => $proto_path[3],
-                'protocol' => $proto_path[4] . '-' . $proto_path[5],
-                'sequence' => $proto_path[6],
+                'region' => $region,
+                'protocol' => $protocol,
+                'sequence' => $actual_sequence
             );
 
-            // read potential values from protocol header
-            $ta_pm_voxel_pat_snr = preg_split('/\s+/', strval($element->SubStep->ProtHeaderInfo->HeaderProperty));
-            $potential['ta'] = $ta_pm_voxel_pat_snr[1] . ' min';
-            $potential['pm'] = $ta_pm_voxel_pat_snr[3];
-            $potential['voxel'] = $ta_pm_voxel_pat_snr[5];
-            $potential['pat'] = $ta_pm_voxel_pat_snr[7];
-            $potential['snr'] = $ta_pm_voxel_pat_snr[10];
+            // done parsing the Protocol name stuff, set last_sequence for next iteration
+            $last_sequence = $actual_sequence;
 
-            foreach ($potential as $key => $val) {
-                if (in_array($key, $target_elements)) {
-                    $prod[$key] = $val;
+            // Step 2: read potential values from protocol header
+            $header = trim(strval($element->SubStep->ProtHeaderInfo->HeaderProperty));
+            // here healthineers get rough on us - we need to split a string by colons and white spaces :(
+            $header = str_replace('::', ':', $header); // strip double colon :: to 1 colon!
+            $header = str_replace(': ', ':', $header); // trim white space after colon!
+            $header = preg_replace('/\s+/', ' ', $header); // strip multi blank spaces to 1
+            // $header_pairs = preg_split('/(\w+):([^:]+)(?: |$)/', $header); // does not work with special chars??
+            $parts = preg_split('/\s+/', $header);
+            foreach ($parts as $part) {
+                if (stristr($part, ':')) {
+                    list($key, $val) = explode(':', $part, 2);
+                    if (in_array(strtolower($key), $this->target_params)) {
+                        $prod[$key] = $val;
+                    }
                 }
             }
 
+            // Step 3: walk through each sequence and search for matching parameters
             foreach ($element->SubStep->Card as $card) {
                 foreach ($card->ProtParameter as $seq_property) {
-                    if (in_array(strtolower(strval($seq_property->Label)), $target_elements)) {
+                    if (in_array(strtolower(strval($seq_property->Label)), $this->target_params)) {
                         $label = strval($seq_property->Label);
                         $value = strval($seq_property->ValueAndUnit);
                         $prod[$label] = $value;
@@ -81,6 +149,6 @@ class MrtXmlConverter implements StrategyInterface
             $xml->next('PrintProtocol');
             unset($element);
         }
-        return ($return_arr);
+        return(serialize($return_arr));
     }
 }

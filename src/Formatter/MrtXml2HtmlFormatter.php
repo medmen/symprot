@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class CtXml2HtmlFormatter implements FormatterStrategyInterface
+class MrtXml2HtmlFormatter implements FormatterStrategyInterface
 {
     private $logger, $can_process_mimetype, $format;
 
@@ -24,7 +24,7 @@ class CtXml2HtmlFormatter implements FormatterStrategyInterface
     {
         return (
             is_object($data) and
-            $data->geraet == 'CT' and
+            $data->geraet == 'MRT' and
             in_array($data->mimetype, $this->can_process_mimetype) and
             $format == $this->format
         );
@@ -46,51 +46,16 @@ class CtXml2HtmlFormatter implements FormatterStrategyInterface
         $protocol = '';
         $series = '';
 
+
         $thead = "<tr><th>bodysize</th><th>Region</th><th>Protocol</th><th>Serie</th>";
+        $thead = '';
         $thead_parameters_already_set = false;
         $cnt = 0;
         foreach ($proto_arr as $row) {
-            if ($row['bodysize'] != $bodysize) {
-                $bodysize = $row['bodysize'];
-                $formatted .= "<tr>\n<td><b>$bodysize</b></td>\n";
-            } else {
-                $formatted .= "<tr>\n<td></td>\n";
-            }
-
-            if ($row['region'] != $region) {
-                $region = $row['region'];
-                $formatted .= "<td><b>$region</b></td>\n";
-            } else {
-                $formatted .= "<td></td>\n";
-            }
-
-            if ($row['protocol'] != $protocol) {
-                $protocol = $row['protocol'];
-                $formatted .= "<td><b>$protocol</b></td>\n";
-            } else {
-                $formatted .= "<td></td>\n";
-            }
-
-            if ($row['series'] !== $series) {
-                $series = $row['series'];
-                $formatted .= "<td><b>$series</b></td>\n";
-            } else {
-                $formatted .= "<td></td>\n";
-            }
-
-            foreach ($row['param'] as $paramname => $paramval) {
-                $formatted .= "<td>$paramval</td>\n";
-                if (false === $thead_parameters_already_set) {
-                    $thead .= "<th>$paramname</th>\n";
-                }
-            }
-            $thead_parameters_already_set = true;
-            $formatted .= "</tr>\n";
-            $thead .= "</tr>\n";
-
-            $cnt++;
+            $formatted.= "<tr><td>".implode('</td><td>', $row)."</td></tr>";
         }
 
         return ("<table class='table-dark table-responsive output-table bordered'><thead>$thead</thead></thead><tbody>$formatted</tbody></table>");
+        // return ("<table class='table-dark table-responsive output-table bordered'></thead><tbody>$formatted</tbody></table>");
     }
 }

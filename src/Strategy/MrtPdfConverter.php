@@ -19,6 +19,7 @@ class MrtPdfConverter implements StrategyInterface
     private array $can_process_mimetype = ['application/pdf'];
     private $entityManager, $params, $logger, $kernel, $target_params;
     private $filepath; // holds full path to input pdf
+    private Config $config;
 
     public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernel)
     {

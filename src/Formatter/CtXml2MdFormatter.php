@@ -32,6 +32,12 @@ class CtXml2MdFormatter implements FormatterStrategyInterface
     public function format($serialized_payload, $format)
     {
         $proto_arr = unserialize($serialized_payload);
+
+        // treat errors
+        if(isset($proto_arr['error'])) {
+            return('<h1 class="error error-message">'.$proto_arr['error'].'</h1>');
+        }
+
         // $count = count($proto_arr, COUNT_RECURSIVE);
         $formatted = '';
         $bodysize = '';

@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Protocol;
-use App\Form\ProtocoluploadType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Config;
+use App\Form\ConfigType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -36,17 +35,16 @@ class ConfigController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
+
             $protocol = $form->getData();
 
             $errors = $validator->validate($protocol);
             if (count($errors) > 0) {
-                return $this->render('protomuncher/upload.html.twig', [
+                return $this->render('config/index.html.twig', [
                     'form' => $form->createView(),
                     'protocol' => $protocol,
                     'errors' => $errors,
-                    'controller_name' => 'ProtomuncherController',
+                    'controller_name' => 'ConfigController',
                 ]);
             }
 
