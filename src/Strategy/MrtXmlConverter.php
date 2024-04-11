@@ -81,9 +81,9 @@ class MrtXmlConverter implements StrategyInterface
         $this->logger->info('doing MRT PDF conversion with parameters '.implode(' | ', $this->target_params));
 
         $return_arr = array();
-        $countIx = 0;
         $proto_cnt = 0;
         $last_sequence = '';
+        $last_protocol = '';
 
         $xml = new XMLReader();
         $xml->open($this->filepath);
@@ -105,6 +105,12 @@ class MrtXmlConverter implements StrategyInterface
             if($actual_sequence == 'localizer' and $last_sequence != 'localizer'){
                 $proto_cnt++;
             }
+
+            $actual_protocol = trim($proto_path[4] . '-' . $proto_path[5]);
+            if ($actual_protocol !== $last_protocol) {
+                $proto_cnt = 1;
+            }
+
             $protocol = trim($proto_path[4] . '-' . $proto_path[5]).'-'.$proto_cnt;
 
             $prod = array(
@@ -115,6 +121,7 @@ class MrtXmlConverter implements StrategyInterface
 
             // done parsing the Protocol name stuff, set last_sequence for next iteration
             $last_sequence = $actual_sequence;
+            $last_protocol = $actual_protocol;
 
             // Step 2: read potential values from protocol header
             $header = trim(strval($element->SubStep->ProtHeaderInfo->HeaderProperty));
@@ -145,7 +152,6 @@ class MrtXmlConverter implements StrategyInterface
             }
 
             $return_arr[] = $prod;
-            $countIx++;
             $xml->next('PrintProtocol');
             unset($element);
         }

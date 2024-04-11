@@ -39,23 +39,39 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
             return('<h1 class="error error-message">'.$proto_arr['error'].'</h1>');
         }
 
+        $thead_arr = array_keys($proto_arr[0]);
+        $td_count = count($thead_arr);
+
+        $thead = "<tr><th>".implode('</th><th>',$thead_arr)."</th></tr>";
+
         // $count = count($proto_arr, COUNT_RECURSIVE);
         $formatted = '';
-        $bodysize = '';
-        $region = '';
-        $protocol = '';
-        $series = '';
 
-
-        $thead = "<tr><th>bodysize</th><th>Region</th><th>Protocol</th><th>Serie</th>";
-        $thead = '';
         $thead_parameters_already_set = false;
-        $cnt = 0;
+        $regions = 0;
+        $protocols = 0;
+        $sequences = 0;
+        $actual_region = '';
+        $actual_protocol = '';
+
         foreach ($proto_arr as $row) {
-            $formatted.= "<tr><td>".implode('</td><td>', $row)."</td></tr>";
+            if (is_array($row)) {
+                $formatted.= "<tr><td>".implode('</td><td>', $row)."</td></tr>";
+
+                if ($row['region'] !== $actual_region) {
+                    $regions++;
+                    $actual_region = $row['region'];
+                }
+
+                if ($row['protocol'] !== $actual_protocol) {
+                    $protocols++;
+                    $actual_protocol = $row['protocol'];
+                }
+
+                $sequences++;
+            }
         }
 
-        return ("<table class='table-dark table-responsive output-table bordered'><thead>$thead</thead></thead><tbody>$formatted</tbody></table>");
-        // return ("<table class='table-dark table-responsive output-table bordered'></thead><tbody>$formatted</tbody></table>");
+        return ("<table class='table-dark table-responsive output-table bordered'><thead>$thead</thead><tfoot><td colspan=$td_count>extracted $regions regions with $protocols protocols and $sequences sequences</td></tfoot><tbody>$formatted</tbody></table>");
     }
 }

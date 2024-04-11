@@ -3,18 +3,60 @@
 {% block title %}Hello ConfigController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div id="messagecontainer" class="container dx-4 justify-content-center text-white mx-auto mt-2 mb-5">
+        {% block flash %}
+            <h6>Messages:</h6>
+        {% endblock%}
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/php/symprot/src/Controller/ConfigController.php'|file_link(0) }}">src/Controller/ConfigController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/php/symprot/templates/config/index.html.twig'|file_link(0) }}">templates/config/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div id="uploadcontainer" class="d-table dx-4 text-white mx-auto mt-2 mb-5">
+
+        <h2>Konfiguration bearbeiten</h2>
+{#
+
+        {{ form_start(form, {'method': 'POST'}) }}
+        <div class="list-group-item-danger">
+            {{ form_errors(form) }}
+        </div>
+
+        <div class="d-table-row">
+            <div class="d-table-cell" >
+                {{ form_label(form.protocolFile) }}
+            </div>
+            <div class="d-table-cell" id="file_upload">
+                {{ form_widget(form.protocolFile) }}
+            </div>
+            <div class="form-error list-group-item-danger">
+                {{ form_errors(form.protocolFile) }}
+            </div>
+            <div class="form-control">
+                {{ form_help(form.protocolFile) }}
+            </div>
+        </div>
+
+        <div class="d-table-row">
+            <div class="d-table-cell">
+                {{ form_label(form.geraet) }}
+            </div>
+            <div class="d-table-cell" id="file_upload_geraet">
+                {{ form_widget(form.geraet) }}
+            </div>
+        </div>
+
+        <div class="d-table-row">
+            <div class="d-table-cell" >
+            </div>
+            <div class="d-table-cell" >
+                {{ form_row(form.save, { 'label': 'Abschicken' }) }}
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+#}
+
+        {{ form(form) }}
+
+    </div>
+
 {% endblock %}
