@@ -3,17 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Protocol;
-use App\Entity\Geraet;
 use App\Form\ProtocoluploadType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProtomuncherController extends AbstractController
 {
@@ -24,8 +23,7 @@ class ProtomuncherController extends AbstractController
     {
         // creates a protocol object and initialize
         $protocol = new Protocol();
-        $errors = array();
-
+        $errors = [];
 
         $form = $this->createForm(ProtocoluploadType::class, $protocol);
 
@@ -44,7 +42,6 @@ class ProtomuncherController extends AbstractController
                     'controller_name' => 'ProtomuncherController',
                 ]);
             }
-
 
             // ... perform some action, such as saving the task to the database
             // for example, if Task is a Doctrine entity, save it!

@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geraet
+ * Geraet.
  *
  * @ORM\Entity(repositoryClass="App\Repository\GeraetRepository")
  */
@@ -17,7 +17,9 @@ class Geraet
      * @var int
      *
      * @ORM\Column(name="geraet_id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $geraetId;
@@ -146,5 +148,4 @@ class Geraet
 
         return $this;
     }
-
 }

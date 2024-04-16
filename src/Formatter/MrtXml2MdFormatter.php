@@ -1,17 +1,16 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace App\Formatter;
 
-use Doctrine\ORM\EntityManagerInterface;
-use http\Exception\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class MrtXml2MdFormatter implements FormatterStrategyInterface
 {
-    private $logger, $can_process_mimetype, $format;
+    private $logger;
+    private $can_process_mimetype;
+    private $format;
 
     public function __construct(LoggerInterface $procLogger)
     {
@@ -22,12 +21,12 @@ class MrtXml2MdFormatter implements FormatterStrategyInterface
 
     public function canFormat($data, $format)
     {
-        return (
-            is_object($data) and
-            $data->geraet == 'MRT' and
-            in_array($data->mimetype, $this->can_process_mimetype) and
-            $format == $this->format
-        );
+        return
+            is_object($data)
+            and $data->geraet == 'MRT'
+            and in_array($data->mimetype, $this->can_process_mimetype)
+            and $format == $this->format
+        ;
     }
 
     public function format($serialized_payload, $format)
@@ -36,14 +35,14 @@ class MrtXml2MdFormatter implements FormatterStrategyInterface
         $formatted = '';
 
         // treat errors
-        if(isset($proto_arr['error'])) {
-            return('<h1 class="error error-message">'.$proto_arr['error'].'</h1>');
+        if (isset($proto_arr['error'])) {
+            return '<h1 class="error error-message">'.$proto_arr['error'].'</h1>';
         }
 
         $thead_arr = array_keys($proto_arr[0]);
         $td_count = count($thead_arr);
 
-        $thead = "<tr><th>".implode(' | </th><th>',$thead_arr)."</th></tr>";
+        $thead = '<tr><th>'.implode(' | </th><th>', $thead_arr).'</th></tr>';
 
         $regions = 0;
         $protocols = 0;
@@ -53,22 +52,22 @@ class MrtXml2MdFormatter implements FormatterStrategyInterface
 
         foreach ($proto_arr as $row) {
             if (is_array($row)) {
-                $formatted.= "<tr><td>".implode(' | </td><td>', $row)."</td></tr>";
+                $formatted .= '<tr><td>'.implode(' | </td><td>', $row).'</td></tr>';
 
                 if ($row['region'] !== $actual_region) {
-                    $regions++;
+                    ++$regions;
                     $actual_region = $row['region'];
                 }
 
                 if ($row['protocol'] !== $actual_protocol) {
-                    $protocols++;
+                    ++$protocols;
                     $actual_protocol = $row['protocol'];
                 }
 
-                $sequences++;
+                ++$sequences;
             }
         }
 
-        return ("<table class='table-dark table-responsive output-table bordered'><thead>$thead</thead><tfoot><td colspan=$td_count>extracted $regions regions with $protocols protocols and $sequences sequences</td></tfoot><tbody>$formatted</tbody></table>");
+        return "<table class='table-dark table-responsive output-table bordered'><thead>$thead</thead><tfoot><td colspan=$td_count>extracted $regions regions with $protocols protocols and $sequences sequences</td></tfoot><tbody>$formatted</tbody></table>";
     }
 }

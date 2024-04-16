@@ -6,7 +6,7 @@ namespace App\Service;
 
 interface IConverter
 {
-    function setinput(string $input): void;
+    public function setinput(string $input): void;
 
-    function convert(): array;
+    public function convert(): array;
 }

@@ -5,18 +5,19 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Parameter
+ * Parameter.
  *
  * @ORM\Entity(repositoryClass="App\Repository\ParameterRepository")
  */
-
 class Parameter
 {
     /**
      * @var int
      *
      * @ORM\Column(name="parameter_id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $parameter_id;
@@ -40,6 +41,7 @@ class Parameter
 
     /**
      * @ORM\ManyToOne(targetEntity=Geraet::class, inversedBy="parameters")
+     *
      * @ORM\JoinColumn(name="geraet_id", referencedColumnName="geraet_id", nullable=false)
      */
     private $geraet;
@@ -96,5 +98,4 @@ class Parameter
 
         return $this;
     }
-
 }

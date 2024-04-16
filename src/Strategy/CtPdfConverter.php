@@ -2,22 +2,24 @@
 
 namespace App\Strategy;
 
-use App\Entity\Parameter;
 use App\Entity\Config;
-use App\Repository\ParameterRepository;
+use App\Entity\Parameter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use App\Strategy\StrategyInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use KubAT\PhpSimple\HtmlDomParser;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\HttpKernel\KernelInterface;
 use TonchikTm\PdfToHtml\Pdf;
 
 class CtPdfConverter implements StrategyInterface
 {
     private array $can_process_mimetype = ['application/pdf'];
-    private $entityManager, $params, $logger, $kernel, $target_params;
+    private $entityManager;
+    private $params;
+    private $logger;
+    private $kernel;
+    private $target_params;
     private $filepath; // holds full path to input pdf
 
     public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernel)
@@ -30,19 +32,17 @@ class CtPdfConverter implements StrategyInterface
 
     public function canProcess($data)
     {
-        return (
-            is_object($data) and
-            $data->geraet == 'CT' and
-            in_array($data->mimetype, $this->can_process_mimetype)
-        );
+        return
+            is_object($data)
+            and $data->geraet == 'CT'
+            and in_array($data->mimetype, $this->can_process_mimetype)
+        ;
     }
 
     /**
-     * @param $limits
-     * @param $max
      * @return array of integers holding page numbers
      */
-    function get_limits($limits, $max): array
+    public function get_limits($limits, $max): array
     {
         // see if limits holds a range
         if (is_string($limits) and stristr($limits, '-')) {
@@ -70,7 +70,7 @@ class CtPdfConverter implements StrategyInterface
                 $end = $new_end;
             }
 
-            return(range($start, $end));
+            return range($start, $end);
         }
 
         if (is_string($limits) and stristr($limits, ',')) {
@@ -85,7 +85,8 @@ class CtPdfConverter implements StrategyInterface
                     unset($item);
                 }
             }
-            return (array_unique($items)); // remove duplicate values
+
+            return array_unique($items); // remove duplicate values
         }
 
         // assume its a single number
@@ -93,22 +94,22 @@ class CtPdfConverter implements StrategyInterface
             if ($limits > $max or 0 == $limits) {
                 $limits = $max;
             }
-            return (array($limits));
+
+            return [$limits];
         }
 
         // if nothing fits, assume we process everything
-        return(range(1, $max));
+        return range(1, $max);
     }
 
     public function process($data)
     {
-        /**
+        /*
          * So far i could not find a PDF file to implement this parser
          * if you find one, feel free to commit.
          * Probably the MrtPdfConverter can guide you...
          */
-        return (serialize(array('error'=>'No parser exists (yet) for CT protocols in PDF')));
-
+        return serialize(['error' => 'No parser exists (yet) for CT protocols in PDF']);
 
         // get all parameters we selected for chosen geraet
         $target_elements = $this->entityManager
@@ -121,13 +122,13 @@ class CtPdfConverter implements StrategyInterface
             ->find(1);
         // ->findOneBy(array('selected' => true));
 
-        if(false == (is_object($config) or count((array)$config) < 1)) {
+        if (false == (is_object($config) or count((array) $config) < 1)) {
             $config = new Config();
         }
 
         $this->config = $config->getDefaults();
 
-        foreach($target_elements as $param) {
+        foreach ($target_elements as $param) {
             // reduce parameters to nameonly, turn to lowercase
             $target_params[] = strtolower($param->getParameterName());
         }
@@ -141,7 +142,7 @@ class CtPdfConverter implements StrategyInterface
         $target_path = $this->kernel.'/public'.$protocol_path;
         $this->filepath = $this->kernel.'/public'.$data->filepath;
 
-        $return = array();
+        $return = [];
 
         $pdf = new Pdf($this->filepath,
             [
@@ -161,11 +162,11 @@ class CtPdfConverter implements StrategyInterface
                     'inlineCss' => false, // replaces css classes to inline css rules
                     'inlineImages' => false, // looks for images in html and replaces the src attribute to base64 hash
                     'onlyContent' => true, // takes from html body content only
-                ]
+                ],
             ]);
 
         $pdfInfo = $pdf->getInfo();
-        if(!is_array($pdfInfo) or (count($pdfInfo) < 1)) {
+        if (!is_array($pdfInfo) or (count($pdfInfo) < 1)) {
             $this->logger->critical($target_path.' contains no valid file');
             throw new FileNotFoundException($target_path.' contains no valid file');
         }
@@ -173,7 +174,7 @@ class CtPdfConverter implements StrategyInterface
         $numofPages = $pdf->countPages();
 
         $limits = $this->config->getLimitPages();
-        if(!isset($limits)) {
+        if (!isset($limits)) {
             $limits = 0;
         }
 
@@ -181,7 +182,7 @@ class CtPdfConverter implements StrategyInterface
 
         $html = $pdf->getHtml();
         foreach ($pages as $pagenumber) {
-            $this->logger->info('converting page ' . $pagenumber);
+            $this->logger->info('converting page '.$pagenumber);
             $page = $html->getPage($pagenumber);
             $page_extract = $this->convert_for_CT($page);
             $return = array_merge($return, $page_extract);
@@ -189,25 +190,25 @@ class CtPdfConverter implements StrategyInterface
 
         // save output to file
         $target_file_parts = pathinfo($this->filepath);
-        $target_file = $target_file_parts['dirname']. DIRECTORY_SEPARATOR .$target_file_parts['filename'].'.txt';
+        $target_file = $target_file_parts['dirname'].DIRECTORY_SEPARATOR.$target_file_parts['filename'].'.txt';
         file_put_contents($target_file, serialize($return));
 
-        return (serialize($return));
+        return serialize($return);
         // return (['success' => true]);
     }
 
-    function convert_for_CT($html): array
+    public function convert_for_CT($html): array
     {
         $dom = HtmlDomParser::str_get_html($html);
-        $output_array = array(); // make sure we return an array
+        $output_array = []; // make sure we return an array
 
-        //Strip out all &nbsp; tags if any (otherwise they would destroy our parsers)
+        // Strip out all &nbsp; tags if any (otherwise they would destroy our parsers)
         foreach ($dom->find('td') as $td) {
             $td->innertext = str_replace('&nbsp;', '', $td->innertext);
         }
 
         // Match a numerated array of wanted fields
-        //@TODO: this implementation sucks probably???
+        // @TODO: this implementation sucks probably???
         $i = 0;
         foreach ($dom->find('tr th.c5') as $wanted_maybe) {
             //  check if the th.c5 contains a span.c4 tag, if yes its holds a new region and thus we need to skip  it...
@@ -250,13 +251,14 @@ class CtPdfConverter implements StrategyInterface
             }
         }
 
-        $this->logger->debug("POST-CHECK is REGION " . $region . " PROTOCOL " . $protocol . " SEQUENCE " . $sequence);
+        $this->logger->debug('POST-CHECK is REGION '.$region.' PROTOCOL '.$protocol.' SEQUENCE '.$sequence);
 
         $dom->clear();
+
         return $output;
     }
 
-    function check_if_changed($subject, $new_subject)
+    public function check_if_changed($subject, $new_subject)
     {
         // strip included HTML-Tags, clean leading and trailing whitespaces
         $subject = trim(strip_tags($subject));
@@ -267,41 +269,45 @@ class CtPdfConverter implements StrategyInterface
         }
 
         if (true == $this->config->getDebug()) {
-            $this->logger->debug("DEBUG: check if subject: '" . $subject . "' matches new subject: '" . $new_subject . "'");
+            $this->logger->debug("DEBUG: check if subject: '".$subject."' matches new subject: '".$new_subject."'");
         }
 
         if (empty($subject) and empty($new_subject)) {
             if (true == $this->config->getDebug()) {
-                $this->logger->debug("DEBUG: subject and new_subject empty --> returning false");
+                $this->logger->debug('DEBUG: subject and new_subject empty --> returning false');
             }
-            return (false);
+
+            return false;
         }
 
         if (empty($new_subject)) {
             if (true == $this->config->getDebug()) {
-                $this->logger->debug("DEBUG: subject exists and new_subject empty --> returning false");
+                $this->logger->debug('DEBUG: subject exists and new_subject empty --> returning false');
             }
-            return (false);
+
+            return false;
         }
 
         if (empty($subject)) {
             if (true == $this->config->getDebug()) {
-                $this->logger->debug("DEBUG: subject empty and new_subject exists --> returning new_subject");
+                $this->logger->debug('DEBUG: subject empty and new_subject exists --> returning new_subject');
             }
-            return ($new_subject);
+
+            return $new_subject;
         }
 
         if ($subject != $new_subject) {
             if (true == $this->config->getDebug()) {
-                $this->logger->debug("DEBUG: subject and new_subject exist --> returning new_subject");
+                $this->logger->debug('DEBUG: subject and new_subject exist --> returning new_subject');
             }
-            return ($new_subject);
+
+            return $new_subject;
         }
 
-        return (false);
+        return false;
     }
 
-    function parse_region($this_region)
+    public function parse_region($this_region): void
     {
         $region = $this_region;
         if (true == $this->config->getDebug()) {
@@ -309,7 +315,7 @@ class CtPdfConverter implements StrategyInterface
         }
     }
 
-    function parse_protocol($this_protocol)
+    public function parse_protocol($this_protocol): void
     {
         global $protocol, $output, $conf_valid_entries, $conf_protomuncher_debug;
         // close table of previous protocol if there was one
@@ -323,20 +329,20 @@ class CtPdfConverter implements StrategyInterface
         }
 
         // beautify the anchor for HTML-compatibility, several escalation-steps are used
-        //2nd: a div with an ID, this requires the first character to be a letter,
+        // 2nd: a div with an ID, this requires the first character to be a letter,
         // umlauts are not allowed
-        $sonderzeichen = array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/", "/\s/");
-        $replace = array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss", "_");
-        $output .= '<div id="' . preg_replace($sonderzeichen, $replace, $protocol) . '">' . "\n";
-        $output .= '<h3><a name="' . preg_replace($sonderzeichen, $replace, $protocol) . '">' . $protocol . "</a></h3>\n";
+        $sonderzeichen = ['/ä/', '/ö/', '/ü/', '/Ä/', '/Ö/', '/Ü/', '/ß/', "/\s/"];
+        $replace = ['ae', 'oe', 'ue', 'Ae', 'Oe', 'Ue', 'ss', '_'];
+        $output .= '<div id="'.preg_replace($sonderzeichen, $replace, $protocol).'">'."\n";
+        $output .= '<h3><a name="'.preg_replace($sonderzeichen, $replace, $protocol).'">'.$protocol."</a></h3>\n";
         $output .= "<table>\n\t<thead>\n\t\t<tr>\n\t\t\t\n";
         foreach ($conf_valid_entries as $th_field) {
-            $output .= "<th>" . strtoupper($th_field) . "</th>";
+            $output .= '<th>'.strtoupper($th_field).'</th>';
         }
-        $output .= "</tr>\n</thead>\n<tfoot><tr><td colspan=\"" . count($conf_valid_entries) . "\">Erklärungen</td></tr></tfoot>\n<tbody>\n\n";
+        $output .= "</tr>\n</thead>\n<tfoot><tr><td colspan=\"".count($conf_valid_entries)."\">Erklärungen</td></tr></tfoot>\n<tbody>\n\n";
     }
 
-    function parse_sequence($this_sequence)
+    public function parse_sequence($this_sequence): void
     {
         global $sequence, $output, $conf_protomuncher_debug, $conf_protomuncher_debug;
         // close table-row of previous sequence if there was one
@@ -351,7 +357,7 @@ class CtPdfConverter implements StrategyInterface
         }
     }
 
-    function parse_row($this_row)
+    public function parse_row($this_row): void
     {
         global $conf_valid_entries, $output, $conf_protomuncher_debug, $wanted_entry, $temp_arr;
 
@@ -375,8 +381,8 @@ class CtPdfConverter implements StrategyInterface
                     $temp_arr[$array_position] = "<td>$potential_hits_array[$array_position]</td>";
                 } else {
                     ksort($temp_arr);
-                    $output .= "<tr>" . implode($temp_arr) . "</tr>\n";
-                    $temp_arr = array();
+                    $output .= '<tr>'.implode($temp_arr)."</tr>\n";
+                    $temp_arr = [];
                     $temp_arr[$array_position] = "<td>$potential_hits_array[$array_position]</td>";
                 }
             }
@@ -387,7 +393,7 @@ class CtPdfConverter implements StrategyInterface
         }
     }
 
-    function trimall($str, $charlist = " \t\n\r\0\x0B")
+    public function trimall($str, $charlist = " \t\n\r\0\x0B")
     {
         return str_replace(str_split($charlist), '', $str);
     }

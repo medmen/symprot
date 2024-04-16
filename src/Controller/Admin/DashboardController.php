@@ -4,7 +4,6 @@ namespace App\Controller\Admin;
 
 use App\Entity\Config;
 use App\Entity\Geraet;
-use App\Entity\Helperfields;
 use App\Entity\Parameter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -15,14 +14,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    private AdminUrlGenerator $adminUrlGenerator;
+
+    public function __construct(AdminUrlGenerator $adminUrlGenerator)
+    {
+        $this->adminUrlGenerator = $adminUrlGenerator;
+    }
+
     /**
      * @Route("/admin", name="admin")
      */
     public function index(): Response
     {
         // return parent::index();
-        $routeBuilder = $this->get(AdminUrlGenerator::class);
+        $routeBuilder = $this->adminUrlGenerator;
         $url = $routeBuilder->setController(GeraetCrudController::class)->generateUrl();
+
         return $this->redirect($url);
     }
 
@@ -34,7 +41,7 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        //yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
+        // yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
         yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', 'index');
         yield MenuItem::linkToCrud('Geraete', 'fas fa-map-marker-alt', Geraet::class);

@@ -1,8 +1,6 @@
 <?php
-namespace App\Formatter;
 
-use App\Formatter\FormatterStrategyInterface;
-use Symfony\Component\Mime\Exception\LogicException;
+namespace App\Formatter;
 
 class FormatterContext
 {
@@ -13,7 +11,7 @@ class FormatterContext
         $this->strategies = $strategies;
     }
 
-    public function addStrategy(FormatterStrategyInterface $strategy)
+    public function addStrategy(FormatterStrategyInterface $strategy): void
     {
         $this->strategies[] = $strategy;
     }

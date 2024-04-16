@@ -2,17 +2,17 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Config;
 use App\Form\ConfigType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ConfigController extends AbstractController
 {
@@ -29,13 +29,12 @@ class ConfigController extends AbstractController
         $config->setOutputFormat('dokuwiki');
         $config->setStripUnits(true);
 
-        $errors = array();
+        $errors = [];
 
         $form = $this->createForm(ConfigType::class, $config);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $protocol = $form->getData();
 
             $errors = $validator->validate($protocol);
@@ -47,7 +46,6 @@ class ConfigController extends AbstractController
                     'controller_name' => 'ConfigController',
                 ]);
             }
-
 
             // ... perform some action, such as saving the task to the database
             // for example, if Task is a Doctrine entity, save it!
@@ -64,10 +62,8 @@ class ConfigController extends AbstractController
             return $this->redirectToRoute('process_upload', ['id' => $protocol->getId()]);
         }
 
-
         return $this->render('config/index.html.twig', [
             'controller_name' => 'ConfigController',
         ]);
-
     }
 }

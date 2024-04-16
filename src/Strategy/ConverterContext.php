@@ -1,7 +1,6 @@
 <?php
-namespace App\Strategy;
 
-use App\Strategy\StrategyInterface;
+namespace App\Strategy;
 
 class ConverterContext
 {
@@ -12,7 +11,7 @@ class ConverterContext
         $this->strategies = $strategies;
     }
 
-    public function addStrategy(StrategyInterface $strategy)
+    public function addStrategy(StrategyInterface $strategy): void
     {
         $this->strategies[] = $strategy;
     }
