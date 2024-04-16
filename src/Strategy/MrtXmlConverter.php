@@ -132,7 +132,7 @@ class MrtXmlConverter implements StrategyInterface
             $parts = preg_split('/\s+/', $header);
             foreach ($parts as $part) {
                 if (stristr($part, ':')) {
-                    list($key, $val) = explode(':', $part, 2);
+                    [$key, $val] = explode(':', $part, 2);
                     if (in_array(strtolower($key), $this->target_params)) {
                         $prod[$key] = $val;
                     }

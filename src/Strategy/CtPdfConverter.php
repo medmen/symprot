@@ -381,7 +381,7 @@ class CtPdfConverter implements StrategyInterface
                     $temp_arr[$array_position] = "<td>$potential_hits_array[$array_position]</td>";
                 } else {
                     ksort($temp_arr);
-                    $output .= '<tr>'.implode($temp_arr)."</tr>\n";
+                    $output .= '<tr>'.implode('', $temp_arr)."</tr>\n";
                     $temp_arr = [];
                     $temp_arr[$array_position] = "<td>$potential_hits_array[$array_position]</td>";
                 }

@@ -7,8 +7,11 @@ use Rector\Symfony\Set\SymfonySetList;
 
 return RectorConfig::configure()
     ->withSymfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml')
+    ->withPhpSets(php80: true);
+/**
     ->withSets([
-        SymfonySetList::SYMFONY_54,
-        SymfonySetList::SYMFONY_CODE_QUALITY,
-        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
+        // SymfonySetList::SYMFONY_54,
+        // SymfonySetList::SYMFONY_CODE_QUALITY,
+        // SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
+*/
