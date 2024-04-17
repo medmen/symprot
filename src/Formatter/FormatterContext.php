@@ -4,11 +4,8 @@ namespace App\Formatter;
 
 class FormatterContext
 {
-    private iterable $strategies = [];
-
-    public function __construct(iterable $strategies)
+    public function __construct(private iterable $strategies)
     {
-        $this->strategies = $strategies;
     }
 
     public function addStrategy(FormatterStrategyInterface $strategy): void

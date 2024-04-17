@@ -13,7 +13,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *
  * @Vich\Uploadable
  */
-class Protocol
+class Protocol implements \Stringable
 {
     /**
      * @ORM\Id
@@ -84,9 +84,9 @@ class Protocol
         return $this->id;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->protocolName;
+        return (string) $this->protocolName;
     }
 
     public function getProtocolFile(): ?File
@@ -100,8 +100,6 @@ class Protocol
      * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
-     *
-     * @param File|UploadedFile|null $protocolFile
      */
     public function setProtocolFile(?File $protocolFile = null): void
     {

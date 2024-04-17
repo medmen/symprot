@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="App\Repository\GeraetRepository")
  */
-class Geraet
+class Geraet implements \Stringable
 {
     /**
      * @var int
@@ -57,7 +57,7 @@ class Geraet
 
     public function __toString(): string
     {
-        return $this->geraetName;
+        return (string) $this->geraetName;
     }
 
     public function getGeraetId(): ?int

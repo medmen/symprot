@@ -8,13 +8,11 @@ use Psr\Log\LoggerInterface;
 
 class MrtXml2HtmlFormatter implements FormatterStrategyInterface
 {
-    private $logger;
     private $can_process_mimetype;
     private $format;
 
-    public function __construct(LoggerInterface $procLogger)
+    public function __construct(private LoggerInterface $logger)
     {
-        $this->logger = $procLogger;
         $this->can_process_mimetype = ['application/xml', 'text/xml'];
         $this->format = 'html';
     }

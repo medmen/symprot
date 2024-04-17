@@ -15,15 +15,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProtocolController extends AbstractController
 {
-    private $convertercontext;
-    private $formattercontext;
     private $kernel;
     private $format;
 
-    public function __construct(ConverterContext $convertercontext, FormatterContext $formattercontext, KernelInterface $kernel)
+    public function __construct(private ConverterContext $convertercontext, private FormatterContext $formattercontext, KernelInterface $kernel)
     {
-        $this->convertercontext = $convertercontext;
-        $this->formattercontext = $formattercontext;
         $this->kernel = $kernel->getProjectDir();
     }
 
