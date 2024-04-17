@@ -72,7 +72,7 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
-        "cache-dir": "./composer-cache"
+        "cache-dir": "./.composer-cache"
     },
     "autoload": {
         "psr-4": {
