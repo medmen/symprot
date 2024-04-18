@@ -9,8 +9,11 @@ use http\Exception\InvalidArgumentException;
 class Formatter
 {
     private $format;
+
     private $old_protocol;
+
     private $old_region;
+
     private $pretty;
 
     public function __construct($format)

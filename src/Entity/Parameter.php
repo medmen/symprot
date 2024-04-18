@@ -6,45 +6,33 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Parameter.
- *
- * @ORM\Entity(repositoryClass="App\Repository\ParameterRepository")
  */
+#[ORM\Entity(repositoryClass: \App\Repository\ParameterRepository::class)]
 class Parameter
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="parameter_id", type="integer", nullable=false)
-     *
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'parameter_id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $parameter_id;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="parameter_name", type="text", nullable=true)
      */
+    #[ORM\Column(name: 'parameter_name', type: 'text', nullable: true)]
     private $parameter_name;
 
-    /**
-     * @ORM\Column(name="parameter_selected", type="boolean")
-     */
+    #[ORM\Column(name: 'parameter_selected', type: 'boolean')]
     private $parameter_selected = false;
 
-    /**
-     * @ORM\Column(name="parameter_default", type="boolean")
-     */
+    #[ORM\Column(name: 'parameter_default', type: 'boolean')]
     private $parameter_default = false;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Geraet::class, inversedBy="parameters")
-     *
-     * @ORM\JoinColumn(name="geraet_id", referencedColumnName="geraet_id", nullable=false)
-     */
-    private $geraet;
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'parameters')]
+    private ?Geraet $geraet = null;
 
     public function getParameterId(): ?int
     {

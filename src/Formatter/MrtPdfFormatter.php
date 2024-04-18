@@ -11,8 +11,11 @@ class MrtPdfFormatter
     private array $can_process_mimetype = ['application/pdf'];
 
     private $format;
+
     private $old_protocol;
+
     private $old_region;
+
     private $pretty;
 
     public function __construct($format)

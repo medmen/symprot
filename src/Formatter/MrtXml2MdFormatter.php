@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 class MrtXml2MdFormatter implements FormatterStrategyInterface
 {
     private $can_process_mimetype;
+
     private $format;
 
     public function __construct(private LoggerInterface $logger)

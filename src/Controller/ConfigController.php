@@ -16,9 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ConfigController extends AbstractController
 {
-    /**
-     * @Route("/config", name="config")
-     */
+    #[Route(path: '/config', name: 'config')]
     public function index(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, NotifierInterface $notifier, SessionInterface $session): Response
     {
         // creates a protocol object and initialize

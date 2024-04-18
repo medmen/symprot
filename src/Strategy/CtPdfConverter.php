@@ -15,8 +15,11 @@ use TonchikTm\PdfToHtml\Pdf;
 class CtPdfConverter implements StrategyInterface
 {
     private array $can_process_mimetype = ['application/pdf'];
+
     private $kernel;
+
     private $target_params;
+
     private $filepath; // holds full path to input pdf
 
     public function __construct(private EntityManagerInterface $entityManager, private ContainerBagInterface $params, private LoggerInterface $logger, KernelInterface $kernel)

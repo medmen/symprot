@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProtocolController extends AbstractController
 {
     private $kernel;
+
     private $format;
 
     public function __construct(private ConverterContext $convertercontext, private FormatterContext $formattercontext, KernelInterface $kernel)
@@ -23,9 +24,7 @@ class ProtocolController extends AbstractController
         $this->kernel = $kernel->getProjectDir();
     }
 
-    /**
-     * @Route("/process_upload/{id}", name="process_upload", methods={"GET"})
-     */
+    #[Route(path: '/process_upload/{id}', name: 'process_upload', methods: ['GET'])]
     public function index(int $id, ConverterContext $converterContext, FormatterContext $formattercontext, NotifierInterface $notifier): Response
     {
         $request = Request::createFromGlobals();

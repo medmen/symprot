@@ -8,44 +8,37 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Geraet.
- *
- * @ORM\Entity(repositoryClass="App\Repository\GeraetRepository")
  */
+#[ORM\Entity(repositoryClass: \App\Repository\GeraetRepository::class)]
 class Geraet implements \Stringable
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="geraet_id", type="integer", nullable=false)
      *
-     * @ORM\Id
      *
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'geraet_id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $geraetId;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="geraet_name", type="text", nullable=true, options={"default"="MRT"})
      */
+    #[ORM\Column(name: 'geraet_name', type: 'text', nullable: true, options: ['default' => 'MRT'])]
     private $geraetName = 'MRT';
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="geraet_beschreibung", type="text", nullable=true, options={"default"="Bei mehreren geräten hilfreich zur Unterscheidung"})
      */
+    #[ORM\Column(name: 'geraet_beschreibung', type: 'text', nullable: true, options: ['default' => 'Bei mehreren geräten hilfreich zur Unterscheidung'])]
     private $geraetBeschreibung = 'Bei mehreren geräten hilfreich zur Unterscheidung';
 
-    /**
-     * @ORM\OneToMany(targetEntity=Parameter::class, mappedBy="geraet", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: Parameter::class, mappedBy: 'geraet', orphanRemoval: true)]
     private $parameters;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Protocol::class, mappedBy="geraet", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: Protocol::class, mappedBy: 'geraet', orphanRemoval: true)]
     private $protocols;
 
     public function __construct()

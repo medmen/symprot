@@ -16,7 +16,9 @@ use XMLReader;
 class MrtXmlConverter implements StrategyInterface
 {
     private Config $config;
+
     private ParameterRepository $parameterRepository;
+
     private array $can_process_mimetype = ['application/xml', 'text/xml'];
 
     public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernel)

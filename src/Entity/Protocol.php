@@ -9,19 +9,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass=ProtocolRepository::class)
- *
  * @Vich\Uploadable
  */
+#[ORM\Entity(repositoryClass: ProtocolRepository::class)]
 class Protocol implements \Stringable
 {
-    /**
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
     /**
@@ -34,45 +29,37 @@ class Protocol implements \Stringable
     private $protocolFile;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     *
      * @var string|null
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private $protocolName;
 
     /**
-     * @ORM\Column(type="integer")
-     *
      * @var int|null
      */
+    #[ORM\Column(type: 'integer')]
     private $protocolSize;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     *
      * @var string|null
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private $protocolMimeType;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     *
      * @var string|null
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private $protocolOrigName;
 
     /**
-     * @ORM\Column(type="datetime")
-     *
      * @var \DateTimeInterface|null
      */
+    #[ORM\Column(type: 'datetime')]
     private $updatedAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Geraet::class, inversedBy="protocols")
-     *
-     * @ORM\JoinColumn(name="geraet_id", referencedColumnName="geraet_id", nullable=false)
-     */
+    #[ORM\JoinColumn(name: 'geraet_id', referencedColumnName: 'geraet_id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Geraet::class, inversedBy: 'protocols')]
     private $geraet;
 
     public function __construct()
