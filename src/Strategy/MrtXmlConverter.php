@@ -16,17 +16,23 @@ use XMLReader;
 class MrtXmlConverter implements StrategyInterface
 {
     private Config $config;
+    private EntityManagerInterface $entityManager;
+    private ContainerBagInterface $params;
+    private LoggerInterface $logger;
+    private ?string $kernel = null;
+
+    private $target_params, $filepath, $format;
 
     private ParameterRepository $parameterRepository;
 
     private array $can_process_mimetype = ['application/xml', 'text/xml'];
 
-    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernel)
+    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernelif)
     {
         $this->entityManager = $entityManager;
         $this->params = $params;
         $this->logger = $procLogger;
-        $this->kernel = $kernel->getProjectDir();
+        $this->kernel = $kernelif->getProjectDir();
     }
 
     public function canProcess($data)

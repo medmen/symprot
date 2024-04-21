@@ -43,7 +43,6 @@ class ProtomuncherController extends AbstractController
 
             // ... perform some action, such as saving the task to the database
             // for example, if Task is a Doctrine entity, save it!
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($protocol);
             $entityManager->flush();
 

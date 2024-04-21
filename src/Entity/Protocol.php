@@ -17,50 +17,34 @@ class Protocol implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      *
      * @Vich\UploadableField(mapping="protocol_file", fileNameProperty="protocolName", size="protocolSize", mimeType="protocolMimeType", originalName="protocolOrigName")
-     *
-     * @var File|null
      */
-    private $protocolFile;
+    private ?File $protocolFile = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255)]
-    private $protocolName;
+    private ?string $protocolName = null;
 
-    /**
-     * @var int|null
-     */
+
     #[ORM\Column(type: 'integer')]
-    private $protocolSize;
+    private ?int $protocolSize = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255)]
-    private $protocolMimeType;
+    private ?string $protocolMimeType = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255)]
-    private $protocolOrigName;
+    private ?string $protocolOrigName = null;
 
-    /**
-     * @var \DateTimeInterface|null
-     */
-    #[ORM\Column(type: 'datetime')]
-    private $updatedAt;
+    #[ORM\Column()]
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\JoinColumn(name: 'geraet_id', referencedColumnName: 'geraet_id', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: Geraet::class, inversedBy: 'protocols')]
-    private $geraet;
+    #[ORM\ManyToOne(inversedBy: 'protocols')]
+    private ?Geraet $geraet = null;
 
     public function __construct()
     {
@@ -149,12 +133,12 @@ class Protocol implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

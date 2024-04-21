@@ -10,17 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: \App\Repository\ParameterRepository::class)]
 class Parameter
 {
-    /**
-     * @var int
-     */
     #[ORM\Column(name: 'parameter_id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $parameter_id;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(name: 'parameter_name', type: 'text', nullable: true)]
     private $parameter_name;
 
@@ -30,7 +24,7 @@ class Parameter
     #[ORM\Column(name: 'parameter_default', type: 'boolean')]
     private $parameter_default = false;
 
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'geraet_id', referencedColumnName: 'geraet_id', nullable: false)]
     #[ORM\ManyToOne(inversedBy: 'parameters')]
     private ?Geraet $geraet = null;
 

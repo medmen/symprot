@@ -20,19 +20,19 @@ class Config
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string')]
-    private $limitPages;
+    private ?string $limitPages = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $stripUnits;
+    private bool $stripUnits = true;
 
     #[ORM\Column(type: 'boolean')]
-    private $debug;
+    private bool $debug = false;
 
     #[ORM\Column(type: 'string')]
-    private $outputFormat;
+    private ?string $outputFormat = null;
 
     public function getId(): ?int
     {

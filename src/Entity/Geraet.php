@@ -12,39 +12,27 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: \App\Repository\GeraetRepository::class)]
 class Geraet implements \Stringable
 {
-    /**
-     * @var int
-     *
-     *
-     *
-     */
     #[ORM\Column(name: 'geraet_id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private $geraetId;
+    private ?int $geraetId = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(name: 'geraet_name', type: 'text', nullable: true, options: ['default' => 'MRT'])]
-    private $geraetName = 'MRT';
+    private ?string $geraetName = 'MRT';
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(name: 'geraet_beschreibung', type: 'text', nullable: true, options: ['default' => 'Bei mehreren geräten hilfreich zur Unterscheidung'])]
-    private $geraetBeschreibung = 'Bei mehreren geräten hilfreich zur Unterscheidung';
+    private ?string $geraetBeschreibung = 'Bei mehreren geräten hilfreich zur Unterscheidung';
 
     #[ORM\OneToMany(targetEntity: Parameter::class, mappedBy: 'geraet', orphanRemoval: true)]
-    private $parameters;
+    private Collection $parameters;
 
     #[ORM\OneToMany(targetEntity: Protocol::class, mappedBy: 'geraet', orphanRemoval: true)]
-    private $protocols;
+    private Collection $protocols;
 
     public function __construct()
     {
         $this->parameters = new ArrayCollection();
-        $this->helperfields = new ArrayCollection();
+        // $this->helperfields = new ArrayCollection();
         $this->protocols = new ArrayCollection();
     }
 
@@ -54,6 +42,10 @@ class Geraet implements \Stringable
     }
 
     public function getGeraetId(): ?int
+    {
+        return $this->geraetId;
+    }
+    public function getId(): ?int
     {
         return $this->geraetId;
     }

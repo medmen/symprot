@@ -11,6 +11,7 @@ class CtXml2MdFormatter implements FormatterStrategyInterface
     private $can_process_mimetype;
 
     private $valid_formats;
+    private ?string $format;
 
     public function __construct(private LoggerInterface $logger)
     {

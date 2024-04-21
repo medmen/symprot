@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Protocol;
 use App\Formatter\FormatterContext;
 use App\Strategy\ConverterContext;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,12 +26,12 @@ class ProtocolController extends AbstractController
     }
 
     #[Route(path: '/process_upload/{id}', name: 'process_upload', methods: ['GET'])]
-    public function index(int $id, ConverterContext $converterContext, FormatterContext $formattercontext, NotifierInterface $notifier): Response
+    public function index(int $id, ConverterContext $converterContext, FormatterContext $formattercontext, NotifierInterface $notifier, EntityManagerInterface $entityManager): Response
     {
         $request = Request::createFromGlobals();
         $this->format = $request->query->get('format') ?? 'html'; // make sure we have a default
 
-        $protocol = $this->getDoctrine()
+        $protocol = $entityManager
             ->getRepository(Protocol::class)
             ->find($id);
 
