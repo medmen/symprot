@@ -16,6 +16,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ConfigController extends AbstractController
 {
+    public function __construct(private \Doctrine\Persistence\ManagerRegistry $managerRegistry)
+    {
+    }
     #[Route(path: '/config', name: 'config')]
     public function index(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, NotifierInterface $notifier, SessionInterface $session): Response
     {
@@ -47,7 +50,7 @@ class ConfigController extends AbstractController
 
             // ... perform some action, such as saving the task to the database
             // for example, if Task is a Doctrine entity, save it!
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->managerRegistry->getManager();
             $entityManager->persist($protocol);
             $entityManager->flush();
 

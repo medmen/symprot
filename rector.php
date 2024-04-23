@@ -17,10 +17,10 @@ return RectorConfig::configure()
     ->withSymfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml')
     //->withPhpSets(php80: true);
     ->withSets([
-        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
-        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
-        SensiolabsSetList::ANNOTATIONS_TO_ATTRIBUTES,
-        // SymfonySetList::SYMFONY_54,
-        // SymfonySetList::SYMFONY_CODE_QUALITY,
-        // SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
+        // DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
+        // SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
+        // SensiolabsSetList::ANNOTATIONS_TO_ATTRIBUTES,
+        SymfonySetList::SYMFONY_60,
+        SymfonySetList::SYMFONY_CODE_QUALITY,
+        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
