@@ -103,7 +103,7 @@ class Config
         return $this;
     }
 
-    public function setDefaults() {
+    public function setDefaults(): void {
         $this->debug = false;
         $this->limitPages = 0;
         $this->outputFormat = 'md';

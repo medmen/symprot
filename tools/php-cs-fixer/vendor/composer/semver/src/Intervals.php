@@ -51,7 +51,7 @@ class Intervals
      *
      * @return void
      */
-    public static function clear()
+    public static function clear(): void
     {
         self::$intervalsCache = array();
     }

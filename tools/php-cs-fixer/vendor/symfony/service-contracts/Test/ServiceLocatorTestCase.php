@@ -24,7 +24,7 @@ abstract class ServiceLocatorTestCase extends TestCase
         };
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $locator = $this->getServiceLocator([
             'foo' => fn () => 'bar',
@@ -37,7 +37,7 @@ abstract class ServiceLocatorTestCase extends TestCase
         $this->assertFalse($locator->has('dummy'));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $locator = $this->getServiceLocator([
             'foo' => fn () => 'bar',
@@ -48,7 +48,7 @@ abstract class ServiceLocatorTestCase extends TestCase
         $this->assertSame('baz', $locator->get('bar'));
     }
 
-    public function testGetDoesNotMemoize()
+    public function testGetDoesNotMemoize(): void
     {
         $i = 0;
         $locator = $this->getServiceLocator([
@@ -64,7 +64,7 @@ abstract class ServiceLocatorTestCase extends TestCase
         $this->assertSame(2, $i);
     }
 
-    public function testThrowsOnUndefinedInternalService()
+    public function testThrowsOnUndefinedInternalService(): void
     {
         if (!$this->getExpectedException()) {
             $this->expectException(\Psr\Container\NotFoundExceptionInterface::class);
@@ -77,7 +77,7 @@ abstract class ServiceLocatorTestCase extends TestCase
         $locator->get('foo');
     }
 
-    public function testThrowsOnCircularReference()
+    public function testThrowsOnCircularReference(): void
     {
         $this->expectException(\Psr\Container\ContainerExceptionInterface::class);
         $this->expectExceptionMessage('Circular reference detected for service "bar", path: "bar -> baz -> bar".');

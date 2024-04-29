@@ -50,7 +50,7 @@ class CompilingMatcher
      *
      * @return void
      */
-    public static function clear()
+    public static function clear(): void
     {
         self::$resultCache = array();
         self::$compiledCheckerCache = array();

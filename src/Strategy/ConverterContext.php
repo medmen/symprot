@@ -12,7 +12,7 @@ class ConverterContext
         $this->strategies = $strategies;
     }
 
-    public function addStrategy(StrategyInterface $strategy)
+    public function addStrategy(StrategyInterface $strategy): void
     {
         $this->strategies[] = $strategy;
     }

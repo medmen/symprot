@@ -145,7 +145,7 @@ class MultiConstraint implements ConstraintInterface
     /**
      * {@inheritDoc}
      */
-    public function setPrettyString($prettyString)
+    public function setPrettyString($prettyString): void
     {
         $this->prettyString = $prettyString;
     }
@@ -300,7 +300,7 @@ class MultiConstraint implements ConstraintInterface
     /**
      * @return void
      */
-    private function extractBounds()
+    private function extractBounds(): void
     {
         if (null !== $this->lowerBound) {
             return;

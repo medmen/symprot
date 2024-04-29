@@ -31,3 +31,7 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 /public/uploads/products/*
 /.composer-cache/
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###

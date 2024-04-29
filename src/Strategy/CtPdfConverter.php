@@ -301,7 +301,7 @@ class CtPdfConverter implements StrategyInterface
         return (false);
     }
 
-    function parse_region($this_region)
+    function parse_region($this_region): void
     {
         $region = $this_region;
         if (true == $this->config->getDebug()) {
@@ -309,7 +309,7 @@ class CtPdfConverter implements StrategyInterface
         }
     }
 
-    function parse_protocol($this_protocol)
+    function parse_protocol($this_protocol): void
     {
         global $protocol, $output, $conf_valid_entries, $conf_protomuncher_debug;
         // close table of previous protocol if there was one
@@ -336,7 +336,7 @@ class CtPdfConverter implements StrategyInterface
         $output .= "</tr>\n</thead>\n<tfoot><tr><td colspan=\"" . count($conf_valid_entries) . "\">Erklärungen</td></tr></tfoot>\n<tbody>\n\n";
     }
 
-    function parse_sequence($this_sequence)
+    function parse_sequence($this_sequence): void
     {
         global $sequence, $output, $conf_protomuncher_debug, $conf_protomuncher_debug;
         // close table-row of previous sequence if there was one
@@ -351,7 +351,7 @@ class CtPdfConverter implements StrategyInterface
         }
     }
 
-    function parse_row($this_row)
+    function parse_row($this_row): void
     {
         global $conf_valid_entries, $output, $conf_protomuncher_debug, $wanted_entry, $temp_arr;
 

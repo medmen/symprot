@@ -40,7 +40,7 @@ class MatchNoneConstraint implements ConstraintInterface
     /**
      * {@inheritDoc}
      */
-    public function setPrettyString($prettyString)
+    public function setPrettyString($prettyString): void
     {
         $this->prettyString = $prettyString;
     }

@@ -13,7 +13,7 @@ class FormatterContext
         $this->strategies = $strategies;
     }
 
-    public function addStrategy(FormatterStrategyInterface $strategy)
+    public function addStrategy(FormatterStrategyInterface $strategy): void
     {
         $this->strategies[] = $strategy;
     }

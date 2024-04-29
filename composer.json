@@ -50,6 +50,7 @@
     "require-dev": {
         "maximebf/debugbar": "^1.18",
         "phpunit/phpunit": "^9.6",
+        "rector/rector": "*",
         "symfony/browser-kit": "^5.4",
         "symfony/css-selector": "^5.4",
         "symfony/debug-bundle": "^5.4",
