@@ -3,27 +3,26 @@
 namespace App\Entity;
 
 use App\Repository\ProtocolRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProtocolRepository::class)
+ *
  * @Vich\Uploadable
  */
 class Protocol
 {
     /**
      * @ORM\Id
+     *
      * @ORM\GeneratedValue
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
-
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
@@ -40,7 +39,6 @@ class Protocol
      * @var string|null
      */
     private $protocolName;
-
 
     /**
      * @ORM\Column(type="integer")
@@ -72,10 +70,10 @@ class Protocol
 
     /**
      * @ORM\ManyToOne(targetEntity=Geraet::class, inversedBy="protocols")
+     *
      * @ORM\JoinColumn(name="geraet_id", referencedColumnName="geraet_id", nullable=false)
      */
     private $geraet;
-
 
     public function __construct()
     {
@@ -86,7 +84,8 @@ class Protocol
         return $this->id;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->protocolName;
     }
 

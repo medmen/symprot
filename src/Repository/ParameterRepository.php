@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Parameter;
-use App\Entity\Geraet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,9 +20,9 @@ class ParameterRepository extends ServiceEntityRepository
     }
 
     /**
-    * @return Parameter[] Returns an array of Parameter objects
-    * where selected = 1
-    */
+     * @return Parameter[] Returns an array of Parameter objects
+     *                     where selected = 1
+     */
     public function findSelectedbyGeraetName(string $geraetname)
     {
         return $this->createQueryBuilder('p')

@@ -2,25 +2,23 @@
 
 namespace App\Strategy;
 
-
-use App\Entity\Parameter;
 use App\Entity\Config;
-use App\Repository\ParameterRepository;
+use App\Entity\Parameter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use App\Strategy\StrategyInterface;
 use Psr\Log\LoggerInterface;
+use SimpleXMLElement;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-
-use \SimpleXMLElement;
-use \XMLReader;
-use function PHPUnit\Framework\containsIdentical;
+use XMLReader;
 
 class CtXmlConverter implements StrategyInterface
 {
     private array $can_process_mimetype = ['application/xml', 'text/xml'];
-    private $entityManager, $params, $logger, $kernel, $target_params;
+    private $entityManager;
+    private $params;
+    private $logger;
+    private $kernel;
+    private $target_params;
     private $filepath; // holds full path to input pdf
 
     public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernel)
@@ -33,17 +31,17 @@ class CtXmlConverter implements StrategyInterface
 
     public function canProcess($data)
     {
-        return (
-            is_object($data) and
-            $data->geraet == 'CT' and
-            in_array($data->mimetype, $this->can_process_mimetype)
-        );
+        return
+            is_object($data)
+            and $data->geraet == 'CT'
+            and in_array($data->mimetype, $this->can_process_mimetype)
+        ;
     }
 
     public function process($data)
     {
         /**
-         * Preparation
+         * Preparation.
          */
         // get all parameters we selected for chosen geraet
         $target_elements = $this->entityManager
@@ -56,13 +54,13 @@ class CtXmlConverter implements StrategyInterface
             ->find(1);
         // ->findOneBy(array('selected' => true));
 
-        if(false == (is_object($config) or count((array)$config) < 1)) {
+        if (false == (is_object($config) or count((array) $config) < 1)) {
             $config = new Config();
         }
 
         $this->config = $config->getDefaults();
 
-        foreach($target_elements as $param) {
+        foreach ($target_elements as $param) {
             // reduce parameters to nameonly, turn to lowercase
             $target_params[] = strtolower($param->getParameterName());
         }
@@ -82,12 +80,12 @@ class CtXmlConverter implements StrategyInterface
         /**
          * XML Parsing
          * we will use XMLReader for swift "streaming" of a potentially large file
-         * Only parts of this file will be processed by SimpleXMLElement, which is much easier to use but memory hungry and slow
+         * Only parts of this file will be processed by SimpleXMLElement, which is much easier to use but memory hungry and slow.
          */
-        $xml = new XMLReader();
+        $xml = new \XMLReader();
         $xml->open($this->filepath);
 
-        /**
+        /*
          * To use xmlReader easily we have to make sure we parse at the outermost level of repeating elements.
          * This is because xmlReaders next() option does not behave as one would think by intuition
          */
@@ -97,7 +95,7 @@ class CtXmlConverter implements StrategyInterface
         $prod = [];
         while ($xml->name == 'Folder') {
             $this->logger->debug('XMLReader found Folder element, processing this with SimpleXML');
-            $element = new SimpleXMLElement($xml->readOuterXML()); //
+            $element = new \SimpleXMLElement($xml->readOuterXML());
 
             // skip Siemens standard protocols
             if (stristr(strval($element->FolderName), 'siemens')) {
@@ -115,7 +113,7 @@ class CtXmlConverter implements StrategyInterface
                 $prod['bodysize'] = $bodysize;
                 $this->logger->debug('parsing bodysize '.$bodysize);
 
-                if(@count($body->Region) < 1) {
+                if (@count($body->Region) < 1) {
                     $this->logger->debug('bodysize holds no regions --> skip it');
                     continue;
                 }
@@ -136,7 +134,7 @@ class CtXmlConverter implements StrategyInterface
                             $this->logger->debug('parsing series '.$series);
 
                             foreach ($ser->children() as $potential) {
-                                if ($scantype->ScanType = "Topo") {
+                                if ($scantype->ScanType = 'Topo') {
                                     $this->logger->debug('this is a topogram');
 
                                     // do stuff only valid for Topo
@@ -154,17 +152,16 @@ class CtXmlConverter implements StrategyInterface
                     }
                 }
             }
-            $countIx++;
+            ++$countIx;
             $xml->next('Folder');
             unset($element);
         }
 
         // save output to file
         $target_file_parts = pathinfo($this->filepath);
-        $target_file = $target_file_parts['dirname']. DIRECTORY_SEPARATOR .$target_file_parts['filename'].'.txt';
+        $target_file = $target_file_parts['dirname'].DIRECTORY_SEPARATOR.$target_file_parts['filename'].'.txt';
         file_put_contents($target_file, serialize($return_arr));
 
-        return (serialize($return_arr));
+        return serialize($return_arr);
     }
 }
-

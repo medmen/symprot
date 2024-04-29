@@ -2,22 +2,24 @@
 
 namespace App\Strategy;
 
-use App\Entity\Parameter;
 use App\Entity\Config;
-use App\Repository\ParameterRepository;
+use App\Entity\Parameter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use App\Strategy\StrategyInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use KubAT\PhpSimple\HtmlDomParser;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\HttpKernel\KernelInterface;
 use TonchikTm\PdfToHtml\Pdf;
 
 class MrtPdfConverter implements StrategyInterface
 {
     private array $can_process_mimetype = ['application/pdf'];
-    private $entityManager, $params, $logger, $kernel, $target_params;
+    private $entityManager;
+    private $params;
+    private $logger;
+    private $kernel;
+    private $target_params;
     private $filepath; // holds full path to input pdf
     private Config $config;
 
@@ -30,11 +32,9 @@ class MrtPdfConverter implements StrategyInterface
     }
 
     /**
-     * @param $limits
-     * @param $max
      * @return array of integers holding page numbers
      */
-    function get_limits($limits, $max): array
+    public function get_limits($limits, $max): array
     {
         // see if limits holds a range
         if (is_string($limits) and stristr($limits, '-')) {
@@ -62,7 +62,7 @@ class MrtPdfConverter implements StrategyInterface
                 $end = $new_end;
             }
 
-            return(range($start, $end));
+            return range($start, $end);
         }
 
         if (is_string($limits) and stristr($limits, ',')) {
@@ -77,7 +77,8 @@ class MrtPdfConverter implements StrategyInterface
                     unset($item);
                 }
             }
-            return (array_unique($items)); // remove duplicate values
+
+            return array_unique($items); // remove duplicate values
         }
 
         // assume its a single number
@@ -85,20 +86,21 @@ class MrtPdfConverter implements StrategyInterface
             if ($limits > $max or 0 == $limits) {
                 $limits = $max;
             }
-            return ([$limits]);
+
+            return [$limits];
         }
 
         // if nothing fits, assume we process everything
-        return(range(1, $max));
+        return range(1, $max);
     }
 
     public function canProcess($data)
     {
-        return (
-            is_object($data) and
-            $data->geraet == 'MRT' and
-            in_array($data->mimetype, $this->can_process_mimetype)
-        );
+        return
+            is_object($data)
+            and $data->geraet == 'MRT'
+            and in_array($data->mimetype, $this->can_process_mimetype)
+        ;
     }
 
     public function process($data)
@@ -112,15 +114,15 @@ class MrtPdfConverter implements StrategyInterface
         $config = $this->entityManager
             ->getRepository(Config::class)
             ->find(1);
-            // ->findOneBy(array('selected' => true));
+        // ->findOneBy(array('selected' => true));
 
-        if(false == (is_object($config) or count((array)$config) < 1)) {
+        if (false == (is_object($config) or count((array) $config) < 1)) {
             $config = new Config();
         }
 
         $this->config = $config->getDefaults();
 
-        foreach($target_elements as $param) {
+        foreach ($target_elements as $param) {
             // reduce parameters to nameonly, turn to lowercase
             $target_params[] = strtolower($param->getParameterName());
         }
@@ -138,27 +140,27 @@ class MrtPdfConverter implements StrategyInterface
 
         $pdf = new Pdf($this->filepath,
             [
-            'pdftohtml_path' => '/usr/bin/pdftohtml -c',
-            'pdfinfo_path' => '/usr/bin/pdfinfo',
-            'generate' => [
-                'singlePage' => false, // we want separate pages
-                'imageJpeg' => false, // do not transform images
-                'ignoreImages' => true, // we need no images
-                'zoom' => 1.5, // scale pdf
-                'noFrames' => false, // we want separate pages
-            ],
-            'clearAfter' => true, // auto clear output dir (if removeOutputDir==false then output dir will remain)
-            'removeOutputDir' => true, // remove output dir
-            'outputDir' => '/tmp/'.uniqid(), // output dir
-            'html' => [ // settings for processing html
-                'inlineCss' => false, // replaces css classes to inline css rules
-                'inlineImages' => false, // looks for images in html and replaces the src attribute to base64 hash
-                'onlyContent' => true, // takes from html body content only
-            ]
-        ]);
+                'pdftohtml_path' => '/usr/bin/pdftohtml -c',
+                'pdfinfo_path' => '/usr/bin/pdfinfo',
+                'generate' => [
+                    'singlePage' => false, // we want separate pages
+                    'imageJpeg' => false, // do not transform images
+                    'ignoreImages' => true, // we need no images
+                    'zoom' => 1.5, // scale pdf
+                    'noFrames' => false, // we want separate pages
+                ],
+                'clearAfter' => true, // auto clear output dir (if removeOutputDir==false then output dir will remain)
+                'removeOutputDir' => true, // remove output dir
+                'outputDir' => '/tmp/'.uniqid(), // output dir
+                'html' => [ // settings for processing html
+                    'inlineCss' => false, // replaces css classes to inline css rules
+                    'inlineImages' => false, // looks for images in html and replaces the src attribute to base64 hash
+                    'onlyContent' => true, // takes from html body content only
+                ],
+            ]);
 
         $pdfInfo = $pdf->getInfo();
-        if(!is_array($pdfInfo) or (count($pdfInfo) < 1)) {
+        if (!is_array($pdfInfo) or (count($pdfInfo) < 1)) {
             $this->logger->critical($target_path.' contains no valid file');
             throw new FileNotFoundException($target_path.' contains no valid file');
         }
@@ -166,7 +168,7 @@ class MrtPdfConverter implements StrategyInterface
         $numofPages = $pdf->countPages();
 
         $limits = $this->config->getLimitPages();
-        if(!isset($limits)) {
+        if (!isset($limits)) {
             $limits = 0;
         }
 
@@ -174,7 +176,7 @@ class MrtPdfConverter implements StrategyInterface
 
         $html = $pdf->getHtml();
         foreach ($pages as $pagenumber) {
-            $this->logger->info('converting page ' . $pagenumber);
+            $this->logger->info('converting page '.$pagenumber);
             $page = $html->getPage($pagenumber);
             $page_extract = $this->convert_for_MRT($page);
             $return = array_merge($return, $page_extract);
@@ -182,14 +184,14 @@ class MrtPdfConverter implements StrategyInterface
 
         // save output to file
         $target_file_parts = pathinfo($this->filepath);
-        $target_file = $target_file_parts['dirname']. DIRECTORY_SEPARATOR .$target_file_parts['filename'].'.txt';
+        $target_file = $target_file_parts['dirname'].DIRECTORY_SEPARATOR.$target_file_parts['filename'].'.txt';
         file_put_contents($target_file, serialize($return));
 
-        return (serialize($return));
+        return serialize($return);
         // return (['success' => true]);
     }
 
-    function convert_for_MRT($html): array
+    public function convert_for_MRT($html): array
     {
         $dom = HtmlDomParser::str_get_html($html);
         $output_array = []; // make sure we return an array
@@ -199,9 +201,9 @@ class MrtPdfConverter implements StrategyInterface
             $converted = false;
             // Special: poppler puts some wanted values in p.ft05 element, catch those
             foreach ($this->target_params as $wanted) {
-                if (preg_match('#\b' . preg_quote($wanted, '#') . '\b#i', $element->innertext)) {
+                if (preg_match('#\b'.preg_quote($wanted, '#').'\b#i', $element->innertext)) {
                     $this->logger->debug("DEBUG: cought bogus ft5 element $wanted in $element->innertext");
-                    //cought a target element, turn into p.ft03 element with altered name
+                    // cought a target element, turn into p.ft03 element with altered name
                     $element->class = 'ft03';
                     $element->innertext = $wanted;
                     $converted = 1;
@@ -226,9 +228,9 @@ class MrtPdfConverter implements StrategyInterface
             $this->logger->debug("parsing 1 protocol..<br>\n");
 
             $sequence = $protocol_elements[6];
-            $protocol = $protocol_elements[4] . '_' . $protocol_elements[5];
+            $protocol = $protocol_elements[4].'_'.$protocol_elements[5];
             $region = $protocol_elements[3];
-            $region_proto_sequence = $region . '_' . $protocol . '_' . $sequence;
+            $region_proto_sequence = $region.'_'.$protocol.'_'.$sequence;
 
             $output_array[$region_proto_sequence]['region'] = $region;
             $output_array[$region_proto_sequence]['protocol'] = $protocol;
@@ -259,7 +261,7 @@ class MrtPdfConverter implements StrategyInterface
             $parts = preg_split("/\s+/", $arrival_time->innertext);
             if ('TA:' == trim($parts[0])) {
                 $output_array[$region_proto_sequence]['messdauer'] = trim($parts[1]);
-                $this->logger->debug(" measurement time is .." . trim($parts[1]) . "<br>\n");
+                $this->logger->debug(' measurement time is ..'.trim($parts[1])."<br>\n");
             }
             break; // ne need to search for other occurrences
         }
@@ -280,7 +282,7 @@ class MrtPdfConverter implements StrategyInterface
 
             if (isset($hit) and 1 == $hit) {
                 if (true == $this->config->getStripUnits()) {
-                    $unvalidated_entry = strtok($unvalidated_entry, " ");
+                    $unvalidated_entry = strtok($unvalidated_entry, ' ');
                 }
                 $output_array[$region_proto_sequence][$actual_hit] = $unvalidated_entry;
                 $this->logger->debug("DEBUG: $actual_hit is a hit containing $unvalidated_entry !<br>\n");
@@ -291,6 +293,6 @@ class MrtPdfConverter implements StrategyInterface
 
         $dom->clear();
 
-        return($output_array);
+        return $output_array;
     }
 }

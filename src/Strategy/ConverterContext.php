@@ -1,7 +1,6 @@
 <?php
-namespace App\Strategy;
 
-use App\Strategy\StrategyInterface;
+namespace App\Strategy;
 
 class ConverterContext
 {

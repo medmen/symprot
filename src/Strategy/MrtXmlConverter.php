@@ -7,13 +7,11 @@ namespace App\Strategy;
 use App\Entity\Config;
 use App\Entity\Parameter;
 use App\Repository\ParameterRepository;
-use App\Strategy\StrategyInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use \SimpleXMLElement;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use \XMLReader;
+use XMLReader;
 
 class MrtXmlConverter implements StrategyInterface
 {
@@ -31,18 +29,19 @@ class MrtXmlConverter implements StrategyInterface
 
     public function canProcess($data)
     {
-        return (
-            is_object($data) and
-            $data->geraet == 'MRT' and
-            in_array($data->mimetype, $this->can_process_mimetype)
-        );
+        return
+            is_object($data)
+            and $data->geraet == 'MRT'
+            and in_array($data->mimetype, $this->can_process_mimetype)
+        ;
     }
 
-    private function trim_with_star(string $value) {
-        return trim(str_replace("*", '', $value));
+    private function trim_with_star(string $value)
+    {
+        return trim(str_replace('*', '', $value));
     }
 
-    public function process($data) : string
+    public function process($data): string
     {
         // return(serialize(array('error' => 'MRT XML conversion is not_yet_implemented')));
 
@@ -57,13 +56,13 @@ class MrtXmlConverter implements StrategyInterface
             ->find(1);
         // ->findOneBy(array('selected' => true));
 
-        if(false == (is_object($config) or count((array)$config) < 1)) {
+        if (false == (is_object($config) or count((array) $config) < 1)) {
             $config = new Config();
         }
 
         $this->config = $config->getDefaults();
 
-        foreach($target_elements as $param) {
+        foreach ($target_elements as $param) {
             // reduce parameters to nameonly, turn to lowercase
             $target_params[] = strtolower($param->getParameterName());
         }
@@ -85,10 +84,10 @@ class MrtXmlConverter implements StrategyInterface
         $last_sequence = '';
         $last_protocol = '';
 
-        $xml = new XMLReader();
+        $xml = new \XMLReader();
         $xml->open($this->filepath);
 
-        /**
+        /*
          * To use xmlReader easily we have to make sure we parse at the outermost level of repeating elements.
          * This is because xmlReaders next() option does not behave as one would think by intuition
          */
@@ -96,22 +95,22 @@ class MrtXmlConverter implements StrategyInterface
         }
 
         while ($xml->name == 'PrintProtocol') {
-            $element = new SimpleXMLElement($xml->readInnerXML()); //
+            $element = new \SimpleXMLElement($xml->readInnerXML());
 
             // Step 1: extract protocol info from header
             $proto_path = explode('\\', strval($element->SubStep->ProtHeaderInfo->HeaderProtPath));
             $region = trim($proto_path[3]);
-            $actual_sequence = trim(str_replace("*", '', $proto_path[6]));
-            if($actual_sequence == 'localizer' and $last_sequence != 'localizer'){
-                $proto_cnt++;
+            $actual_sequence = trim(str_replace('*', '', $proto_path[6]));
+            if ($actual_sequence == 'localizer' and $last_sequence != 'localizer') {
+                ++$proto_cnt;
             }
 
-            $actual_protocol = trim($proto_path[4] . '-' . $proto_path[5]);
+            $actual_protocol = trim($proto_path[4].'-'.$proto_path[5]);
             if ($actual_protocol !== $last_protocol) {
                 $proto_cnt = 1;
             }
 
-            $protocol = trim($proto_path[4] . '-' . $proto_path[5]).'-'.$proto_cnt;
+            $protocol = trim($proto_path[4].'-'.$proto_path[5]).'-'.$proto_cnt;
 
             $prod = ['region' => $region, 'protocol' => $protocol, 'sequence' => $actual_sequence];
 
@@ -151,6 +150,7 @@ class MrtXmlConverter implements StrategyInterface
             $xml->next('PrintProtocol');
             unset($element);
         }
-        return(serialize($return_arr));
+
+        return serialize($return_arr);
     }
 }

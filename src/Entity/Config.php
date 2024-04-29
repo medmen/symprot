@@ -11,16 +11,19 @@ use Doctrine\ORM\Mapping as ORM;
 class Config
 {
     // set default values
-    public function __construct() {
+    public function __construct()
+    {
         $this->debug = false;
         $this->limitPages = 0;
-        $this->outputFormat= 'md';
-        $this->stripUnits=true;
+        $this->outputFormat = 'md';
+        $this->stripUnits = true;
     }
 
     /**
      * @ORM\Id
+     *
      * @ORM\GeneratedValue
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -98,12 +101,15 @@ class Config
         return $this;
     }
 
-    public function getDefaults(){
+    public function getDefaults()
+    {
         $this->setDefaults();
+
         return $this;
     }
 
-    public function setDefaults(): void {
+    public function setDefaults(): void
+    {
         $this->debug = false;
         $this->limitPages = 0;
         $this->outputFormat = 'md';

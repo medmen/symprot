@@ -1,8 +1,6 @@
 <?php
-namespace App\Formatter;
 
-use App\Formatter\FormatterStrategyInterface;
-use Symfony\Component\Mime\Exception\LogicException;
+namespace App\Formatter;
 
 class FormatterContext
 {
