@@ -12,7 +12,7 @@ services:
         bind:
             # tie logging to a special channel, so our logs do not interfer
             # with symfonys logging
-            $procLogger: '@monolog.logger.proc'
+            # $procLogger: '@monolog.logger.proc'
 
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

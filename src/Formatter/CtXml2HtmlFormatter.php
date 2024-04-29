@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Formatter;
 
+use Monolog\Attribute\WithMonologChannel;
 use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Monolog\Logger;
 
 class CtXml2HtmlFormatter implements FormatterStrategyInterface
 {

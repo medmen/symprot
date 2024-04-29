@@ -5,21 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dce2117-eb6d-47d7-8046-945c1649b113" name="Default Changelist" comment="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
-      <change afterPath="$PROJECT_DIR$/.php-cs-fixer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rector.php" beforeDir="false" afterPath="$PROJECT_DIR$/rector.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/DashboardController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ConfigController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ConfigController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ProtomuncherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ProtomuncherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Formatter/Formatter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Formatter/Formatter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Formatter/MrtPdfFormatter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Formatter/MrtPdfFormatter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/Formatter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/Formatter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Strategy/CtPdfConverter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategy/CtPdfConverter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Strategy/CtXmlConverter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategy/CtXmlConverter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Strategy/MrtPdfConverter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategy/MrtPdfConverter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Strategy/MrtXmlConverter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategy/MrtXmlConverter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/bootstrap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/controllers.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/controllers/hello_controller.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -393,7 +385,7 @@
       <workItem from="1714071227747" duration="6984000" />
       <workItem from="1714333693910" duration="381000" />
       <workItem from="1714334080051" duration="2121000" />
-      <workItem from="1714373095578" duration="2958000" />
+      <workItem from="1714373095578" duration="5127000" />
     </task>
     <task id="LOCAL-00001" summary="upload works, now lets rock">
       <created>1632252990146</created>
@@ -457,30 +449,6 @@
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
       <updated>1640466060228</updated>
-    </task>
-    <task id="LOCAL-00029" summary="update symfony to 5.4&#10;updating recipes">
-      <option name="closed" value="true" />
-      <created>1713215866302</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1713215866302</updated>
-    </task>
-    <task id="LOCAL-00030" summary="update symfony to 5.4&#10;updating recipes">
-      <option name="closed" value="true" />
-      <created>1713215919560</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1713215919560</updated>
-    </task>
-    <task id="LOCAL-00031" summary="update symfony to 5.4&#10;updating recipes">
-      <option name="closed" value="true" />
-      <created>1713215934759</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1713215934759</updated>
     </task>
     <task id="LOCAL-00032" summary="update symfony to 5.4&#10;updating recipes">
       <option name="closed" value="true" />
@@ -778,7 +746,31 @@
       <option name="project" value="LOCAL" />
       <updated>1714375433695</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
+      <option name="closed" value="true" />
+      <created>1714376183321</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1714376183321</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release&#10;make changes with rector and phpcsfixer">
+      <option name="closed" value="true" />
+      <created>1714376333223</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1714376333223</updated>
+    </task>
+    <task id="LOCAL-00071" summary="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
+      <option name="closed" value="true" />
+      <created>1714378636535</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1714378636535</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -820,6 +812,7 @@
     <MESSAGE value="update symfony to 6.4 and PHP to 8.1&#10;done Step 17 of&#10;https://symfonycasts.com/screencast/symfony6-upgrade" />
     <MESSAGE value="update symfony to 6.4 and PHP to 8.1&#10;https://symfonycasts.com/screencast/symfony6-upgrade&#10;now final recipes update" />
     <MESSAGE value="after update symfony to 6.4 and PHP to 8.1&#10;switch asset manager to Assetmapper" />
+    <MESSAGE value="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release&#10;make changes with rector and phpcsfixer" />
     <MESSAGE value="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release" />
     <option name="LAST_COMMIT_MESSAGE" value="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release" />
   </component>
@@ -828,7 +821,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/src/Strategy/CtPdfConverter.php</url>
-          <line>200</line>
+          <line>201</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
