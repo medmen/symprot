@@ -85,7 +85,7 @@ class MrtPdfConverter implements StrategyInterface
             if ($limits > $max or 0 == $limits) {
                 $limits = $max;
             }
-            return (array($limits));
+            return ([$limits]);
         }
 
         // if nothing fits, assume we process everything
@@ -134,7 +134,7 @@ class MrtPdfConverter implements StrategyInterface
         $target_path = $this->kernel.'/public'.$protocol_path;
         $this->filepath = $this->kernel.'/public'.$data->filepath;
 
-        $return = array();
+        $return = [];
 
         $pdf = new Pdf($this->filepath,
             [
@@ -192,7 +192,7 @@ class MrtPdfConverter implements StrategyInterface
     function convert_for_MRT($html): array
     {
         $dom = HtmlDomParser::str_get_html($html);
-        $output_array = array(); // make sure we return an array
+        $output_array = []; // make sure we return an array
         $region_proto_sequence = false;
 
         foreach ($dom->find('div p.ft05') as $element) { // Strip out Comments
@@ -238,7 +238,7 @@ class MrtPdfConverter implements StrategyInterface
             // TODO: find a more adequate way to extract that info
             $seq_parts = explode('_', $sequence);
             foreach ($seq_parts as $part) {
-                if (in_array(strtolower(trim($part)), array('tra', 'sag', 'cor'))) {
+                if (in_array(strtolower(trim($part)), ['tra', 'sag', 'cor'])) {
                     $output_array[$region_proto_sequence]['direction'] = strtolower(trim($part));
                     break;
                 }

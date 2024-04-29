@@ -29,7 +29,7 @@ class ConfigController extends AbstractController
         $config->setOutputFormat('dokuwiki');
         $config->setStripUnits(true);
 
-        $errors = array();
+        $errors = [];
 
         $form = $this->createForm(ConfigType::class, $config);
 

@@ -14,10 +14,11 @@ class MrtPdfFormatter
 
     function __construct($format)
     {
-        $valid_formats = array(
-            'md', // markdown
-            'html' //
-        );
+        $valid_formats = [
+            'md',
+            // markdown
+            'html',
+        ];
 
         if (!in_array($format, $valid_formats)) {
             throw new InvalidArgumentException('invalid format: ' . $format);
@@ -63,7 +64,7 @@ class MrtPdfFormatter
         // remove region and protocol from headers
         $headers_arr = array_filter(
             $headers_arr,
-            fn($val) => !in_array($val, array('region', 'protocol'))
+            fn($val) => !in_array($val, ['region', 'protocol'])
         );
 
         foreach ($data as $row) {

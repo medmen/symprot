@@ -80,7 +80,7 @@ class MrtXmlConverter implements StrategyInterface
 
         $this->logger->info('doing MRT PDF conversion with parameters '.implode(' | ', $this->target_params));
 
-        $return_arr = array();
+        $return_arr = [];
         $proto_cnt = 0;
         $last_sequence = '';
         $last_protocol = '';
@@ -113,11 +113,7 @@ class MrtXmlConverter implements StrategyInterface
 
             $protocol = trim($proto_path[4] . '-' . $proto_path[5]).'-'.$proto_cnt;
 
-            $prod = array(
-                'region' => $region,
-                'protocol' => $protocol,
-                'sequence' => $actual_sequence
-            );
+            $prod = ['region' => $region, 'protocol' => $protocol, 'sequence' => $actual_sequence];
 
             // done parsing the Protocol name stuff, set last_sequence for next iteration
             $last_sequence = $actual_sequence;
@@ -133,7 +129,7 @@ class MrtXmlConverter implements StrategyInterface
             $parts = preg_split('/\s+/', $header);
             foreach ($parts as $part) {
                 if (stristr($part, ':')) {
-                    list($key, $val) = explode(':', $part, 2);
+                    [$key, $val] = explode(':', $part, 2);
                     if (in_array(strtolower($key), $this->target_params)) {
                         $prod[$key] = $val;
                     }

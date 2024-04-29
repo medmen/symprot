@@ -93,7 +93,7 @@ class CtPdfConverter implements StrategyInterface
             if ($limits > $max or 0 == $limits) {
                 $limits = $max;
             }
-            return (array($limits));
+            return ([$limits]);
         }
 
         // if nothing fits, assume we process everything
@@ -107,7 +107,7 @@ class CtPdfConverter implements StrategyInterface
          * if you find one, feel free to commit.
          * Probably the MrtPdfConverter can guide you...
          */
-        return (serialize(array('error'=>'No parser exists (yet) for CT protocols in PDF')));
+        return (serialize(['error'=>'No parser exists (yet) for CT protocols in PDF']));
 
 
         // get all parameters we selected for chosen geraet
@@ -141,7 +141,7 @@ class CtPdfConverter implements StrategyInterface
         $target_path = $this->kernel.'/public'.$protocol_path;
         $this->filepath = $this->kernel.'/public'.$data->filepath;
 
-        $return = array();
+        $return = [];
 
         $pdf = new Pdf($this->filepath,
             [
@@ -199,7 +199,7 @@ class CtPdfConverter implements StrategyInterface
     function convert_for_CT($html): array
     {
         $dom = HtmlDomParser::str_get_html($html);
-        $output_array = array(); // make sure we return an array
+        $output_array = []; // make sure we return an array
 
         //Strip out all &nbsp; tags if any (otherwise they would destroy our parsers)
         foreach ($dom->find('td') as $td) {
@@ -325,8 +325,8 @@ class CtPdfConverter implements StrategyInterface
         // beautify the anchor for HTML-compatibility, several escalation-steps are used
         //2nd: a div with an ID, this requires the first character to be a letter,
         // umlauts are not allowed
-        $sonderzeichen = array("/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/", "/\s/");
-        $replace = array("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss", "_");
+        $sonderzeichen = ["/ä/", "/ö/", "/ü/", "/Ä/", "/Ö/", "/Ü/", "/ß/", "/\s/"];
+        $replace = ["ae", "oe", "ue", "Ae", "Oe", "Ue", "ss", "_"];
         $output .= '<div id="' . preg_replace($sonderzeichen, $replace, $protocol) . '">' . "\n";
         $output .= '<h3><a name="' . preg_replace($sonderzeichen, $replace, $protocol) . '">' . $protocol . "</a></h3>\n";
         $output .= "<table>\n\t<thead>\n\t\t<tr>\n\t\t\t\n";
@@ -376,7 +376,7 @@ class CtPdfConverter implements StrategyInterface
                 } else {
                     ksort($temp_arr);
                     $output .= "<tr>" . implode($temp_arr) . "</tr>\n";
-                    $temp_arr = array();
+                    $temp_arr = [];
                     $temp_arr[$array_position] = "<td>$potential_hits_array[$array_position]</td>";
                 }
             }

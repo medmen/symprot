@@ -24,7 +24,7 @@ class ProtomuncherController extends AbstractController
     {
         // creates a protocol object and initialize
         $protocol = new Protocol();
-        $errors = array();
+        $errors = [];
 
 
         $form = $this->createForm(ProtocoluploadType::class, $protocol);

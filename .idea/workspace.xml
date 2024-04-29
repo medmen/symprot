@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0dce2117-eb6d-47d7-8046-945c1649b113" name="Default Changelist" comment="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release" />
+    <list default="true" id="0dce2117-eb6d-47d7-8046-945c1649b113" name="Default Changelist" comment="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
+      <change afterPath="$PROJECT_DIR$/.php-cs-fixer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rector.php" beforeDir="false" afterPath="$PROJECT_DIR$/rector.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/DashboardController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ConfigController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ConfigController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ProtomuncherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ProtomuncherController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Formatter/Formatter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Formatter/Formatter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Formatter/MrtPdfFormatter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Formatter/MrtPdfFormatter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/Formatter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/Formatter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Strategy/CtPdfConverter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategy/CtPdfConverter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Strategy/CtXmlConverter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategy/CtXmlConverter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Strategy/MrtPdfConverter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategy/MrtPdfConverter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Strategy/MrtXmlConverter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategy/MrtXmlConverter.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -210,6 +226,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/webpack-encore-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php81" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php73" />
+      <path value="$PROJECT_DIR$/vendor/rector/rector" />
+      <path value="$PROJECT_DIR$/vendor/phpstan/phpstan" />
     </include_path>
   </component>
   <component name="ProblemsViewState">
@@ -375,7 +393,7 @@
       <workItem from="1714071227747" duration="6984000" />
       <workItem from="1714333693910" duration="381000" />
       <workItem from="1714334080051" duration="2121000" />
-      <workItem from="1714373095578" duration="2010000" />
+      <workItem from="1714373095578" duration="2958000" />
     </task>
     <task id="LOCAL-00001" summary="upload works, now lets rock">
       <created>1632252990146</created>
@@ -439,46 +457,6 @@
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
       <updated>1640466060228</updated>
-    </task>
-    <task id="LOCAL-00024" summary="update symfony to 5.4&#10;updating recipes">
-      <option name="closed" value="true" />
-      <created>1713215514451</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1713215514451</updated>
-    </task>
-    <task id="LOCAL-00025" summary="update symfony to 5.4&#10;updating recipes">
-      <option name="closed" value="true" />
-      <created>1713215683624</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1713215683624</updated>
-    </task>
-    <task id="LOCAL-00026" summary="update symfony to 5.4&#10;updating recipes">
-      <option name="closed" value="true" />
-      <created>1713215711883</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1713215711883</updated>
-    </task>
-    <task id="LOCAL-00027" summary="update symfony to 5.4&#10;updating recipes">
-      <option name="closed" value="true" />
-      <created>1713215740289</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1713215740289</updated>
-    </task>
-    <task id="LOCAL-00028" summary="update symfony to 5.4&#10;updating recipes">
-      <option name="closed" value="true" />
-      <created>1713215777927</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1713215777927</updated>
     </task>
     <task id="LOCAL-00029" summary="update symfony to 5.4&#10;updating recipes">
       <option name="closed" value="true" />
@@ -760,7 +738,47 @@
       <option name="project" value="LOCAL" />
       <updated>1714375099826</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
+      <option name="closed" value="true" />
+      <created>1714375180677</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1714375180677</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
+      <option name="closed" value="true" />
+      <created>1714375218898</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1714375218898</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
+      <option name="closed" value="true" />
+      <created>1714375361014</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1714375361014</updated>
+    </task>
+    <task id="LOCAL-00067" summary="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
+      <option name="closed" value="true" />
+      <created>1714375366693</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1714375366693</updated>
+    </task>
+    <task id="LOCAL-00068" summary="Update to symfony 5.4 and PHP 7.4&#10;prepare for 1st release">
+      <option name="closed" value="true" />
+      <created>1714375433695</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1714375433695</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

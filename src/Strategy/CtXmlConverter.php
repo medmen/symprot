@@ -76,7 +76,7 @@ class CtXmlConverter implements StrategyInterface
         $target_path = $this->kernel.'/public'.$protocol_path;
         $this->filepath = $this->kernel.'/public'.$data->filepath;
 
-        $return_arr = array();
+        $return_arr = [];
         $countIx = 0;
 
         /**
@@ -94,7 +94,7 @@ class CtXmlConverter implements StrategyInterface
         while ($xml->read() && $xml->name != 'Folder') {
         }
 
-        $prod = array();
+        $prod = [];
         while ($xml->name == 'Folder') {
             $this->logger->debug('XMLReader found Folder element, processing this with SimpleXML');
             $element = new SimpleXMLElement($xml->readOuterXML()); //
@@ -109,7 +109,7 @@ class CtXmlConverter implements StrategyInterface
             $region = '';
             $protocol = '';
             $series = '';
-            $prod = array();
+            $prod = [];
             foreach ($element->Body as $body) {
                 $bodysize = strval($body->BodySize);
                 $prod['bodysize'] = $bodysize;

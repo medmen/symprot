@@ -15,13 +15,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    private \EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator $adminUrlGenerator;
+    public function __construct(\EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator $adminUrlGenerator)
+    {
+        $this->adminUrlGenerator = $adminUrlGenerator;
+    }
     /**
      * @Route("/admin", name="admin")
      */
     public function index(): Response
     {
         // return parent::index();
-        $routeBuilder = $this->get(AdminUrlGenerator::class);
+        $routeBuilder = $this->adminUrlGenerator;
         $url = $routeBuilder->setController(GeraetCrudController::class)->generateUrl();
         return $this->redirect($url);
     }
