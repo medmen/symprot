@@ -28,3 +28,7 @@ phpstan.neon
 ### cs-fixer
 /tools/php-cs-fixer/vendor/
 /.php-cs-fixer.cache
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
