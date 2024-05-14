@@ -37,7 +37,7 @@ class ProtocolController extends AbstractController
 
         $geraet = ucfirst($protocol->getGeraet()->getGeraetName());
         $filetype = ucfirst(explode('/', $protocol->getProtocolMimeType())[1]);
-        $uploadDir = $this->getParameter('vich_uploader.mappings')['protocol_file']['uri_prefix'];
+        $uploadDir = $this->getParameter('vich_uploader.mappings')['protocolFile']['uri_prefix'];
         $filepath = $uploadDir.'/'.$protocol->getProtocolName();
         $fullfilepath = $this->kernel.'/public'.$filepath;
 

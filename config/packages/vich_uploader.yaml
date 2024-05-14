@@ -2,7 +2,7 @@ vich_uploader:
     db_driver: orm
 
     mappings:
-        protocol_file:
+        protocolFile:
             uri_prefix: '%app.path.protocols%'
             upload_destination: '%kernel.project_dir%/public%app.path.protocols%'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer

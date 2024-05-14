@@ -8,9 +8,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: ProtocolRepository::class)]
 class Protocol implements \Stringable
 {
@@ -24,6 +22,7 @@ class Protocol implements \Stringable
      *
      * @Vich\UploadableField(mapping="protocol_file", fileNameProperty="protocolName", size="protocolSize", mimeType="protocolMimeType", originalName="protocolOrigName")
      */
+    #[Vich\UploadableField(mapping: "protocolFile", fileNameProperty: "protocolName", size: "protocolSize", mimeType: "protocolMimeType", originalName: "protocolOrigName")]
     private ?File $protocolFile = null;
 
     #[ORM\Column(type: 'string', length: 255)]
