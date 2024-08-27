@@ -11,7 +11,7 @@
         "doctrine/annotations": "^2.0",
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.1",
-        "doctrine/orm": "^2.9",
+        "doctrine/orm": "^3.0",
         "easycorp/easyadmin-bundle": "^3",
         "kub-at/php-simple-html-dom-parser": "^1.9",
         "phpdocumentor/reflection-docblock": "^5.3",
