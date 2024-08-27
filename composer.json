@@ -45,7 +45,7 @@
         "symfony/yaml": "5.4.*",
         "twig/extra-bundle": "^2.12|^3.5",
         "twig/twig": "^2.12|^3.5",
-        "vich/uploader-bundle": "^1.21"
+        "vich/uploader-bundle": "^2.0"
     },
     "require-dev": {
         "maximebf/debugbar": "^1.18",
