@@ -8,7 +8,7 @@
         "core-js": "^3.20.0",
         "file-loader": "^6.0.0",
         "glob-all": "^3.2.1",
-        "node-sass": "^7.0.0",
+        "node-sass": "^9.0.0",
         "path": "^0.12.7",
         "postcss-loader": "^6.2.1",
         "purgecss": "^4.1.3",
