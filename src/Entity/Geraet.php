@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,7 +33,6 @@ class Geraet implements \Stringable
     public function __construct()
     {
         $this->parameters = new ArrayCollection();
-        $this->geraet = new ArrayCollection();
         // $this->helperfields = new ArrayCollection();
         $this->protocols = new ArrayCollection();
     }

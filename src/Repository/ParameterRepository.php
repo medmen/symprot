@@ -23,13 +23,13 @@ class ParameterRepository extends ServiceEntityRepository
      * @return Parameter[] Returns an array of Parameter objects
      *                     where selected = 1
      */
-    public function findSelectedbyGeraetName(string $geraetname)
+    public function findSelectedbyGeraetName(string $geraet_name)
     {
         return $this->createQueryBuilder('p')
             ->innerJoin('p.geraet', 'g')
-            ->where('g.geraetName = :geraetname')
+            ->where('g.geraet_name = :geraet_name')
             ->AndWhere('p.parameter_selected = true')
-            ->setParameter('geraetname', $geraetname)
+            ->setParameter('geraet_name', $geraet_name)
             ->orderBy('p.parameter_id', 'ASC')
             ->getQuery()
             ->getResult()

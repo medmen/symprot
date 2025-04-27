@@ -15,6 +15,7 @@ class Config
         $this->limitPages = 0;
         $this->outputFormat = 'md';
         $this->stripUnits = true;
+        $this->autoImportParameters = true;
     }
 
     #[ORM\Id]
@@ -25,14 +26,17 @@ class Config
     #[ORM\Column(type: 'string')]
     private ?string $limitPages = null;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => true])]
     private bool $stripUnits = true;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
     private bool $debug = false;
 
     #[ORM\Column(type: 'string')]
     private ?string $outputFormat = null;
+
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => true])]
+    private bool $autoImportParameters = true;
 
     public function getId(): ?int
     {
@@ -87,6 +91,19 @@ class Config
         return $this;
     }
 
+    public function getAutoImportParameters(): ?bool
+    {
+        return $this->autoImportParameters;
+    }
+
+    public function setautoImportParameters(bool $autoImportParameters): self
+    {
+        $this->autoImportParameters = $autoImportParameters;
+
+        return $this;
+    }
+
+
     public function getDefaults()
     {
         $this->setDefaults();
@@ -100,5 +117,20 @@ class Config
         $this->limitPages = 0;
         $this->outputFormat = 'md';
         $this->stripUnits = true;
+    }
+
+    public function isStripUnits(): ?bool
+    {
+        return $this->stripUnits;
+    }
+
+    public function isDebug(): ?bool
+    {
+        return $this->debug;
+    }
+
+    public function isAutoImportParameters(): ?bool
+    {
+        return $this->autoImportParameters;
     }
 }
