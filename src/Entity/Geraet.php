@@ -15,13 +15,13 @@ class Geraet implements \Stringable
     #[ORM\Column(name: 'geraet_id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private ?int $geraetId = null;
+    private ?int $geraet_id = null;
 
     #[ORM\Column(name: 'geraet_name', type: 'text', nullable: true, options: ['default' => 'MRT'])]
-    private ?string $geraetName = 'MRT';
+    private ?string $geraet_name = 'MRT';
 
     #[ORM\Column(name: 'geraet_beschreibung', type: 'text', nullable: true, options: ['default' => 'Bei mehreren geräten hilfreich zur Unterscheidung'])]
-    private ?string $geraetBeschreibung = 'Bei mehreren geräten hilfreich zur Unterscheidung';
+    private ?string $geraet_beschreibung = 'Bei mehreren geräten hilfreich zur Unterscheidung';
 
     #[ORM\OneToMany(targetEntity: Parameter::class, mappedBy: 'geraet', orphanRemoval: true)]
     private Collection $parameters;
@@ -32,44 +32,45 @@ class Geraet implements \Stringable
     public function __construct()
     {
         $this->parameters = new ArrayCollection();
+        $this->geraet = new ArrayCollection();
         // $this->helperfields = new ArrayCollection();
         $this->protocols = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return (string) $this->geraetName;
+        return (string) $this->geraet_name;
     }
 
     public function getGeraetId(): ?int
     {
-        return $this->geraetId;
+        return $this->geraet_id;
     }
     public function getId(): ?int
     {
-        return $this->geraetId;
+        return $this->geraet_id;
     }
 
     public function getGeraetName(): ?string
     {
-        return $this->geraetName;
+        return $this->geraet_name;
     }
 
-    public function setGeraetName(?string $geraetName): self
+    public function setGeraetName(?string $geraet_name): self
     {
-        $this->geraetName = $geraetName;
+        $this->geraet_name = $geraet_name;
 
         return $this;
     }
 
     public function getGeraetBeschreibung(): ?string
     {
-        return $this->geraetBeschreibung;
+        return $this->geraet_beschreibung;
     }
 
-    public function setGeraetBeschreibung(?string $geraetBeschreibung): self
+    public function setGeraetBeschreibung(?string $geraet_beschreibung): self
     {
-        $this->geraetBeschreibung = $geraetBeschreibung;
+        $this->geraet_beschreibung = $geraet_beschreibung;
 
         return $this;
     }
