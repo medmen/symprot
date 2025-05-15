@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Parameter.
  */
+#[ORM\Index(name: 'position_idx', columns: ['position'])]
 #[ORM\Entity(repositoryClass: \App\Repository\ParameterRepository::class)]
 class Parameter
 {
@@ -14,6 +15,9 @@ class Parameter
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $parameter_id;
+
+    #[ORM\Column(name: 'position', type: 'integer', nullable: true)]
+    private int $position = 0;
 
     #[ORM\Column(name: 'parameter_name', type: 'text', nullable: true)]
     private $parameter_name;
@@ -79,5 +83,15 @@ class Parameter
         $this->geraet = $geraet;
 
         return $this;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
     }
 }
