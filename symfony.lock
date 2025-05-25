@@ -90,6 +90,9 @@
     "egulias/email-validator": {
         "version": "3.1.1"
     },
+    "evotodi/seed-bundle": {
+        "version": "7.1"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
     },

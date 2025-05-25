@@ -45,3 +45,8 @@ services:
         # inject all services tagged with app.formatter_strategy as first argument
         arguments:
             - !tagged_iterator app.formatter_strategy
+
+    ### Add seeds
+    #Evotodi\SeedBundle\DataSeeds\:
+    #    resource: '../src/Seeds/'
+    #    tags: ['evotodi.seed']
