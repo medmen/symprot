@@ -30,7 +30,7 @@ class ParameterRepository extends ServiceEntityRepository
             ->where('g.geraet_name = :geraet_name')
             ->AndWhere('p.parameter_selected = true')
             ->setParameter('geraet_name', $geraet_name)
-            ->orderBy('p.parameter_id', 'ASC')
+            ->orderBy('p.sort_position', 'ASC')
             ->getQuery()
             ->getResult()
         ;

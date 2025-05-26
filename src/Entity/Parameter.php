@@ -28,6 +28,10 @@ class Parameter
     #[ORM\ManyToOne(inversedBy: 'parameters')]
     private ?Geraet $geraet = null;
 
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(name: 'sort_position', type: 'integer', nullable: true)]
+    private ?int $sort_position = 0;
+
     public function getParameterId(): ?int
     {
         return $this->parameter_id;
@@ -77,6 +81,18 @@ class Parameter
     public function setGeraet(?Geraet $geraet): self
     {
         $this->geraet = $geraet;
+
+        return $this;
+    }
+
+    public function getSortPosition(): ?int
+    {
+        return $this->sort_position;
+    }
+
+    public function setSortPosition(int $sort_position): static
+    {
+        $this->sort_position = $sort_position;
 
         return $this;
     }
