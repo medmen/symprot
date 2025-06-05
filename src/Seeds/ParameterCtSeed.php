@@ -8,7 +8,7 @@ use Evotodi\SeedBundle\Command\Seed;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ParameterMrSeed extends Seed
+class ParameterCtSeed extends Seed
 {
     public static function seedName(): string
     {
