@@ -12,7 +12,7 @@
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^3",
-        "easycorp/easyadmin-bundle": "^4",
+        "easycorp/easyadmin-bundle": "^4.24",
         "gedmo/doctrine-extensions": "^3.20",
         "kub-at/php-simple-html-dom-parser": "^1.9",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -45,8 +45,8 @@
         "symfony/validator": "6.4.*",
         "symfony/web-link": "6.4.*",
         "symfony/yaml": "6.4.*",
-        "twig/extra-bundle": "^2.12|^3.5",
         "twig/twig": "^2.12|^3.5",
+        "twig/extra-bundle": "^2.12|^3.5",
         "vich/uploader-bundle": "^2"
     },
     "require-dev": {
