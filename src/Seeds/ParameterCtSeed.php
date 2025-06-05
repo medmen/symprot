@@ -80,7 +80,7 @@ class ParameterMrSeed extends Seed
 	public function getData(): array
     {
         return array (
-			`PitchFactor',
+			'PitchFactor',
 			'QualityRefMAs',
 			'RefKV',
 			'Voltage',
@@ -129,6 +129,7 @@ class ParameterMrSeed extends Seed
 	
 	public function getDefault(): array
     {
+        return array (
 			'PitchFactor',
 			'QualityRefMAs',
 			'RefKV',
@@ -143,7 +144,8 @@ class ParameterMrSeed extends Seed
 			'ReconIncrR',
 			'NoOfImages',
 			'Kernel',
-			'Window
+			'Window'
+        );
 	}
 	
 	public function getSelected(): array
