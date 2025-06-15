@@ -61,6 +61,7 @@ class ProtocolController extends AbstractController
         $data->filepath = $filepath;
 
         $serialized_and_parsed_data = $this->convertercontext->handle($data);
+        // can we store this in session?
 
         $notifier->send(new Notification(
             '<h2> Die Datei wurde hochgeladen.</h2>
@@ -74,6 +75,9 @@ class ProtocolController extends AbstractController
         ];
 
         $formatted_data = $this->formattercontext->handle($data, $serialized_and_parsed_data, $this->format);
+
+        // Clean up the uploaded file after processing
+        // unlink($fullfilepath);
 
         return $this->render('protocol/index.html.twig', [
             'geraet' => $geraet,

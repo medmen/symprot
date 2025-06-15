@@ -31,7 +31,7 @@ class CtPdfConverter implements StrategyInterface
     {
         return
             is_object($data)
-            and $data->geraet == 'CT'
+            and $data->geraet == 'CT_Siemens'
             and in_array($data->mimetype, $this->can_process_mimetype)
         ;
     }
