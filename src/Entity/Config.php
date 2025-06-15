@@ -16,6 +16,7 @@ class Config
         $this->outputFormat = 'md';
         $this->stripUnits = true;
         $this->autoImportParameters = true;
+        // $this->keepUploadedFiles = false;
     }
 
     #[ORM\Id]

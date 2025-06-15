@@ -27,9 +27,9 @@ class ParameterRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->innerJoin('p.geraet', 'g')
-            ->where('g.geraet_name = :geraet_name')
+            ->where('g.geraet_name = :geraetname')
+            ->setParameter('geraetname', $geraet_name)
             ->AndWhere('p.parameter_selected = true')
-            ->setParameter('geraet_name', $geraet_name)
             ->orderBy('p.sort_position', 'ASC')
             ->getQuery()
             ->getResult()

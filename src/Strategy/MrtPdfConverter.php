@@ -96,7 +96,7 @@ class MrtPdfConverter implements StrategyInterface
     {
         return
             is_object($data)
-            and $data->geraet == 'MRT'
+            and $data->geraet == 'MRT_Siemens'
             and in_array($data->mimetype, $this->can_process_mimetype)
         ;
     }
