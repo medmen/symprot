@@ -17,5 +17,8 @@
 
 `composer install` - this will install the symfony framework and and several modules used in this app
 
-## initialize and populate Database:
+## initialize the Database:
 `php bin/console doctrine:migrations:migrate`
+
+### optional: populate the Database:
+`php bin/console seed:load` - this will load some example data into the database, so you can test the app
