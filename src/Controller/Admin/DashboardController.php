@@ -24,7 +24,11 @@ class DashboardController extends AbstractDashboardController
     {
         // return parent::index();
         $routeBuilder = $this->adminUrlGenerator;
-        $url = $routeBuilder->setController(GeraetCrudController::class)->generateUrl();
+        $url = $routeBuilder
+            ->setController(ParameterCrudController::class)
+            ->set('filters[geraet][comparison]', '=')
+            ->set('filters[geraet][value]', '1')
+            ->generateUrl();
 
         return $this->redirect($url);
     }
@@ -40,8 +44,11 @@ class DashboardController extends AbstractDashboardController
         // yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
         yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', 'index');
-        yield MenuItem::linkToCrud('Geraete', 'fas fa-map-marker-alt', Geraet::class);
-        yield MenuItem::linkToCrud('Config', 'fas fa-helperfields', Config::class);
-        yield MenuItem::linkToCrud('Parameter', 'fas fa-parameters', Parameter::class);
+        yield MenuItem::linkToCrud('Geraete', 'fas fa-circle-radiation', Geraet::class);
+        yield MenuItem::linkToCrud('Config', 'fas fa-gear', Config::class);
+        yield MenuItem::linkToCrud('Parameter', 'fas fa-list-check', Parameter::class)
+            ->setQueryParameter('filters[geraet][comparison]', '=')
+            ->setQueryParameter('filters[geraet][value]', '1')
+        ;
     }
 }

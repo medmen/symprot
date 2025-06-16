@@ -49,6 +49,8 @@ class ParameterCrudController extends AbstractCrudController
     {
         return $filters
             ->add(EntityFilter::new('geraet'))
+            ->add('parameter_selected')
+            ->add('parameter_default')
         ;
     }
 
