@@ -50,6 +50,19 @@ class MrtXmlConverter implements StrategyInterface
         return trim(str_replace('*', '', $value));
     }
 
+    private function is_localizer(string $sequence): bool
+    {
+        $localizer_names = array('localizer', 'scout');
+        foreach ($localizer_names as $localizer)
+        {
+            if (stristr($sequence, $localizer) !== false)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function process($data): string
     {
         // return(serialize(array('error' => 'MRT XML conversion is not_yet_implemented')));
@@ -111,7 +124,9 @@ class MrtXmlConverter implements StrategyInterface
             $proto_path = explode('\\', strval($element->SubStep->ProtHeaderInfo->HeaderProtPath));
             $region = trim($proto_path[3]);
             $actual_sequence = trim(str_replace('*', '', $proto_path[6]));
-            if ($actual_sequence == 'localizer' and $last_sequence != 'localizer') {
+
+            // see if sequence is a localizer and start new protocol counter
+            if ($this->is_localizer($actual_sequence) and !$this->is_localizer($last_sequence)) {
                 ++$proto_cnt;
             }
 

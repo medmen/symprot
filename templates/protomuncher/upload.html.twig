@@ -66,16 +66,11 @@
 
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form[name="{{ form.vars.name }}"]');
-            const overlay = document.getElementById('upload-overlay');
-
-            form.addEventListener('submit', function() {
-                overlay.style.display = 'block';
-            });
-        });
-    </script>
-
-
 {% endblock %}
+
+{% block importmap %}
+    {# do NOT call parent() #}
+
+    {{ importmap(['app', 'upload']) }}
+{% endblock %}
+

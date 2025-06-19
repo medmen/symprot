@@ -16,4 +16,8 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'upload' => [
+        'path' => './assets/upload_spinner.js',
+        'entrypoint' => true,
+    ],
 ];

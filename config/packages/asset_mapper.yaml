@@ -4,6 +4,8 @@ framework:
         paths:
             - assets/
         missing_import_mode: strict
+        exclude_dotfiles: true
+        importmap_polyfill: false
 
 when@prod:
     framework:
