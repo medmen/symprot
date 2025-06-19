@@ -21,11 +21,15 @@ class ProtocoluploadType extends AbstractType
                 'constraints' => [
                     new File([
                         'maxSize' => '50M',
+                        'binaryFormat' => true, // Use MiB, GiB, etc. so php ini settings are respected
+                        'maxSizeMessage' => 'Die Datei ist zu groß ({{ size }} {{ suffix }}). Maximal {{ limit }} {{ suffix }} sind erlaubt.',
                         'mimeTypes' => [
                             'application/pdf',
                             'application/xml',
                             'text/xml',
                         ],
+                        'mimeTypesMessage' => 'Bitte laden Sie eine PDF oder XML Datei hoch.',
+                        'uploadIniSizeErrorMessage' => 'Die Datei ist zu groß. Maximal {{ limit }} {{ suffix }} sind vom Server erlaubt.',
                     ]),
                 ],
             ]

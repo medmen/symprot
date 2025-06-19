@@ -7,8 +7,9 @@
 {% block body %}
 
     <div id="messagecontainer" class="container dx-4 justify-content-center text-white mx-auto mt-2 mb-5">
+        <h6>Messages:</h6>
         {% block flash %}
-            <h6>Messages:</h6>
+
         {% endblock%}
 
         {{ protocol.protocolFile }}
@@ -16,11 +17,18 @@
 
     <div id="uploadcontainer" class="d-table dx-4 text-white mx-auto mt-2 mb-5">
 
+        <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:1000;">
+            <img src="{{ asset('img/spinner.jpg') }}" alt="Upload läuft..." style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
+        </div>
+
         <h2>Protokoll hochladen</h2>
 
         {{ form_start(form, {'method': 'POST'}) }}
-        <div class="list-group-item-danger">
+        <div class="form-error list-group-item-danger">
             {{ form_errors(form) }}
+            {{ form_errors(form.protocolFile) }}
+         </div>
+
         </div>
 
         <div class="d-table-row">
@@ -29,9 +37,6 @@
             </div>
             <div class="d-table-cell" id="file_upload">
                 {{ form_widget(form.protocolFile) }}
-            </div>
-            <div class="form-error list-group-item-danger">
-                {{ form_errors(form.protocolFile) }}
             </div>
             <div class="form-control">
                 {{ form_help(form.protocolFile) }}
@@ -60,5 +65,17 @@
         {# {{ form(form) }} #}
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[name="{{ form.vars.name }}"]');
+            const overlay = document.getElementById('upload-overlay');
+
+            form.addEventListener('submit', function() {
+                overlay.style.display = 'block';
+            });
+        });
+    </script>
+
 
 {% endblock %}
