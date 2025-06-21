@@ -146,7 +146,8 @@ class MrtXmlConverter implements StrategyInterface
             // done parsing the Protocol name stuff, set last_sequence for next iteration
             $last_sequence = $actual_sequence;
             $last_protocol = $actual_protocol;
-            $count_matches = 0; // count how many parameters we found in this protocol
+
+            $max_matches = count($this->target_params) + 3; // +3 because we already have region, protocol and sequence
 
             // Step 2: read potential values from protocol header
             $header = trim(strval($element->SubStep->ProtHeaderInfo->HeaderProperty));
@@ -161,7 +162,6 @@ class MrtXmlConverter implements StrategyInterface
                     [$key, $val] = explode(':', $part, 2);
                     if (in_array(strtolower($key), $this->target_params)) {
                         $prod[$key] = $val;
-                        ++$count_matches; // count how many parameters we found in this protocol
                     }
                 }
             }
@@ -173,13 +173,20 @@ class MrtXmlConverter implements StrategyInterface
                         $label = strval($seq_property->Label);
                         $value = strval($seq_property->ValueAndUnit);
                         $prod[$label] = $value;
-                        ++$count_matches; // count how many parameters we found in this protocol
                     }
-                    if($count_matches == count($this->target_params)) {
-                        break; // we found all parameters, no need to continue
+                    if(count($prod) == $max_matches) {
+                        break 2; // we found all parameters, no need to continue
                     }
                 }
             }
+
+            // Step 5: sorta $prod acording to target params
+            array_unshift($this->target_params, 'region', 'protocol', 'sequence'); // add region, protocol and sequence to the front
+            $prod = array_change_key_case($prod, CASE_LOWER);
+            $prod = array_merge(
+                array_fill_keys($this->target_params, '&nbsp;'), // fill empty values
+                $prod // merge with existing values
+            );
 
             $return_arr[] = $prod;
             $xml->next('PrintProtocol');

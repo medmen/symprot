@@ -54,8 +54,6 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
 
         foreach ($proto_arr as $row) {
             if (is_array($row)) {
-                $formatted .= '<tr><td>'.implode('</td><td>', $row).'</td></tr>';
-
                 if ($row['region'] !== $actual_region) {
                     ++$regions;
                     $actual_region = $row['region'];
@@ -64,6 +62,10 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
                 if ($row['protocol'] !== $actual_protocol) {
                     ++$protocols;
                     $actual_protocol = $row['protocol'];
+                    $formatted .= '<tr><th>'.implode('</th><th>', $row).'</th></tr>';
+                } else {
+                    // unset region and protocol from row
+                    $formatted .= '<tr><td>'.implode('</td><td>', $row).'</td></tr>';
                 }
 
                 ++$sequences;
