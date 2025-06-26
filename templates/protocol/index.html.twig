@@ -1,9 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Protokoll Ausgabe - {{ geraet }}{% endblock %}
+    {% block flash %}
+        <div id="messagecontainer" class="container dx-4 justify-content-center text-white mx-auto mt-2 mb-5">
+
+        </div>
+    {% endblock%}
+
 
 {% block body %}
-    <form method="get" target="./">
+    <form method="get" target="_self">
         <input type="submit" name="format"
                class="button" value="html" />
 
@@ -11,6 +17,12 @@
                class="button" value="md" label="markdown" />
     </form>
 
+    <form target="_self" method="post" action="{{ path('protocol_delete', {id: id}) }}" class="delete-form">
+        <input type="hidden" name="id" value="{{ id }}" />
+        <input type="submit" name="delete"
+               class="button btn-danger" value="delete" label="done - delete" />
+
+    </form>
 
 <div class="output-wrapper">
 

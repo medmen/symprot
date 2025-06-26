@@ -56,6 +56,10 @@ class Protocol implements \Stringable
 
     public function __toString(): string
     {
+        // If protocolName is null (e.g. after deleting), return an empty string to avoid errors
+        if (null === $this->protocolName) {
+            return '';
+        }
         return (string) $this->protocolName;
     }
 
@@ -89,7 +93,7 @@ class Protocol implements \Stringable
         return $this->protocolName;
     }
 
-    public function setProtocolName(string $protocolName): self
+    public function setProtocolName(?string $protocolName): self
     {
         $this->protocolName = $protocolName;
 
@@ -101,7 +105,7 @@ class Protocol implements \Stringable
         return $this->protocolSize;
     }
 
-    public function setProtocolSize(int $protocolSize): self
+    public function setProtocolSize(?int $protocolSize): self
     {
         $this->protocolSize = $protocolSize;
 
@@ -113,7 +117,7 @@ class Protocol implements \Stringable
         return $this->protocolMimeType;
     }
 
-    public function setProtocolMimeType(string $protocolMimeType): self
+    public function setProtocolMimeType(?string $protocolMimeType): self
     {
         $this->protocolMimeType = $protocolMimeType;
 
@@ -125,7 +129,7 @@ class Protocol implements \Stringable
         return $this->protocolOrigName;
     }
 
-    public function setProtocolOrigName(string $protocolOrigName): self
+    public function setProtocolOrigName(?string $protocolOrigName): self
     {
         $this->protocolOrigName = $protocolOrigName;
 

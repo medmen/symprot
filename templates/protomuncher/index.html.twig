@@ -2,6 +2,14 @@
 
 {% block title %}Hello ProtomuncherController!{% endblock %}
 
+<div id="messagecontainer" class="container dx-4 justify-content-center text-white mx-auto mt-2 mb-5">
+    <h6>Messages:</h6>
+    {% block flash %}
+
+    {% endblock%}
+
+</div>
+
 {% block body %}
 
     <h1>Hello {{ controller_name }}! ✅</h1>

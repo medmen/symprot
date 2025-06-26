@@ -35,6 +35,19 @@ class ProtocolController extends AbstractController
             ->getRepository(Protocol::class)
             ->find($id);
 
+        // Check if protocol exists
+        if (null === $protocol) {
+            $notifier->send(
+                new Notification(
+                    '<h2>Kein Protokoll</h2>
+                                <p>Das gesuchte Protokoll exisitiert nbicht.</p>',
+                    ['browser']
+                )
+            );
+
+            return $this->redirectToRoute('index');
+        }
+
         $geraet = ucfirst($protocol->getGeraet()->getGeraetName());
         $filetype = ucfirst(explode('/', $protocol->getProtocolMimeType())[1]);
         $uploadDir = $this->getParameter('vich_uploader.mappings')['protocolFile']['uri_prefix'];
@@ -84,7 +97,51 @@ class ProtocolController extends AbstractController
             'protocol' => $protocol,
             'errors' => $errors,
             'output' => $formatted_data,
+            'id' =>  $id, // pass along the id for deletion
             'controller_name' => 'ProtocolController',
         ]);
     }
+
+    #[Route(path: '/protocol_delete/{id}', name: 'protocol_delete', methods: ['POST'])]
+    public function delete(int $id, NotifierInterface $notifier, EntityManagerInterface $entityManager): Response {
+        $protocol = $entityManager
+            ->getRepository(Protocol::class)
+            ->find($id);
+
+        $uploadDir    = $this->getParameter('vich_uploader.mappings')['protocolFile']['uri_prefix'];
+        $filepath     = $uploadDir . '/' . $protocol->getProtocolName();
+        $fullfilepath = $this->kernel . '/public' . $filepath;
+        $geraet = $protocol->getGeraet()->getGeraetName();
+
+        // Check if file exists
+        if(file_exists($fullfilepath)) {
+            // Delete the file
+            unlink($fullfilepath);
+
+            // Now remove the protocol from database
+            $entityManager->remove($protocol);
+            $entityManager->flush();
+
+            $notifier->send(
+                new Notification(
+                    '<h2> Die Datei wurde gelöscht.</h2>
+                                <p>Die Datei wurde erfolgreich gelöscht.</p>',
+                    ['browser']
+                )
+            );
+
+            return $this->redirectToRoute('index');
+        } else {
+            $errors[] = 'No file was found - cannot delete!';
+            $notifier->send(
+                new Notification(
+                    '<h2> Kann nicht löschen.</h2>
+                                <p>Keine zu löschende Datei gefunden...</p>',
+                    ['browser']
+                )
+            );
+            return $this->redirectToRoute('index');
+        }
+    }
 }
+
