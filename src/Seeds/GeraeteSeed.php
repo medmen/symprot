@@ -33,18 +33,17 @@ class GeraeteSeed extends Seed
 		$this->disableDoctrineLogging();
 
 		//Access doctrine through $this->doctrine
-		$statesRepository = $this->getManager()->getRepository(Geraet::class);
-
+		$GeraetRepository = $this->getManager()->getRepository(Geraet::class);
 
 		foreach ($this->getData() as $name => $description) {
 
-			if($GeraetRepository->findOneBy(array('name' => $name))) {
+			if($GeraetRepository->findOneBy(array('geraet_name' => $name))) {
 				continue;
 			}
 
 			$em = new Geraet();
-			$em->setName($name);
-			$em->setBeschreibung($description);
+			$em->setGeraetName($name);
+			$em->setGeraetBeschreibung($description);
 
 			//Doctrine manager is also available
 			$this->getManager()->persist($em);
@@ -58,7 +57,7 @@ class GeraeteSeed extends Seed
 
 	public function unload(InputInterface $input, OutputInterface $output): int
     {
-		$className = $this->getManager()->getClassMetadata(States::class)->getName();
+		$className = $this->getManager()->getClassMetadata(Geraet::class)->getName();
 		$this->getManager()->createQuery('DELETE FROM '.$className)->execute();
 		return 0;
 	}

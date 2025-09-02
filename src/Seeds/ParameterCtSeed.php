@@ -28,17 +28,16 @@ class ParameterCtSeed extends Seed
 
         // Fetch the user by email or any unique identifier
 
-        $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT']);
-
+        $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT_Siemens']);
 
         //Access doctrine through $this->doctrine
 		$ParameterRepository = $this->getManager()->getRepository(Parameter::class);
 
 		$order = 0;
 		
-		foreach ($this->getParameters() as $name) {
+		foreach ($this->getData() as $name) {
 
-			if($ParameterRepository->findOneBy(array('parameter_name' => $name, 'geraet' => $geraet->getId()))) {
+			if($ParameterRepository->findOneBy(array('parameter_name' => $name, 'geraet' => $geraet->getGeraetId()))) {
 				continue;
 			}
 			$order++;
@@ -46,16 +45,16 @@ class ParameterCtSeed extends Seed
 			$em = new Parameter();
 			$em->setParameterName($name);
 
-			if(in_array($name, $this->getDefault)) {
+			if(in_array($name, $this->getDefault())) {
 				$em->setParameterDefault(true);	
 			}
 
-			if(in_array($name, $this->getSelected)) {
+			if(in_array($name, $this->getSelected())) {
 				$em->setParameterSelected(true);	
 			}
 			
-			$em->setParameterorder($order);
-            $em->setGeraet($geraet);
+			$em->setSortPosition($order);
+      $em->setGeraet($geraet);
             
 			//Doctrine manager is also available
 			$this->getManager()->persist($em);
@@ -71,8 +70,7 @@ class ParameterCtSeed extends Seed
 	public function unload(InputInterface $input, OutputInterface $output): int
     {
 		$className = $this->getManager()->getClassMetadata(Parameter::class)->getName();
-        $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT']);
-
+        $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT_Siemens']);
         $this->getManager()->createQuery('DELETE FROM '.$className.' WHERE geraet_id = '.$geraet->getId)->execute();
 		return 0;
 	}

@@ -20,8 +20,9 @@ class MrtXmlConverter implements StrategyInterface
     private ContainerBagInterface $params;
     private LoggerInterface $logger;
     private ?string $kernel = null;
-
-    private $target_params, $filepath, $format;
+    private array $target_params = [];
+    private string $filepath;
+    private string $format;
 
     private ParameterRepository $parameterRepository;
 
@@ -39,7 +40,7 @@ class MrtXmlConverter implements StrategyInterface
     {
         return
             is_object($data)
-            and $data->geraet == 'MRT'
+            and $data->geraet == 'MRT_Siemens'
             and in_array($data->mimetype, $this->can_process_mimetype)
         ;
     }
@@ -65,11 +66,12 @@ class MrtXmlConverter implements StrategyInterface
         // ->findOneBy(array('selected' => true));
 
         if (false == (is_object($config) or count((array) $config) < 1)) {
-            $config = new Config();
+            $config = new Config(); // load default config
         }
 
         $this->config = $config->getDefaults();
 
+        $target_params = array();
         foreach ($target_elements as $param) {
             // reduce parameters to nameonly, turn to lowercase
             $target_params[] = strtolower($param->getParameterName());
@@ -85,7 +87,7 @@ class MrtXmlConverter implements StrategyInterface
         $target_path = $this->kernel.'/public'.$protocol_path;
         $this->filepath = $this->kernel.'/public'.$data->filepath;
 
-        $this->logger->info('doing MRT PDF conversion with parameters '.implode(' | ', $this->target_params));
+        $this->logger->info('doing MRT XML conversion with parameters '.implode(' | ', $this->target_params));
 
         $return_arr = [];
         $proto_cnt = 0;
@@ -129,6 +131,7 @@ class MrtXmlConverter implements StrategyInterface
             // done parsing the Protocol name stuff, set last_sequence for next iteration
             $last_sequence = $actual_sequence;
             $last_protocol = $actual_protocol;
+            $count_matches = 0; // count how many parameters we found in this protocol
 
             // Step 2: read potential values from protocol header
             $header = trim(strval($element->SubStep->ProtHeaderInfo->HeaderProperty));
@@ -143,6 +146,7 @@ class MrtXmlConverter implements StrategyInterface
                     [$key, $val] = explode(':', $part, 2);
                     if (in_array(strtolower($key), $this->target_params)) {
                         $prod[$key] = $val;
+                        ++$count_matches; // count how many parameters we found in this protocol
                     }
                 }
             }
@@ -154,6 +158,10 @@ class MrtXmlConverter implements StrategyInterface
                         $label = strval($seq_property->Label);
                         $value = strval($seq_property->ValueAndUnit);
                         $prod[$label] = $value;
+                        ++$count_matches; // count how many parameters we found in this protocol
+                    }
+                    if($count_matches == count($this->target_params)) {
+                        break; // we found all parameters, no need to continue
                     }
                 }
             }
