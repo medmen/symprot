@@ -37,6 +37,7 @@
         "symfony/property-access": "6.4.*",
         "symfony/property-info": "6.4.*",
         "symfony/proxy-manager-bridge": "6.4.*",
+        "symfony/requirements-checker": "^2.0",
         "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.4.*",
         "symfony/serializer": "6.4.*",
@@ -62,7 +63,7 @@
         "symfony/phpunit-bridge": "^7",
         "symfony/stopwatch": "^6.4",
         "symfony/var-dumper": "^6.4",
-        "symfony/web-profiler-bundle": "^6.4"
+        "symfony/web-profiler-bundle": "6.4.*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -98,7 +99,8 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "importmap:install": "symfony-cmd"
+            "importmap:install": "symfony-cmd",
+            "requirements-checker": "script"
         },
         "post-install-cmd": [
             "@auto-scripts"

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Geraet;
 use App\Entity\Parameter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -31,9 +32,26 @@ class ParameterRepository extends ServiceEntityRepository
             ->setParameter('geraetname', $geraet_name)
             ->AndWhere('p.parameter_selected = true')
             ->orderBy('p.sort_position', 'ASC')
+            ->addOrderBy('p.parameter_id', 'ASC')
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * Fetch all parameters belonging to a Geraet ordered deterministically by sort_position and id.
+     *
+     * @return Parameter[]
+     */
+    public function findByGeraetOrdered(Geraet $geraet): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.geraet = :geraet')
+            ->setParameter('geraet', $geraet)
+            ->orderBy('p.sort_position', 'ASC')
+            ->addOrderBy('p.parameter_id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**
