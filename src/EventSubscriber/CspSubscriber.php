@@ -13,13 +13,16 @@ class CspSubscriber
 {
     private UriSafeTokenGenerator $tokenGenerator;
 
-    public function __construct()
+    public function __construct(private readonly bool $cspEnabled = true)
     {
         $this->tokenGenerator = new UriSafeTokenGenerator();
     }
 
     public function onResponse(ResponseEvent $event): void
     {
+        if (!$this->cspEnabled) {
+            return;
+        }
         $request = $event->getRequest();
         $response = $event->getResponse();
         if (!$response instanceof Response) {

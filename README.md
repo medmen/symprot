@@ -37,7 +37,7 @@ If you are familiar with PHP programming, you can easily
 ### Recent enhancements:
 - Stable per-device (Geraet) sorting for Parameters with move Top/Up/Down/Bottom actions that keep a contiguous sort_position. Lists now sort predictably, also when filtered by modality (Geraet).
 - Visual feedback when moving a parameter: after a move, the target row is highlighted and smoothly scrolled into view.
-- Content Security Policy (CSP): inline JS/CSS disabled by default; per-request nonces are used for required inline blocks (e.g., importmap). The highlight assets were moved to external files and are loaded without 'unsafe-inline'.
+- Content Security Policy (CSP): inline JS/CSS disabled by default; per-request nonces are used for required inline blocks (e.g., importmap). The highlight assets were moved to external files and are loaded without 'unsafe-inline'. You can toggle CSP via the APP_CSP_ENABLED env var (see README Security section).
 
 ## Setup 
 (i assume linux and a terminal)  :
@@ -73,6 +73,12 @@ Web things are by design accessible from "everywhere", so security problems may 
 malfunction and potentially infecting your webserver with malware. 
 Symprot was built to work, security is not a primary goal! 
 But it is build on a solid foundation (Symfony framework) and comes with a CSP, so basic security measures are taken.
+
+CSP on/off:
+- By default, CSP is enabled. To disable it (e.g., for local debugging), set APP_CSP_ENABLED=0 in your environment or in .env.local.
+- To explicitly enable it, set APP_CSP_ENABLED=1.
+- After changing env vars in dev, clear cache or reload PHP FPM if needed.
+
 If you happen to find an issue, please file a bug report (ideally with a bugfix pull request).
 
 ## Help?
