@@ -1,0 +1,7 @@
+/node_modules/
+/public/build/
+/var/
+/vendor/
+/.composer-cache/
+/.idea/
+/public/uploads/

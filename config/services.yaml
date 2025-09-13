@@ -6,6 +6,7 @@
 parameters:
     cache_adapter: cache.adapter.apcu
     app.path.protocols: /uploads/products
+    app.csp_enabled: '%env(bool:APP_CSP_ENABLED)%'
 
 services:
     # default configuration for services in *this* file
@@ -26,6 +27,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\EventSubscriber\CspSubscriber:
+        arguments:
+            $cspEnabled: '%app.csp_enabled%'
 
     _instanceof:
         App\Strategy\StrategyInterface:

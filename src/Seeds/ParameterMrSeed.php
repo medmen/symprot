@@ -148,6 +148,4 @@ class ParameterMrSeed extends Seed
     {
         return $this->getDefault();
     }
-
-
 }

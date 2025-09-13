@@ -54,10 +54,13 @@ class MrtXmlConverter implements StrategyInterface
     {
         // return(serialize(array('error' => 'MRT XML conversion is not_yet_implemented')));
 
-        // get all parameters we selected for chosen geraet
-        $target_elements = $this->entityManager
-            ->getRepository(Parameter::class)
-            ->findSelectedbyGeraetName($data->geraet);
+        // get all parameters we selected for chosen geraet (unless already preset)
+        $target_elements = [];
+        if (empty($this->target_params)) {
+            $target_elements = $this->entityManager
+                ->getRepository(Parameter::class)
+                ->findSelectedbyGeraetName($data->geraet);
+        }
 
         // get the config
         $config = $this->entityManager
@@ -65,19 +68,27 @@ class MrtXmlConverter implements StrategyInterface
             ->find(1);
         // ->findOneBy(array('selected' => true));
 
-        if (false == (is_object($config) or count((array) $config) < 1)) {
+        if (!$config instanceof Config) {
             $config = new Config(); // load default config
         }
 
         $this->config = $config->getDefaults();
 
-        $target_params = array();
-        foreach ($target_elements as $param) {
-            // reduce parameters to nameonly, turn to lowercase
-            $target_params[] = strtolower($param->getParameterName());
+        if (empty($this->target_params)) {
+            $target_params = array();
+            foreach ($target_elements as $param) {
+                // reduce parameters to nameonly, turn to lowercase
+                $name = null;
+                if (is_object($param) && method_exists($param, 'getParameterName')) {
+                    $name = $param->getParameterName();
+                }
+                if (null !== $name && $name !== '') {
+                    $target_params[] = strtolower((string)$name);
+                }
+            }
+            // store target params in object so we can retrieve from other functions
+            $this->target_params = $target_params;
         }
-        // store target params in object so we can retrieve from other functions
-        $this->target_params = $target_params;
 
         // clean up
         unset($target_elements, $target_params);
@@ -85,7 +96,7 @@ class MrtXmlConverter implements StrategyInterface
         // get paths
         $protocol_path = $this->params->get('app.path.protocols');
         $target_path = $this->kernel.'/public'.$protocol_path;
-        $this->filepath = $this->kernel.'/public'.$data->filepath;
+        $this->filepath = $this->kernel.$data->filepath;
 
         $this->logger->info('doing MRT XML conversion with parameters '.implode(' | ', $this->target_params));
 
@@ -109,18 +120,18 @@ class MrtXmlConverter implements StrategyInterface
 
             // Step 1: extract protocol info from header
             $proto_path = explode('\\', strval($element->SubStep->ProtHeaderInfo->HeaderProtPath));
-            $region = trim($proto_path[3]);
-            $actual_sequence = trim(str_replace('*', '', $proto_path[6]));
+            $region = trim((string)($proto_path[3] ?? ''));
+            $actual_sequence = trim(str_replace('*', '', (string)($proto_path[6] ?? '')));
             if ($actual_sequence == 'localizer' and $last_sequence != 'localizer') {
                 ++$proto_cnt;
             }
 
-            $actual_protocol = trim($proto_path[4].'-'.$proto_path[5]);
+            $actual_protocol = trim(((string)($proto_path[4] ?? '')) . '-' . ((string)($proto_path[5] ?? '')));
             if ($actual_protocol !== $last_protocol) {
                 $proto_cnt = 1;
             }
 
-            $protocol = trim($proto_path[4].'-'.$proto_path[5]).'-'.$proto_cnt;
+            $protocol = trim(((string)($proto_path[4] ?? '')) . '-' . ((string)($proto_path[5] ?? ''))) . '-' . $proto_cnt;
 
             $prod = [
                 'region' => $region,
@@ -144,9 +155,9 @@ class MrtXmlConverter implements StrategyInterface
             foreach ($parts as $part) {
                 if (stristr($part, ':')) {
                     [$key, $val] = explode(':', $part, 2);
+                    $prod[$key] = $val; // collect all, will filter/order later
                     if (in_array(strtolower($key), $this->target_params)) {
-                        $prod[$key] = $val;
-                        ++$count_matches; // count how many parameters we found in this protocol
+                        ++$count_matches; // only increment for target params
                     }
                 }
             }
@@ -154,11 +165,11 @@ class MrtXmlConverter implements StrategyInterface
             // Step 3: walk through each sequence and search for matching parameters
             foreach ($element->SubStep->Card as $card) {
                 foreach ($card->ProtParameter as $seq_property) {
-                    if (in_array(strtolower(strval($seq_property->Label)), $this->target_params)) {
-                        $label = strval($seq_property->Label);
-                        $value = strval($seq_property->ValueAndUnit);
-                        $prod[$label] = $value;
-                        ++$count_matches; // count how many parameters we found in this protocol
+                    $label = strval($seq_property->Label);
+                    $value = strval($seq_property->ValueAndUnit);
+                    $prod[$label] = $value; // collect all
+                    if (in_array(strtolower($label), $this->target_params)) {
+                        ++$count_matches; // count only target params
                     }
                     if($count_matches == count($this->target_params)) {
                         break; // we found all parameters, no need to continue
@@ -166,7 +177,24 @@ class MrtXmlConverter implements StrategyInterface
                 }
             }
 
-            $return_arr[] = $prod;
+            // Reorder collected parameters according to admin-defined order ($this->target_params)
+            $meta = [
+                'region' => $prod['region'] ?? null,
+                'protocol' => $prod['protocol'] ?? null,
+                'sequence' => $prod['sequence'] ?? null,
+            ];
+            $ordered = [];
+            foreach ($this->target_params as $lowerName) {
+                // Find original key case-insensitively in $prod
+                foreach ($prod as $k => $v) {
+                    if (in_array($k, ['region','protocol','sequence'], true)) { continue; }
+                    if (strtolower((string)$k) === $lowerName) {
+                        $ordered[$k] = $v;
+                        break;
+                    }
+                }
+            }
+            $return_arr[] = $meta + $ordered;
             $xml->next('PrintProtocol');
             unset($element);
         }

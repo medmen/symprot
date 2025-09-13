@@ -21,8 +21,6 @@ class Parameter
     #[ORM\Column(name: 'parameter_selected', type: 'boolean')]
     private $parameter_selected = false;
 
-    #[ORM\Column(name: 'parameter_default', type: 'boolean')]
-    private $parameter_default = false;
 
     #[ORM\JoinColumn(name: 'geraet_id', referencedColumnName: 'geraet_id', nullable: false)]
     #[ORM\ManyToOne(inversedBy: 'parameters')]
@@ -61,17 +59,6 @@ class Parameter
         return $this;
     }
 
-    public function getParameterDefault(): ?bool
-    {
-        return $this->parameter_default;
-    }
-
-    public function setParameterDefault(bool $parameter_default): self
-    {
-        $this->parameter_default = $parameter_default;
-
-        return $this;
-    }
 
     public function getGeraet(): ?Geraet
     {

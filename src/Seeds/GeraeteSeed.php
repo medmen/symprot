@@ -35,7 +35,6 @@ class GeraeteSeed extends Seed
 		//Access doctrine through $this->doctrine
 		$GeraetRepository = $this->getManager()->getRepository(Geraet::class);
 
-
 		foreach ($this->getData() as $name => $description) {
 
 			if($GeraetRepository->findOneBy(array('geraet_name' => $name))) {

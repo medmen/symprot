@@ -30,7 +30,6 @@ class ParameterCtSeed extends Seed
 
         $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT_Siemens']);
 
-
         //Access doctrine through $this->doctrine
 		$ParameterRepository = $this->getManager()->getRepository(Parameter::class);
 
@@ -55,7 +54,7 @@ class ParameterCtSeed extends Seed
 			}
 			
 			$em->setSortPosition($order);
-            $em->setGeraet($geraet);
+      $em->setGeraet($geraet);
             
 			//Doctrine manager is also available
 			$this->getManager()->persist($em);
@@ -72,7 +71,6 @@ class ParameterCtSeed extends Seed
     {
 		$className = $this->getManager()->getClassMetadata(Parameter::class)->getName();
         $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT_Siemens']);
-
         $this->getManager()->createQuery('DELETE FROM '.$className.' WHERE geraet_id = '.$geraet->getId)->execute();
 		return 0;
 	}

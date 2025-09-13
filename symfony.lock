@@ -22,7 +22,13 @@
         "version": "2.13.2"
     },
     "doctrine/deprecations": {
-        "version": "v0.5.3"
+        "version": "1.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "87424683adc81d7dc305eefec1fced883084aab9"
+        }
     },
     "doctrine/doctrine-bundle": {
         "version": "2.14",
@@ -93,17 +99,11 @@
     "evotodi/seed-bundle": {
         "version": "7.1"
     },
-    "friendsofphp/proxy-manager-lts": {
-        "version": "v1.0.5"
-    },
     "jms/metadata": {
         "version": "2.5.1"
     },
     "kub-at/php-simple-html-dom-parser": {
         "version": "1.9.1"
-    },
-    "laminas/laminas-code": {
-        "version": "4.4.2"
     },
     "maximebf/debugbar": {
         "version": "v1.16.5"
@@ -113,6 +113,18 @@
     },
     "myclabs/deep-copy": {
         "version": "1.10.2"
+    },
+    "nelmio/security-bundle": {
+        "version": "3.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.4",
+            "ref": "71045833e4f882ad9de8c95fe47efb99a1eec2f7"
+        },
+        "files": [
+            "config/packages/nelmio_security.yaml"
+        ]
     },
     "nikic/php-parser": {
         "version": "v4.11.0"
@@ -512,8 +524,14 @@
     "symfony/property-info": {
         "version": "v5.3.1"
     },
-    "symfony/proxy-manager-bridge": {
-        "version": "v5.3.0"
+    "symfony/requirements-checker": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "02c6e4b9b117c39e8a23eab7f3840ef6e62293b9"
+        }
     },
     "symfony/routing": {
         "version": "6.4",
@@ -604,15 +622,24 @@
         ]
     },
     "symfony/uid": {
-        "version": "v5.3.3"
+        "version": "6.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.2",
+            "ref": "d294ad4add3e15d7eb1bae0221588ca89b38e558"
+        },
+        "files": [
+            "config/packages/uid.yaml"
+        ]
     },
     "symfony/ux-twig-component": {
-        "version": "2.24",
+        "version": "2.26",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "2.13",
-            "ref": "9b627037a510e20eddb559e06050a34854ce51d6"
+            "ref": "f367ae2a1faf01c503de2171f1ec22567febeead"
         },
         "files": [
             "config/packages/twig_component.yaml"
