@@ -30,39 +30,11 @@ class MrtXmlConverterTest extends TestCase
         $selected = [
             $this->makeParam('TE'),
             $this->makeParam('TR'),
-            $this->makeParam('FA'),
+            $this->makeParam('TA'),
         ];
 
         // Minimal XML with header and two sequence parameters appearing in mixed order
-        $xml = <<<XML
-        <root>
-          <PrintProtocol>
-            <SubStep>
-              <ProtHeaderInfo>
-                <HeaderProtPath>\\a\\b\\c\\Head\\Proto\\Seq\\T1</HeaderProtPath>
-                <HeaderProperty>FA:20 TE:5 TR:500</HeaderProperty>
-              </ProtHeaderInfo>
-              <Card>
-                <ProtParameter>
-                  <Label>TR</Label>
-                  <ValueAndUnit>500</ValueAndUnit>
-                </ProtParameter>
-                <ProtParameter>
-                  <Label>FA</Label>
-                  <ValueAndUnit>20</ValueAndUnit>
-                </ProtParameter>
-              </Card>
-                <ProtParameter>
-                  <Label>NotInUse</Label>
-                  <ValueAndUnit>I Am here to disturb</ValueAndUnit>
-                </ProtParameter>
-            </SubStep>
-          </PrintProtocol>
-        </root>
-        XML;
-
-        $tmp = tempnam(sys_get_temp_dir(), 'mrt');
-        file_put_contents($tmp, $xml);
+        $xml = file_get_contents(__DIR__.'../fixtures/MRT_minimal_test.xml');
 
         $em = $this->createMock(EntityManagerInterface::class);
         $repoParam = $this->getMockBuilder(\stdClass::class)->addMethods(['findSelectedbyGeraetName'])->getMock();
@@ -82,40 +54,37 @@ class MrtXmlConverterTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
 
         $kernel = $this->createMock(KernelInterface::class);
-        $kernel->method('getProjectDir')->willReturn(dirname($tmp));
+        // $kernel->method('getProjectDir')->willReturn(dirname($tmp));
 
         $converter = new MrtXmlConverter($em, $params, $logger, $kernel);
         // Pre-seed target_params (admin order) to avoid relying on repository
         $ref = new \ReflectionClass($converter);
         $prop = $ref->getProperty('target_params');
         $prop->setAccessible(true);
-        $prop->setValue($converter, ['te','tr','fa']);
+        $prop->setValue($converter, ['te','tr','ta']);
 
-        // Place file as /public/test.xml relative to the fake kernel project dir
-        @mkdir(dirname($tmp) . '/public', 0777, true);
-        $publicPath = dirname($tmp) . '/public/test.xml';
-        @copy($tmp, $publicPath);
-
+        // Write XML to temp file for processing
         $data = (object) [
             'geraet' => 'MRT_Siemens',
             'mimetype' => 'application/xml',
-            'filepath' => '/test.xml',
+            'filepath' => __DIR__.'/../fixtures/MRT_minimal_test.xml',
         ];
 
         $serialized = $converter->process($data);
         $result = unserialize($serialized);
 
         $this->assertIsArray($result);
-        $this->assertCount(1, $result);
+        $this->assertCount(3, $result); // our XML has 3 sequences
+
         $row = $result[0];
         // Ensure keys for target params exist in the result
         $this->assertArrayHasKey('TE', $row);
         $this->assertArrayHasKey('TR', $row);
-        $this->assertArrayHasKey('FA', $row);
+        $this->assertArrayHasKey('TA', $row);
 
         // And ensure converter can be reordered to admin order deterministically
         $keys = array_keys($row);
-        $ordered = array_values(array_intersect(['TE','TR','FA'], $keys));
-        $this->assertSame(['TE','TR','FA'], $ordered, 'Parameters should follow admin sort order when filtered');
+        $ordered = array_values(array_intersect(['TE','TR','TA'], $keys));
+        $this->assertSame(['TE','TR','TA'], $ordered, 'Parameters should follow admin sort order when filtered');
     }
 }

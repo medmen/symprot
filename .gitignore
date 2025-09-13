@@ -4,3 +4,4 @@
 /vendor/
 /.composer-cache/
 /.idea/
+/public/uploads/

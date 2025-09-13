@@ -96,7 +96,7 @@ class MrtXmlConverter implements StrategyInterface
         // get paths
         $protocol_path = $this->params->get('app.path.protocols');
         $target_path = $this->kernel.'/public'.$protocol_path;
-        $this->filepath = $this->kernel.'/public'.$data->filepath;
+        $this->filepath = $this->kernel.$data->filepath;
 
         $this->logger->info('doing MRT XML conversion with parameters '.implode(' | ', $this->target_params));
 

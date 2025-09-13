@@ -1,0 +1,2508 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="printprot_apply.xsl"?>
+<PrintOut>
+  <PrintProtocol>
+    <Protocol Id="cdf3b170-8793-4503-b341-061239e69ecf">
+      <HeaderTitle>SIEMENS MAGNETOM Skyra_fit </HeaderTitle>
+      <SubStep>
+        <ProtHeaderInfo>
+          <HeaderProtPath>\\Benutzer\Abdomen\Oberbauch\DOT\localizer *</HeaderProtPath>
+          <HeaderProperty>TA: 0:28 PM: ISO Voxelgröße: 0.8×0.8×6.0 mmPAT: Aus Rel. SNR: 1.00  : fl </HeaderProperty>
+        </ProtHeaderInfo>
+        <Card ID="ID_1" name="Eigenschaften">
+          <ProtParameter>
+            <Label>Prio Rekonstr.</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in den Viewer laden</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Automatischer Kinostart</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Automatische Bildspeicherung</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in die Mini-Segmente laden</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in großes Bildsegment laden</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline-Anzeige automatisch öffnen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline-Anzeige automatisch schließen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Start measurement without further preparation</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Auf Start duch Benutzer warten</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Start measurements</Label>
+            <ValueAndUnit>Einmal messen </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_2" name="Routine">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>5 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>150 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>2</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>7 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>30 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L0.0 P30.0 H0.0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Coronal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>3</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>3 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>150 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Sagittal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Oversampling</Label>
+            <ValueAndUnit>25 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>400 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>6,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>7,8 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TE</Label>
+            <ValueAndUnit>3,69 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mittelungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>15 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Filter</Label>
+            <ValueAndUnit>Verzeichn. Korr.(2D), Elliptischer Filter </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenelemente</Label>
+            <ValueAndUnit>BO1-3;SP1-4 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_3" name="Kontrast - Allgemein">
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>7,8 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TE</Label>
+            <ValueAndUnit>3,69 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TD</Label>
+            <ValueAndUnit>0 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MTC</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Magn. Präparation</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Flipwinkel</Label>
+            <ValueAndUnit>20 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Wasserunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>SWI</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_4" name="Kontrast - Dynamisch">
+          <ProtParameter>
+            <Label>Mittelungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mittelungsmodus</Label>
+            <ValueAndUnit>Kurzzeit </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Rekonstruktion</Label>
+            <ValueAndUnit>Betrag </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Messungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrere Serien</Label>
+            <ValueAndUnit>Jede Messung </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_5" name="Auflösung - Allgemein">
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>400 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>6,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Basis-Auflösung</Label>
+            <ValueAndUnit>256 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Auflösung</Label>
+            <ValueAndUnit>80 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen Partial Fourier</Label>
+            <ValueAndUnit>7/8 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Interpolation</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_6" name="Auflösung - iPAT">
+          <ProtParameter>
+            <Label>PAT Modus</Label>
+            <ValueAndUnit>Keiner </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_7" name="Auflösung - Filter Bild">
+          <ProtParameter>
+            <Label>Image Filter</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verzeichn. Korr.</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Modus</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ungefilterte Bilder</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Prescan Normalisierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Normalisierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>B1-Filter</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_8" name="Auflösung - Filter Rohdaten">
+          <ProtParameter>
+            <Label>Rohdaten</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Elliptischer Filter</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_9" name="Geometrie - Allgemein">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>5 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>150 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>2</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>7 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>30 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L0.0 P30.0 H0.0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Coronal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>3</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>3 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>150 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Sagittal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>400 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>6,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>7,8 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrschichtmodus</Label>
+            <ValueAndUnit>Sequenziell </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Serie</Label>
+            <ValueAndUnit>Verschachtelt </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>15 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_10" name="Geometrie - AutoAlign">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>2</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L0.0 P30.0 H0.0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Coronal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>3</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Sagittal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>L</Label>
+            <ValueAndUnit>0,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>P</Label>
+            <ValueAndUnit>0,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>H</Label>
+            <ValueAndUnit>0,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Rotation</Label>
+            <ValueAndUnit>0,00 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_11" name="Geometrie - Sättiger">
+          <ProtParameter>
+            <Label>Sättigungsmodus</Label>
+            <ValueAndUnit>Standard </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Wasserunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spez. Sättiger</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_12" name="Geometrie - Tim Planning Suite">
+          <ProtParameter>
+            <Label>Set-n-Go Protokoll</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>H </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline Composing</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_13" name="System - Verschiedenes">
+          <ProtParameter>
+            <Label>Positionierungsmodus</Label>
+            <ValueAndUnit>ISO </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>H </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MSMA</Label>
+            <ValueAndUnit>S - C - T </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Sagittal</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Coronal</Label>
+            <ValueAndUnit>P &gt;&gt; A </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Transversal</Label>
+            <ValueAndUnit>H &gt;&gt; F </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Kanalkombination</Label>
+            <ValueAndUnit>Adaptive Combine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Unkombiniert speichern</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Optimierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenfokus</Label>
+            <ValueAndUnit>Konstant </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenanwahl </Label>
+            <ValueAndUnit>Ein  - AutoCoilSelect </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_14" name="System - Justagen">
+          <ProtParameter>
+            <Label>B0-Shim-Modus</Label>
+            <ValueAndUnit>Tune-Up </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>B1-Shim-Modus</Label>
+            <ValueAndUnit>TrueForm </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mit Körperspule justieren</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Freq. Justage bestät.</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>von Fett ausgehen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>von Silikon ausgehen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Justagetoleranz</Label>
+            <ValueAndUnit>Auto </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_15" name="System - Justagevolumen">
+          <ProtParameter>
+            <Label>  Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Rotation</Label>
+            <ValueAndUnit>0,00 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  A &gt;&gt; P</Label>
+            <ValueAndUnit>263 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  R &gt;&gt; L</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  F &gt;&gt; H</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Zurücksetzen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_16" name="System - Tx/Rx">
+          <ProtParameter>
+            <Label>Frequenz 1H</Label>
+            <ValueAndUnit>123,250091 MHz</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Korrekturfaktor</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Verstärkung</Label>
+            <ValueAndUnit>Groß </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Korr. Bildskal.</Label>
+            <ValueAndUnit>1,000 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Zurücksetzen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>? Ref. Amplitude 1H</Label>
+            <ValueAndUnit>0,000 V</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_17" name="Physio - Signal 1">
+          <ProtParameter>
+            <Label>1.Signal/Modus</Label>
+            <ValueAndUnit>Kein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>7,8 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>15 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Segmente</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_18" name="Physio - Herz">
+          <ProtParameter>
+            <Label>Hilfslinien</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Magn. Präparation</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Dark Blood</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>400 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Auflösung</Label>
+            <ValueAndUnit>80 %</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_19" name="Physio - PACE">
+          <ProtParameter>
+            <Label>Atemkontrolle</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>15 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_20" name="Inline - Allgemein">
+          <ProtParameter>
+            <Label>Subtrahieren</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Messungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>StdAbw</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Leber Registrierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Originalbilder speichern</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_21" name="Inline - MIP">
+          <ProtParameter>
+            <Label>MIP-Sag</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Cor</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Tra</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Zeit</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Originalbilder speichern</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_22" name="Inline - Mamma">
+          <ProtParameter>
+            <Label>Wash - In</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Wash - Out</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TTP</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>PEI</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Zeit</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Messungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_23" name="Inline - Composing">
+          <ProtParameter>
+            <Label>Inline Composing</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verzeichn. Korr.</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Modus</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ungefilterte Bilder</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_24" name="Sequenz - Teil 1">
+          <ProtParameter>
+            <Label>Einleitung</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Dimension</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasenstabilisierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Asymmetrisches Echo</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Kontraste</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Flusskomp.</Label>
+            <ValueAndUnit>Nein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrschichtmodus</Label>
+            <ValueAndUnit>Sequenziell </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bandbreite</Label>
+            <ValueAndUnit>320 Hz/Px</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_25" name="Sequenz - Teil 2">
+          <ProtParameter>
+            <Label>Segmente</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Lärmreduktion</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>HF-Puls-Typ</Label>
+            <ValueAndUnit>Normal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Gradientenmodus</Label>
+            <ValueAndUnit>Normal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Anregung</Label>
+            <ValueAndUnit>Schichtsel. </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>HF-Spoiler</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_26" name="Sequenz - Assistent">
+          <ProtParameter>
+            <Label>Mode</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Erlaubte Verzögerung</Label>
+            <ValueAndUnit>0 s</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+      </SubStep>
+    </Protocol>
+  </PrintProtocol>
+  <PrintProtocol>
+    <Protocol Id="d409f1b5-e28c-4f67-a674-baf252a85a2d">
+      <HeaderTitle>SIEMENS MAGNETOM Skyra_fit </HeaderTitle>
+      <SubStep>
+        <ProtHeaderInfo>
+          <HeaderProtPath>\\Benutzer\Abdomen\Oberbauch\DOT\localizer *</HeaderProtPath>
+          <HeaderProperty>TA: 0:16 PM: ISO Voxelgröße: 0.8×0.8×6.0 mmPAT: 2 Rel. SNR: 1.00  : fl </HeaderProperty>
+        </ProtHeaderInfo>
+        <Card ID="ID_1" name="Eigenschaften">
+          <ProtParameter>
+            <Label>Prio Rekonstr.</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in den Viewer laden</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Automatischer Kinostart</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Automatische Bildspeicherung</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in die Mini-Segmente laden</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in großes Bildsegment laden</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline-Anzeige automatisch öffnen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline-Anzeige automatisch schließen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Start measurement without further preparation</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Auf Start duch Benutzer warten</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Start measurements</Label>
+            <ValueAndUnit>Einmal messen </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_2" name="Routine">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>5 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>150 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L3.9 P10.6 F81.0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>2</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>7 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>30 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L12.6 A5.7 F84.7 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>C &gt; T-1.2 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>3</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>3 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>150 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>R59.1 P52.2 F75.8 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>S &gt; T1.4 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Oversampling</Label>
+            <ValueAndUnit>25 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>400 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>6,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>7,8 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TE</Label>
+            <ValueAndUnit>3,69 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mittelungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>15 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Filter</Label>
+            <ValueAndUnit>Verzeichn. Korr.(2D), Elliptischer Filter </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenelemente</Label>
+            <ValueAndUnit>BO1-3;SP2-5 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_3" name="Kontrast - Allgemein">
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>7,8 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TE</Label>
+            <ValueAndUnit>3,69 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TD</Label>
+            <ValueAndUnit>0 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MTC</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Magn. Präparation</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Flipwinkel</Label>
+            <ValueAndUnit>20 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Wasserunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>SWI</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_4" name="Kontrast - Dynamisch">
+          <ProtParameter>
+            <Label>Mittelungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mittelungsmodus</Label>
+            <ValueAndUnit>Kurzzeit </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Rekonstruktion</Label>
+            <ValueAndUnit>Betrag </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Messungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrere Serien</Label>
+            <ValueAndUnit>Jede Messung </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_5" name="Auflösung - Allgemein">
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>400 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>6,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Basis-Auflösung</Label>
+            <ValueAndUnit>256 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Auflösung</Label>
+            <ValueAndUnit>80 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen Partial Fourier</Label>
+            <ValueAndUnit>7/8 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Interpolation</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_6" name="Auflösung - iPAT">
+          <ProtParameter>
+            <Label>PAT Modus</Label>
+            <ValueAndUnit>GRAPPA </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Beschl. Faktor PE</Label>
+            <ValueAndUnit>2 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ref. Zeilen PE</Label>
+            <ValueAndUnit>24 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Referenzmessungsm.</Label>
+            <ValueAndUnit>Integriert </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_7" name="Auflösung - Filter Bild">
+          <ProtParameter>
+            <Label>Image Filter</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verzeichn. Korr.</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Modus</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ungefilterte Bilder</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Prescan Normalisierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Normalisierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>B1-Filter</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_8" name="Auflösung - Filter Rohdaten">
+          <ProtParameter>
+            <Label>Rohdaten</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Elliptischer Filter</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_9" name="Geometrie - Allgemein">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>5 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>150 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L3.9 P10.6 F81.0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>2</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>7 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>30 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L12.6 A5.7 F84.7 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>C &gt; T-1.2 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>3</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>3 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>150 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>R59.1 P52.2 F75.8 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>S &gt; T1.4 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>400 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>6,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>7,8 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrschichtmodus</Label>
+            <ValueAndUnit>Sequenziell </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Serie</Label>
+            <ValueAndUnit>Verschachtelt </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>15 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_10" name="Geometrie - AutoAlign">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L3.9 P10.6 F81.0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>2</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L12.6 A5.7 F84.7 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>C &gt; T-1.2 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>3</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>R59.1 P52.2 F75.8 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>S &gt; T1.4 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>A &gt;&gt; P </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Position</Label>
+            <ValueAndUnit>L3.9 P10.6 F81.0 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>L</Label>
+            <ValueAndUnit>3,9 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>P</Label>
+            <ValueAndUnit>10,6 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>F</Label>
+            <ValueAndUnit>81,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Rotation</Label>
+            <ValueAndUnit>0,00 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_11" name="Geometrie - Sättiger">
+          <ProtParameter>
+            <Label>Sättigungsmodus</Label>
+            <ValueAndUnit>Standard </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Wasserunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spez. Sättiger</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_12" name="Geometrie - Tim Planning Suite">
+          <ProtParameter>
+            <Label>Set-n-Go Protokoll</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>F </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>80 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline Composing</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_13" name="System - Verschiedenes">
+          <ProtParameter>
+            <Label>Positionierungsmodus</Label>
+            <ValueAndUnit>ISO </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>F </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>80 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MSMA</Label>
+            <ValueAndUnit>S - C - T </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Sagittal</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Coronal</Label>
+            <ValueAndUnit>P &gt;&gt; A </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Transversal</Label>
+            <ValueAndUnit>H &gt;&gt; F </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Kanalkombination</Label>
+            <ValueAndUnit>Adaptive Combine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Unkombiniert speichern</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Optimierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenfokus</Label>
+            <ValueAndUnit>Konstant </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenanwahl </Label>
+            <ValueAndUnit>Ein  - AutoCoilSelect </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_14" name="System - Justagen">
+          <ProtParameter>
+            <Label>B0-Shim-Modus</Label>
+            <ValueAndUnit>Tune-Up </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>B1-Shim-Modus</Label>
+            <ValueAndUnit>TrueForm </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mit Körperspule justieren</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Freq. Justage bestät.</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>von Fett ausgehen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>von Silikon ausgehen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Justagetoleranz</Label>
+            <ValueAndUnit>Auto </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_15" name="System - Justagevolumen">
+          <ProtParameter>
+            <Label>  Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Rotation</Label>
+            <ValueAndUnit>0,00 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  A &gt;&gt; P</Label>
+            <ValueAndUnit>263 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  R &gt;&gt; L</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  F &gt;&gt; H</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Zurücksetzen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_16" name="System - Tx/Rx">
+          <ProtParameter>
+            <Label>Frequenz 1H</Label>
+            <ValueAndUnit>123,250091 MHz</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Korrekturfaktor</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Verstärkung</Label>
+            <ValueAndUnit>Groß </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Korr. Bildskal.</Label>
+            <ValueAndUnit>1,000 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Zurücksetzen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>? Ref. Amplitude 1H</Label>
+            <ValueAndUnit>0,000 V</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_17" name="Physio - Signal 1">
+          <ProtParameter>
+            <Label>1.Signal/Modus</Label>
+            <ValueAndUnit>Kein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>7,8 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>15 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Segmente</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_18" name="Physio - Herz">
+          <ProtParameter>
+            <Label>Hilfslinien</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Magn. Präparation</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Dark Blood</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>400 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Auflösung</Label>
+            <ValueAndUnit>80 %</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_19" name="Physio - PACE">
+          <ProtParameter>
+            <Label>Atemkontrolle</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>15 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_20" name="Inline - Allgemein">
+          <ProtParameter>
+            <Label>Subtrahieren</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Messungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>StdAbw</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Leber Registrierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Originalbilder speichern</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_21" name="Inline - MIP">
+          <ProtParameter>
+            <Label>MIP-Sag</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Cor</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Tra</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Zeit</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Originalbilder speichern</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_22" name="Inline - Mamma">
+          <ProtParameter>
+            <Label>Wash - In</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Wash - Out</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TTP</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>PEI</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Zeit</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Messungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_23" name="Inline - Composing">
+          <ProtParameter>
+            <Label>Inline Composing</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verzeichn. Korr.</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Modus</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ungefilterte Bilder</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_24" name="Sequenz - Teil 1">
+          <ProtParameter>
+            <Label>Einleitung</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Dimension</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasenstabilisierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Asymmetrisches Echo</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Kontraste</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Flusskomp.</Label>
+            <ValueAndUnit>Nein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrschichtmodus</Label>
+            <ValueAndUnit>Sequenziell </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bandbreite</Label>
+            <ValueAndUnit>320 Hz/Px</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_25" name="Sequenz - Teil 2">
+          <ProtParameter>
+            <Label>Segmente</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Lärmreduktion</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>HF-Puls-Typ</Label>
+            <ValueAndUnit>Normal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Gradientenmodus</Label>
+            <ValueAndUnit>Normal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Anregung</Label>
+            <ValueAndUnit>Schichtsel. </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>HF-Spoiler</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_26" name="Sequenz - Assistent">
+          <ProtParameter>
+            <Label>Mode</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Erlaubte Verzögerung</Label>
+            <ValueAndUnit>0 s</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+      </SubStep>
+    </Protocol>
+  </PrintProtocol>
+  <PrintProtocol>
+    <Protocol Id="fceaf870-a2b2-45b2-86be-7c5d5077c5a6">
+      <HeaderTitle>SIEMENS MAGNETOM Skyra_fit </HeaderTitle>
+      <SubStep>
+        <ProtHeaderInfo>
+          <HeaderProtPath>\\Benutzer\Abdomen\Oberbauch\DOT\t2_haste_cor *</HeaderProtPath>
+          <HeaderProperty>TA: 0:56 PM: ISO Voxelgröße: 0.5×0.5×5.0 mmPAT: 2 Rel. SNR: 1.00  : h </HeaderProperty>
+        </ProtHeaderInfo>
+        <Card ID="ID_1" name="Eigenschaften">
+          <ProtParameter>
+            <Label>Prio Rekonstr.</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in den Viewer laden</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Automatischer Kinostart</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Automatische Bildspeicherung</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in die Mini-Segmente laden</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bilder in großes Bildsegment laden</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline-Anzeige automatisch öffnen</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline-Anzeige automatisch schließen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Start measurement without further preparation</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Auf Start duch Benutzer warten</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Start measurements</Label>
+            <ValueAndUnit>Einmal messen </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_2" name="Routine">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>37 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>10 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L17.1 P14.5 F103.5 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>C &gt; T1.8 &gt; S-0.4 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Oversampling</Label>
+            <ValueAndUnit>100 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>5,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>1200,0 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TE</Label>
+            <ValueAndUnit>95 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mittelungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>3 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Filter</Label>
+            <ValueAndUnit>Verzeichn. Korr.(2D), Prescan Normalisierung </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenelemente</Label>
+            <ValueAndUnit>BO1-3;SP3-5 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_3" name="Kontrast - Allgemein">
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>1200,0 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TE</Label>
+            <ValueAndUnit>95 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MTC</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Magn. Präparation</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Flipwinkel</Label>
+            <ValueAndUnit>160 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Wasserunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Magn. wiederherst.</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_4" name="Kontrast - Dynamisch">
+          <ProtParameter>
+            <Label>Mittelungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mittelungsmodus</Label>
+            <ValueAndUnit>Langzeit </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Rekonstruktion</Label>
+            <ValueAndUnit>Betrag </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Messungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrere Serien</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_5" name="Auflösung - Allgemein">
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>5,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Basis-Auflösung</Label>
+            <ValueAndUnit>320 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Auflösung</Label>
+            <ValueAndUnit>75 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen Partial Fourier</Label>
+            <ValueAndUnit>4/8 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Interpolation</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_6" name="Auflösung - iPAT">
+          <ProtParameter>
+            <Label>PAT Modus</Label>
+            <ValueAndUnit>GRAPPA </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Beschl. Faktor PE</Label>
+            <ValueAndUnit>2 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ref. Zeilen PE</Label>
+            <ValueAndUnit>24 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Referenzmessungsm.</Label>
+            <ValueAndUnit>Integriert </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_7" name="Auflösung - Filter Bild">
+          <ProtParameter>
+            <Label>Image Filter</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verzeichn. Korr.</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Modus</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ungefilterte Bilder</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Prescan Normalisierung</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ungefilterte Bilder</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Normalisierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>B1-Filter</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_8" name="Auflösung - Filter Rohdaten">
+          <ProtParameter>
+            <Label>Rohdaten</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Elliptischer Filter</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_9" name="Geometrie - Allgemein">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Schichten</Label>
+            <ValueAndUnit>37 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Distanzfaktor</Label>
+            <ValueAndUnit>10 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L17.1 P14.5 F103.5 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>C &gt; T1.8 &gt; S-0.4 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Schichtdicke</Label>
+            <ValueAndUnit>5,0 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>1200,0 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrschichtmodus</Label>
+            <ValueAndUnit>Einzelmess. </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Serie</Label>
+            <ValueAndUnit>Absteigend </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>3 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_10" name="Geometrie - AutoAlign">
+          <ProtParameter>
+            <Label>Schichtgruppe</Label>
+            <ValueAndUnit>1</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Position</Label>
+            <ValueAndUnit>L17.1 P14.5 F103.5 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Orientierung</Label>
+            <ValueAndUnit>C &gt; T1.8 &gt; S-0.4 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter GroupId="1">
+            <Label>Phasenkod.-Richt.</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Position</Label>
+            <ValueAndUnit>L17.1 P14.5 F103.5 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>L</Label>
+            <ValueAndUnit>17,1 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>P</Label>
+            <ValueAndUnit>14,5 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>F</Label>
+            <ValueAndUnit>103,5 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Rotation</Label>
+            <ValueAndUnit>0,00 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Initiale Orientierung</Label>
+            <ValueAndUnit>C &gt; T  </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>C &gt; T</Label>
+            <ValueAndUnit>1,8 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>&gt; S</Label>
+            <ValueAndUnit>-0,4 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_11" name="Geometrie - Sättiger">
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Wasserunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Magn. wiederherst.</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spez. Sättiger</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_12" name="Geometrie - Navigator" />
+        <Card ID="ID_13" name="Geometrie - Tim Planning Suite">
+          <ProtParameter>
+            <Label>Set-n-Go Protokoll</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>F </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>103 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Inline Composing</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_14" name="System - Verschiedenes">
+          <ProtParameter>
+            <Label>Positionierungsmodus</Label>
+            <ValueAndUnit>ISO </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>F </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Tischposition</Label>
+            <ValueAndUnit>103 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MSMA</Label>
+            <ValueAndUnit>S - C - T </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Sagittal</Label>
+            <ValueAndUnit>R &gt;&gt; L </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Coronal</Label>
+            <ValueAndUnit>P &gt;&gt; A </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Transversal</Label>
+            <ValueAndUnit>H &gt;&gt; F </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Kanalkombination</Label>
+            <ValueAndUnit>Adaptive Combine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Unkombiniert speichern</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Optimierung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenfokus</Label>
+            <ValueAndUnit>Konstant </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>AutoAlign</Label>
+            <ValueAndUnit>--- </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Spulenanwahl </Label>
+            <ValueAndUnit>Ein  - AutoCoilSelect </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_15" name="System - Justagen">
+          <ProtParameter>
+            <Label>B0-Shim-Modus</Label>
+            <ValueAndUnit>Tune-Up </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>B1-Shim-Modus</Label>
+            <ValueAndUnit>TrueForm </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mit Körperspule justieren</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Freq. Justage bestät.</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>von Fett ausgehen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>von Silikon ausgehen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Justagetoleranz</Label>
+            <ValueAndUnit>Auto </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_16" name="System - Justagevolumen">
+          <ProtParameter>
+            <Label>  Position</Label>
+            <ValueAndUnit>Isozentrum </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Orientierung</Label>
+            <ValueAndUnit>Transversal </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Rotation</Label>
+            <ValueAndUnit>0,00 Grad</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  A &gt;&gt; P</Label>
+            <ValueAndUnit>263 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  R &gt;&gt; L</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  F &gt;&gt; H</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Zurücksetzen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_17" name="System - Tx/Rx">
+          <ProtParameter>
+            <Label>Frequenz 1H</Label>
+            <ValueAndUnit>123,250091 MHz</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Korrekturfaktor</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>  Verstärkung</Label>
+            <ValueAndUnit>Groß </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Korr. Bildskal.</Label>
+            <ValueAndUnit>1,000 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Zurücksetzen</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>? Ref. Amplitude 1H</Label>
+            <ValueAndUnit>0,000 V</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_18" name="Physio - Signal 1">
+          <ProtParameter>
+            <Label>1.Signal/Modus</Label>
+            <ValueAndUnit>Kein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>TR</Label>
+            <ValueAndUnit>1200,0 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>3 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_19" name="Physio - Herz">
+          <ProtParameter>
+            <Label>Magn. Präparation</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Fettunterdr.</Label>
+            <ValueAndUnit>Keine </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Dark Blood</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Auslese</Label>
+            <ValueAndUnit>350 mm</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>FoV Phase</Label>
+            <ValueAndUnit>100,0 %</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Phasen-Auflösung</Label>
+            <ValueAndUnit>75 %</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_20" name="Physio - PACE">
+          <ProtParameter>
+            <Label>Atemkontrolle</Label>
+            <ValueAndUnit>Atemanhalten </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verknüpfungen</Label>
+            <ValueAndUnit>3 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_21" name="Inline - Allgemein">
+          <ProtParameter>
+            <Label>Subtrahieren</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Messungen</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>StdAbw</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Originalbilder speichern</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_22" name="Inline - MIP">
+          <ProtParameter>
+            <Label>MIP-Sag</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Cor</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Tra</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>MIP-Zeit</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Originalbilder speichern</Label>
+            <ValueAndUnit>Ein  </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_23" name="Inline - Composing">
+          <ProtParameter>
+            <Label>Inline Composing</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Verzeichn. Korr.</Label>
+            <ValueAndUnit>Ein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Modus</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Ungefilterte Bilder</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_24" name="Sequenz - Teil 1">
+          <ProtParameter>
+            <Label>Einleitung</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Dimension</Label>
+            <ValueAndUnit>2D </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Kontraste</Label>
+            <ValueAndUnit>1 </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Flusskomp.</Label>
+            <ValueAndUnit>Nein </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Mehrschichtmodus</Label>
+            <ValueAndUnit>Einzelmess. </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Echoabstand</Label>
+            <ValueAndUnit>5,02 ms</ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Bandbreite</Label>
+            <ValueAndUnit>401 Hz/Px</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_25" name="Sequenz - Teil 2">
+          <ProtParameter>
+            <Label>HF-Puls-Typ</Label>
+            <ValueAndUnit>Schnell </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Gradientenmodus</Label>
+            <ValueAndUnit>Schnell </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Hyperecho</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Turbo Faktor</Label>
+            <ValueAndUnit>240 </ValueAndUnit>
+          </ProtParameter>
+        </Card>
+        <Card ID="ID_26" name="Sequenz - Assistent">
+          <ProtParameter>
+            <Label>Mode</Label>
+            <ValueAndUnit>Aus </ValueAndUnit>
+          </ProtParameter>
+          <ProtParameter>
+            <Label>Erlaubte Verzögerung</Label>
+            <ValueAndUnit>30 s</ValueAndUnit>
+          </ProtParameter>
+        </Card>
+      </SubStep>
+    </Protocol>
+  </PrintProtocol>
+</PrintOut>
