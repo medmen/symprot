@@ -20,9 +20,9 @@ class CspExtension extends AbstractExtension
         ];
     }
 
-    public function getNonce(?string $usage = null): string
+    public function getNonce(...$args): string
     {
-        // Ignore $usage, nonce is the same regardless of usage
+        // Ignore arguments (e.g., usage) for compatibility
         $request = $this->requestStack->getCurrentRequest();
         if (!$request) {
             return '';

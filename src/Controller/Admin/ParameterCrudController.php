@@ -59,7 +59,6 @@ class ParameterCrudController extends AbstractCrudController
         return $filters
             ->add(EntityFilter::new('geraet'))
             ->add('parameter_selected')
-            ->add('parameter_default')
         ;
     }
 
@@ -75,7 +74,6 @@ class ParameterCrudController extends AbstractCrudController
         yield AssociationField::new('geraet');
         yield TextField::new('parameter_name');
         yield BooleanField::new('parameter_selected');
-        yield BooleanField::new('parameter_default');
     }
     public function configureActions(Actions $actions): Actions
     {

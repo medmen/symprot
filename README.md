@@ -43,7 +43,7 @@ If you are familiar with PHP programming, you can easily
 (i assume linux and a terminal)  :
 ### prerequisites: 
   1. A webserver (e.g. Apache, nginx), configured and ready - i assume you have that up and running :) 
-  2. PHP with modules PDO, Ctype, iconv, PCRE, Session, SimpleXML, and Tokenizer installed
+  2. PHP 8.2+ with modules PDO, Ctype, iconv, PCRE, Session, SimpleXML, and Tokenizer installed
   3. sqlite as database (e.g. for Ubuntu `sudo apt-get install sqlite3, php-sqlite3)
   4. [composer] (https://getcomposer.org/download/)
 ### in terminal:  
