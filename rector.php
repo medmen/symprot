@@ -20,7 +20,7 @@ return RectorConfig::configure()
         // DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         // SensiolabsSetList::ANNOTATIONS_TO_ATTRIBUTES,
-        SymfonySetList::SYMFONY_60,
+        SymfonySetList::SYMFONY_71,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
