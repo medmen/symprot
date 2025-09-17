@@ -35,19 +35,39 @@ class ProtocolController extends AbstractController
             ->getRepository(Protocol::class)
             ->find($id);
 
-        $geraet = ucfirst($protocol->getGeraet()->getGeraetName());
-        $filetype = ucfirst(explode('/', $protocol->getProtocolMimeType())[1]);
-        $uploadDir = $this->getParameter('vich_uploader.mappings')['protocolFile']['uri_prefix'];
-        $filepath = $uploadDir.'/'.$protocol->getProtocolName();
-        $fullfilepath = $this->kernel.'/public'.$filepath;
+        // Handle missing protocol gracefully
+        if (!$protocol) {
+            return $this->render('protocol/index.html.twig', [
+                'geraet' => '',
+                'protocol' => null,
+                'errors' => ['Protocol not found.'],
+                'output' => '',
+                'controller_name' => 'ProtocolController',
+            ]);
+        }
+
+        $geraetEntity = $protocol->getGeraet();
+        $geraet = $geraetEntity ? ucfirst((string) $geraetEntity->getGeraetName()) : '';
+
+        $mime = (string) $protocol->getProtocolMimeType();
+        $filetype = ($mime && str_contains($mime, '/')) ? ucfirst(explode('/', $mime)[1]) : '';
+
+        // Build both the public URI and the filesystem path using Vich mapping
+        $vichMappings = $this->getParameter('vich_uploader.mappings');
+        $uriPrefix = $vichMappings['protocolFile']['uri_prefix'] ?? '';
+        $uploadDestination = $vichMappings['protocolFile']['upload_destination'] ?? '';
+
+        $filename = (string) $protocol->getProtocolName();
+        $filepath = rtrim((string) $uriPrefix, '/').'/'.$filename; // public URI
+        $fullfilepath = rtrim((string) $uploadDestination, '/').'/'.$filename; // filesystem path
 
         // make very sure file exists
-        if (false == file_exists($fullfilepath)) {
-            $errors[] = 'No file was uploaded or upload failed - please ask the Admin to check permissions for file upload!';
+        if (!is_file($fullfilepath)) {
+            $errors = ['No file was uploaded or upload failed - please ask the Admin to check permissions for file upload!'];
 
             return $this->render('protocol/index.html.twig', [
                 'geraet' => $geraet,
-                'protocol' => $protocol->getProtocolName(),
+                'protocol' => $filename,
                 'errors' => $errors,
                 'output' => 'Umwandlung fehlgeschlagen, '.$fullfilepath.' enthält keine Datei',
                 'controller_name' => 'ProtocolController',
@@ -57,8 +77,8 @@ class ProtocolController extends AbstractController
         // define new plain object for transport of necessary values
         $data = new \stdClass();
         $data->geraet = $geraet;
-        $data->mimetype = $protocol->getProtocolMimeType();
-        $data->filepath = $filepath;
+        $data->mimetype = $mime;
+        $data->filepath = $filepath; // public URI used by formatters/templates
 
         $serialized_and_parsed_data = $this->convertercontext->handle($data);
         // can we store this in session?

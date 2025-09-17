@@ -12,6 +12,7 @@
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('assets/styles/fonts_nunito_local.css') }}">
             {{ encore_entry_link_tags('app') }}
             <link rel="stylesheet" href="{{ asset('build/app.css') }}">
         {% endblock %}
