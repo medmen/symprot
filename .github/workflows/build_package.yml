@@ -1,0 +1,52 @@
+name: Build & Deploy Symfony Package
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo, xml, ctype, iconv, json
+          tools: composer, symfony
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Build Symfony package (customize as needed)
+        run: |
+          mkdir -p build
+          VERSION=$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::7}
+          PACKAGE_NAME="symfony-package-${VERSION}.zip"
+          zip -r "build/$PACKAGE_NAME" . -x ".git/*" "vendor/*" "build/*"
+          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PACKAGE_NAME }}
+          path: build/${{ env.PACKAGE_NAME }}
+
+      - name: Cleanup old package artifacts
+        run: |
+          # Requires GitHub CLI (gh) for artifact management
+          echo "Fetching artifacts..."
+          gh run list --json databaseId,name,createdAt -q ".[]" > artifacts.json
+          ARTIFACT_IDS=$(jq -r 'sort_by(.createdAt) | reverse | .[10:] | .[].databaseId' artifacts.json)
+          for ID in $ARTIFACT_IDS; do
+            echo "Deleting artifact ID: $ID"
+            gh run delete $ID
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Optional: Deploy step can be added here if you need to publish somewhere
