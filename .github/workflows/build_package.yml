@@ -1,4 +1,6 @@
 name: Build & Deploy Symfony Package
+permissions:
+  contents: read
 
 on:
   push:
