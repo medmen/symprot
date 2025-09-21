@@ -32,28 +32,56 @@ jobs:
           zip -r "build/$PACKAGE_NAME" . -x ".git/*" "vendor/*" "build/*"
           echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
 
-      - name: Upload package artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.PACKAGE_NAME }}
-          path: build/${{ env.PACKAGE_NAME }}
-
-      - name: Cleanup old package artifacts (keep latest 10)
+      - name: Publish nightly artifact to GitHub Packages
         run: |
+          echo "Publishing $PACKAGE_NAME to GitHub Packages as nightly..."
+          curl -X PUT \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary "@build/${{ env.PACKAGE_NAME }}" \
+            "https://uploads.github.com/repos/${{ github.repository }}/packages?name=${{ env.PACKAGE_NAME }}&label=nightly"
+        # Note: This uses the GitHub REST API for generic package uploads.
+        # For advanced Composer (PHP) package publishing, consider using Composer+auth.json or other package registries.
+
+      - name: Cleanup old nightly packages (keep only latest 10)
+        run: |
+          # Install jq if missing
           sudo apt-get install jq -y
+
           REPO="${{ github.repository }}"
-          ARTIFACTS=$(gh api repos/$REPO/actions/artifacts | jq -c '.artifacts')
-          COUNT=$(echo $ARTIFACTS | jq 'length')
-          if [ "$COUNT" -gt 10 ]; then
-            IDS=$(echo $ARTIFACTS | jq 'sort_by(.created_at) | reverse | .[10:] | .[].id')
-            for ID in $IDS; do
-              echo "Deleting artifact ID: $ID"
-              gh api --method DELETE repos/$REPO/actions/artifacts/$ID
-            done
-          else
-            echo "Less than or equal to 10 artifacts, nothing to delete"
+          PACKAGE_NAME="symfony-package"
+
+          # List all package versions for the repository
+          gh api "repos/$REPO/packages?package_type=generic" > packages.json
+
+          # Find the package ID for our package
+          PKG_ID=$(jq '[.[] | select(.name == "'$PACKAGE_NAME'")] | first | .id' packages.json)
+          if [ -z "$PKG_ID" ]; then
+            echo "No package named $PACKAGE_NAME found."
+            exit 0
           fi
+
+          # List all versions of our package
+          gh api "repos/$REPO/packages/generic/$PACKAGE_NAME/versions" > versions.json
+
+          # Filter only nightly versions (name contains 'nightly')
+          NIGHTLY_VERSIONS=$(jq '[.[] | select(.name | test("nightly"))]' versions.json)
+          COUNT=$(echo $NIGHTLY_VERSIONS | jq 'length')
+
+          if [ "$COUNT" -le 10 ]; then
+            echo "Nothing to clean up, nightly versions: $COUNT"
+            exit 0
+          fi
+
+          # Get IDs of older nightly versions (all except 10 newest)
+          IDS=$(echo $NIGHTLY_VERSIONS | jq 'sort_by(.created_at) | reverse | .[10:] | .[].id')
+
+          for ID in $IDS; do
+            echo "Deleting old nightly package version ID: $ID"
+            gh api --method DELETE "repos/$REPO/packages/generic/$PACKAGE_NAME/versions/$ID"
+          done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
 
     # Optional: Deploy step can be added here if you need to publish somewhere
