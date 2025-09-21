@@ -36,16 +36,21 @@ jobs:
           name: ${{ env.PACKAGE_NAME }}
           path: build/${{ env.PACKAGE_NAME }}
 
-      - name: Cleanup old package artifacts
+      - name: Cleanup old package artifacts (keep latest 10)
         run: |
-          # Requires GitHub CLI (gh) for artifact management
-          echo "Fetching artifacts..."
-          gh run list --json databaseId,name,createdAt -q ".[]" > artifacts.json
-          ARTIFACT_IDS=$(jq -r 'sort_by(.createdAt) | reverse | .[10:] | .[].databaseId' artifacts.json)
-          for ID in $ARTIFACT_IDS; do
-            echo "Deleting artifact ID: $ID"
-            gh run delete $ID
-          done
+          sudo apt-get install jq -y
+          REPO="${{ github.repository }}"
+          ARTIFACTS=$(gh api repos/$REPO/actions/artifacts | jq -c '.artifacts')
+          COUNT=$(echo $ARTIFACTS | jq 'length')
+          if [ "$COUNT" -gt 10 ]; then
+            IDS=$(echo $ARTIFACTS | jq 'sort_by(.created_at) | reverse | .[10:] | .[].id')
+            for ID in $IDS; do
+              echo "Deleting artifact ID: $ID"
+              gh api --method DELETE repos/$REPO/actions/artifacts/$ID
+            done
+          else
+            echo "Less than or equal to 10 artifacts, nothing to delete"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
