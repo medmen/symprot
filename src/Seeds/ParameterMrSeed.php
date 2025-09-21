@@ -125,7 +125,7 @@ class ParameterMrSeed extends Seed
             );
     }
 
-    public function getDefault(): array
+    public function getSelected(): array
     {
         return array (
             "TA",
@@ -138,10 +138,5 @@ class ParameterMrSeed extends Seed
             "Basis-Auflösung",
             "Voxelgröße",
         );
-    }
-
-    public function getSelected(): array
-    {
-        return $this->getDefault();
     }
 }
