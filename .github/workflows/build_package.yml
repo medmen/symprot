@@ -24,6 +24,17 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
+      - name: Build assets and preseed DB in production mode
+        run: |
+          composer dump-env prod
+          bin/console about --env=prod
+          vendor/bin/requirements-checker
+          bin/console doctrine:database:create
+          bin/console doctrine:migrations:migrate
+          bin/console seed:load
+          bin/console asset-map:compile
+          bin/console cache:clear --env=prod
+
       - name: Build Symfony package (customize as needed)
         run: |
           mkdir -p build
