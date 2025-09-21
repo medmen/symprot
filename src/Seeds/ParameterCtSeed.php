@@ -121,7 +121,7 @@ class ParameterCtSeed extends Seed
         );
 	}
 	
-	public function getDefault(): array
+	public function getSelected(): array
     {
         return array (
 			'PitchFactor',
@@ -140,12 +140,5 @@ class ParameterCtSeed extends Seed
 			'Kernel',
 			'Window'
         );
-	}
-	
-	public function getSelected(): array
-    {
-		return $this->getDefault();
-	}
-	
-
+	}	
 }
