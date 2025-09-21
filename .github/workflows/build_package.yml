@@ -45,8 +45,9 @@ jobs:
 
       - name: Cleanup old nightly packages (keep only latest 10)
         run: |
-          # Install jq if missing
+          # Install jq and gh if missing
           sudo apt-get install jq -y
+          sudo apt-get install gh -y
 
           REPO="${{ github.repository }}"
           PACKAGE_NAME="symfony-package"
