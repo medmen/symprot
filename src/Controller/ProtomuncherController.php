@@ -6,6 +6,7 @@ use App\Entity\Protocol;
 use App\Form\ProtocoluploadType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -37,6 +38,38 @@ class ProtomuncherController extends AbstractController
                     'form' => $form->createView(),
                     'protocol' => $protocol,
                     'errors' => $errors,
+                    'controller_name' => 'ProtomuncherController',
+                ]);
+            }
+
+            // Before persisting, ensure the upload destination exists and is writable
+            $vichMappings = $this->getParameter('vich_uploader.mappings');
+            $uploadDestination = $vichMappings['protocolFile']['upload_destination'] ?? null;
+
+            $fs = new Filesystem();
+            $preUploadErrors = [];
+            if (!$uploadDestination) {
+                $preUploadErrors[] = 'Upload destination for files is not configured.';
+            } else {
+                // Attempt to create the directory if it does not exist
+                if (!$fs->exists($uploadDestination)) {
+                    try {
+                        $fs->mkdir($uploadDestination, 0775);
+                    } catch (\Throwable $e) {
+                        $preUploadErrors[] = 'Cannot create upload directory: '.$uploadDestination.' ('.$e->getMessage().')';
+                    }
+                }
+                // Check writability
+                if (!$preUploadErrors && !is_writable($uploadDestination)) {
+                    $preUploadErrors[] = 'Upload directory is not writable: '.$uploadDestination.'. Please adjust permissions (e.g., chown/chmod) for the web server user.';
+                }
+            }
+
+            if ($preUploadErrors) {
+                return $this->render('protomuncher/upload.html.twig', [
+                    'form' => $form->createView(),
+                    'protocol' => $protocol,
+                    'errors' => $preUploadErrors,
                     'controller_name' => 'ProtomuncherController',
                 ]);
             }

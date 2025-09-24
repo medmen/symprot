@@ -96,7 +96,7 @@ class MrtXmlConverter implements StrategyInterface
         // get paths
         $protocol_path = $this->params->get('app.path.protocols');
         $target_path = $this->kernel.'/public'.$protocol_path;
-        $this->filepath = $this->kernel.$data->filepath;
+        $this->filepath = $this->kernel.'/public'.$data->filepath;
 
         $this->logger->info('doing MRT XML conversion with parameters '.implode(' | ', $this->target_params));
 
@@ -106,7 +106,10 @@ class MrtXmlConverter implements StrategyInterface
         $last_protocol = '';
 
         $xml = new \XMLReader();
-        $xml->open($this->filepath);
+        $success = $xml->open($this->filepath);
+        if (!$success) {
+            return serialize(['error' => 'Could not open XML file '.$this->filepath]);
+        }
 
         /*
          * To use xmlReader easily we have to make sure we parse at the outermost level of repeating elements.
