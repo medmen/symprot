@@ -116,6 +116,7 @@ class MrtXmlConverter implements StrategyInterface
          * This is because xmlReaders next() option does not behave as one would think by intuition
          */
         while ($xml->read() && $xml->name != 'PrintProtocol') {
+            // doeing nothin here skips to the first PrintProtocol element
         }
 
         while ($xml->name == 'PrintProtocol') {
