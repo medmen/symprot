@@ -19,14 +19,10 @@ class ProtocoluploadType extends AbstractType
                 'label' => 'XML oder PDF Datei',
                 'required' => true,
                 'constraints' => [
-                    new File([
-                        'maxSize' => '50M',
-                        'mimeTypes' => [
-                            'application/pdf',
-                            'application/xml',
-                            'text/xml',
-                        ],
-                    ]),
+                    new File(
+                        maxSize: '50M',
+                        mimeTypes: ['application/pdf', 'application/xml', 'text/xml']
+                    ),
                 ],
             ]
             )

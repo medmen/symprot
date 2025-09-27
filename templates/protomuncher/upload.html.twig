@@ -11,6 +11,18 @@
             <h6>Messages:</h6>
         {% endblock%}
 
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {{ protocol.protocolFile }}
     </div>
 

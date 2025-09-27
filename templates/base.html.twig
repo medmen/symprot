@@ -39,10 +39,6 @@
                             {% endblock %}
                         </div>
                     </div>
-
-                    <div class="collapse col-xxl-3" id="flash-messages">
-                        {% include ('flash_messages.html.twig') %}
-                    </div>
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                         Menu
                         <i class="fas fa-bars"></i>
@@ -56,6 +52,17 @@
                 </div>
             </nav>
             </header>
+
+            <section class="text-center" id="messages">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            </section>
 
             <section class="signup-section text-center" id="maincontent">
                 <div class="container px-4 px-lg-5 d-flex h-75 align-items-center justify-content-center">
@@ -73,13 +80,12 @@
                 <div class="container px-4 px-lg-5">
                     <div class="row gx-4 gx-lg-5 justify-content-center">
                         <div class="col-lg-8">
-                            <h2 class="text-white mb-1">Copyright &copy; AS 2021</h2>
+                            <h2 class="text-white mb-1">Copyright &copy; AS 2021 - {{ 'now' | date('Y') }}</h2>
                             <p class="text-white-50">
                                 Gemacht mit Symfony, Kaffee und dem <a href="https://startbootstrap.com/theme/grayscale/">Grayscale-Bootstrap-theme</a>.
                             </p>
                         </div>
                     </div>
-                    <!-- <img class="img-fluid" src="{{ asset('build/images/ipad.png') }}" alt="ein Ipad" /> -->
                 </div>
             </footer>
         </div>

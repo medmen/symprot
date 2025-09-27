@@ -17,11 +17,6 @@ class Protocol implements \Stringable
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     *
-     * @Vich\UploadableField(mapping="protocol_file", fileNameProperty="protocolName", size="protocolSize", mimeType="protocolMimeType", originalName="protocolOrigName")
-     */
     #[Vich\UploadableField(mapping: "protocolFile", fileNameProperty: "protocolName", size: "protocolSize", mimeType: "protocolMimeType", originalName: "protocolOrigName")]
     private ?File $protocolFile = null;
 
