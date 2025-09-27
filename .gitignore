@@ -6,3 +6,4 @@
 /.idea/
 /public/uploads/
 php.xml
+.env.local*
