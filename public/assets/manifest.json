@@ -28,6 +28,8 @@
     "bundles\/easyadmin\/manifest.json": "\/assets\/bundles\/easyadmin\/manifest-s8itxAN.json",
     "bundles\/easyadmin\/page-color-scheme.30cb23c2.js": "\/assets\/bundles\/easyadmin\/page-color-scheme.30cb23c2-lXpFH5W.js",
     "bundles\/easyadmin\/page-layout.6e9fe55d.js": "\/assets\/bundles\/easyadmin\/page-layout.6e9fe55d-sMGmPXz.js",
+    "fonts\/nunito\/Nunito-Bold.woff2": "\/assets\/fonts\/nunito\/Nunito-Bold-Qe_IK_d.woff2",
+    "fonts\/nunito\/Nunito-Regular.woff2": "\/assets\/fonts\/nunito\/Nunito-Regular-dljFjsc.woff2",
     "img\/bg-masthead.jpg": "\/assets\/img\/bg-masthead-staffa7.jpg",
     "img\/bg-signup.jpg": "\/assets\/img\/bg-signup-fAT9v-a.jpg",
     "img\/demo-image-01.jpg": "\/assets\/img\/demo-image-01-GiWZDJ1.jpg",
@@ -36,7 +38,8 @@
     "img\/nebula.jpg": "\/assets\/img\/nebula-SDe6Egr.jpg",
     "styles\/app.css": "\/assets\/styles\/app-cT2YKNc.css",
     "styles\/app.scss": "\/assets\/styles\/app--CnnoRs.scss",
-    "styles\/googlefonts_nonito.css": "\/assets\/styles\/googlefonts_nonito-jsuO0mU.css",
+    "styles\/fonts_nunito_local.css": "\/assets\/styles\/fonts_nunito_local-aM5OeRw.css",
+    "styles\/googlefonts_nonito.css": "\/assets\/styles\/googlefonts_nonito-i5Y7ByD.css",
     "styles\/googlefonts_varela-round.css": "\/assets\/styles\/googlefonts_varela-round-5-mROnE.css",
     "styles\/style.css": "\/assets\/styles\/style-Q1tx8NJ.css",
     "template_scripts.js": "\/assets\/template_scripts-xT9sZRF.js"

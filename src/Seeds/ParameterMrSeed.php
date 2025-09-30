@@ -45,10 +45,6 @@ class ParameterMrSeed extends Seed
             $em = new Parameter();
             $em->setParameterName($name);
 
-            if(in_array($name, $this->getDefault())) {
-                $em->setParameterDefault(true);
-            }
-
             if(in_array($name, $this->getSelected())) {
                 $em->setParameterSelected(true);
             }
@@ -126,10 +122,10 @@ class ParameterMrSeed extends Seed
             "b-Wert >=",
             "Atemkontrolle",
             "Voxelgröße",
-            );
+        );
     }
 
-    public function getDefault(): array
+    public function getSelected(): array
     {
         return array (
             "TA",
@@ -142,10 +138,5 @@ class ParameterMrSeed extends Seed
             "Basis-Auflösung",
             "Voxelgröße",
         );
-    }
-
-    public function getSelected(): array
-    {
-        return $this->getDefault();
     }
 }
