@@ -26,57 +26,59 @@
 
     <body id="page-top">
         <div class="main-wrapper">
-            <header >
-            <!-- Navigation-->
-            <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-                <div class="container px-4 px-lg-5">
-                    <div class="d-flex justify-content-center">
-                        <div class="text-center text-black-50 mx-auto">
-                            {% block title %}
-                                <h4>Siemens Untersuchungsptotokolle</h4>
-                                <h3>einfach</h3>
-                                <h4>sichten und dokumentieren</h4>
-                            {% endblock %}
+            <header class="page-header">
+                <!-- Navigation-->
+                <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
+                    <div class="container px-4 px-lg-5">
+                        <div class="d-flex justify-content-center">
+                            <div class="text-center text-black-50 mx-auto">
+                                {% block title %}
+                                    <h4>Siemens Untersuchungsptotokolle</h4>
+                                    <h3>einfach</h3>
+                                    <h4>sichten und dokumentieren</h4>
+                                {% endblock %}
+                            </div>
+                        </div>
+                        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                            Menu
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarResponsive">
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item"><a class="nav-link" href="{{ path('about') }}">About</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('admin') }}">Admin</a></li>
+                            </ul>
                         </div>
                     </div>
-                    <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                        Menu
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="{{ path('about') }}">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('admin') }}">Admin</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+                </nav>
             </header>
 
-            <section class="text-center" id="messages">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
+            <main class="page-body">
+                <section class="about-section text-center" id="messages">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-            </section>
+                </section>
 
-            <section class="signup-section text-center" id="maincontent">
-                <div class="container px-4 px-lg-5 d-flex h-75 align-items-center justify-content-center">
-                    <div class="d-flex justify-content-center">
-                        <div class="text-center">
-                            {% block body %}
+                <section class="signup-section text-center" id="maincontent">
+                    <div class="container px-4 px-lg-5 d-flex h-75 align-items-center justify-content-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="text-center">
+                                {% block body %}
 
-                            {% endblock %}
+                                {% endblock %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </main>
             <!-- Footer-->
-            <footer class="footer bg-black small text-center text-white-50" id="about">
+            <footer class="page-footer bg-black small text-center text-white-50" id="about">
                 <div class="container px-4 px-lg-5">
                     <div class="row gx-4 gx-lg-5 justify-content-center">
                         <div class="col-lg-8">

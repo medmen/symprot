@@ -83,12 +83,19 @@ class ProtocolController extends AbstractController
         $serialized_and_parsed_data = $this->convertercontext->handle($data);
         // can we store this in session?
 
+        /**
         $notifier->send(new Notification(
-            '<h2> Die Datei wurde hochgeladen.</h2>
+            "Die Datei wurde hochgeladen.\n
                     <p>Sie wird nun im Hintergrund analysiert und umgewandelt. <br>
                     Die Ausgabe erfolgt im Fenster unten. <br>
-                    </p>',
+                    </p>",
             ['browser']));
+        */
+
+        $this->addFlash(
+            'success',
+            'Die Datei wurde hochgeladen. Sie wird nun im Hintergrund analysiert und umgewandelt. Die Ausgabe erfolgt im Fenster unten.',
+        );
 
         $errors = [
             'filetype' => $filetype,
