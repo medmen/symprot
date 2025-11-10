@@ -6,21 +6,12 @@
         <meta name="description" content="Symprot transformiert Untersuchungs-Protokolle von Siemens-CTs & MRTs nach HTML, Markdown uvm. Natürlich nur der Teil der zählt :)" />
         <meta name="author" content="Alexander Schuster" />
 
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon.ico') }}" />
 
         <title>Symprot - Protokolle einfach sichten & dokumentieren!</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('assets/styles/fonts_nunito_local.css') }}">
-            {{ encore_entry_link_tags('app') }}
-            <link rel="stylesheet" href="{{ asset('build/app.css') }}">
-        {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app', { 'nonce': csp_nonce('script') }) }}{% endblock %}
-            {{ encore_entry_script_tags('app') }}
-            <script src="{{ asset('build/app.js') }}"></script>
         {% endblock %}
     </head>
 
@@ -55,14 +46,7 @@
 
             <main class="page-body">
                 <section class="about-section text-center" id="messages">
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }}">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        </div>
-                    {% endfor %}
-                {% endfor %}
+                    {% include 'components/_flash_messages.html.twig' %}
                 </section>
 
                 <section class="signup-section text-center" id="maincontent">

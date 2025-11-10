@@ -7,30 +7,18 @@
 {% block body %}
 
     <div id="messagecontainer" class="container dx-4 justify-content-center text-white mx-auto mt-2 mb-5">
-        {% block flash %}
-            <h6>Messages:</h6>
-        {% endblock%}
-
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-
-        {% for message in app.flashes('error') %}
-            <div class="alert alert-danger">
-                {{ message }}
-            </div>
-        {% endfor %}
-
         {{ protocol.protocolFile }}
+    </div>
+
+    <div id="progress_bar">
+        <!-- this is a progress bar. Its filled by JS when a file gets uploaded.-->
     </div>
 
     <div id="uploadcontainer" class="d-table dx-4 text-white mx-auto mt-2 mb-5">
 
         <h2>Protokoll hochladen</h2>
 
-        {{ form_start(form, {'method': 'POST'}) }}
+        {{ form_start(form, {'method': 'POST', 'attr': {'id': 'file-upload-form'}}) }}
         <div class="list-group-item-danger">
             {{ form_errors(form) }}
         </div>

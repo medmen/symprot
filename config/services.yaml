@@ -46,3 +46,4 @@ services:
         # inject all services tagged with app.formatter_strategy as first argument
         arguments:
             - !tagged_iterator app.formatter_strategy
+            - '@request_stack'
