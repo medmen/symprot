@@ -98,6 +98,12 @@ class MrtXmlConverter implements StrategyInterface
         $target_path = $this->kernel.'/public'.$protocol_path;
         $this->filepath = $this->kernel.'/public'.$data->filepath;
 
+        // check if file exists!
+        if (!file_exists($this->filepath)) {
+                $this->logger->error('Target XML file not found at '.$this->filepath);
+                 return(serialize(array('error' => 'No file found for MRT XML conversion')));
+        }
+
         $this->logger->info('doing MRT XML conversion with parameters '.implode(' | ', $this->target_params));
 
         $return_arr = [];
