@@ -98,6 +98,12 @@ class MrtXmlConverter implements StrategyInterface
         // get paths: resolve full path from uploads dir and provided filename
         $this->filepath = rtrim($this->appUploadsDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $data->filename;
 
+        // check if file exists!
+        if (!file_exists($this->filepath)) {
+                $this->logger->error('Target XML file not found at '.$this->filepath);
+                 return(serialize(array('error' => 'No file found for MRT XML conversion')));
+        }
+
         $this->logger->info('doing MRT XML conversion with parameters '.implode(' | ', $this->target_params));
 
         $return_arr = [];
