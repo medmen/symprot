@@ -99,9 +99,6 @@
     "evotodi/seed-bundle": {
         "version": "7.1"
     },
-    "jms/metadata": {
-        "version": "2.5.1"
-    },
     "kub-at/php-simple-html-dom-parser": {
         "version": "1.9.1"
     },
@@ -710,18 +707,6 @@
     },
     "twig/twig": {
         "version": "v3.3.2"
-    },
-    "vich/uploader-bundle": {
-        "version": "1.23",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "1.13",
-            "ref": "1b3064c2f6b255c2bc2f56461aaeb76b11e07e36"
-        },
-        "files": [
-            "config/packages/vich_uploader.yaml"
-        ]
     },
     "webmozart/assert": {
         "version": "1.10.0"

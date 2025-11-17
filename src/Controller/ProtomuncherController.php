@@ -2,97 +2,92 @@
 
 namespace App\Controller;
 
-use App\Entity\Protocol;
 use App\Form\ProtocoluploadType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProtomuncherController extends AbstractController
 {
     #[Route(path: '/', name: 'index')]
-    public function index(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, NotifierInterface $notifier, SessionInterface $session): Response
+    public function index(Request $request, NotifierInterface $notifier, SessionInterface $session): Response
     {
-        // creates a protocol object and initialize
-        $protocol = new Protocol();
         $errors = [];
 
-        $form = $this->createForm(ProtocoluploadType::class, $protocol);
-
+        $form = $this->createForm(ProtocoluploadType::class);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
-            $protocol = $form->getData();
+            /** @var UploadedFile|null $uploadedFile */
+            $uploadedFile = $form->get('protocolFile')->getData();
+            $geraet = (string) ($form->get('geraet')->getData() ?? '');
 
-            $errors = $validator->validate($protocol);
-            if (count($errors) > 0) {
-                return $this->render('protomuncher/upload.html.twig', [
-                    'form' => $form->createView(),
-                    'protocol' => $protocol,
-                    'errors' => $errors,
-                    'controller_name' => 'ProtomuncherController',
-                ]);
-            }
-
-            // Before persisting, ensure the upload destination exists and is writable
-            $vichMappings = $this->getParameter('vich_uploader.mappings');
-            $uploadDestination = $vichMappings['protocolFile']['upload_destination'] ?? null;
-
-            $fs = new Filesystem();
-            $preUploadErrors = [];
-            if (!$uploadDestination) {
-                $preUploadErrors[] = 'Upload destination for files is not configured.';
+            if (!$uploadedFile) {
+                $errors[] = 'Keine Datei hochgeladen.';
             } else {
-                // Attempt to create the directory if it does not exist
-                if (!$fs->exists($uploadDestination)) {
-                    try {
-                        $fs->mkdir($uploadDestination, 0775);
-                    } catch (\Throwable $e) {
-                        $preUploadErrors[] = 'Cannot create upload directory: '.$uploadDestination.' ('.$e->getMessage().')';
+                // Save to /tmp with a unique name
+                $fs = new Filesystem();
+                $targetDir = $this->getParameter('app.uploads_dir');
+                if (!$fs->exists($targetDir)) {
+                    try { $fs->mkdir($targetDir, 0775); } catch (\Throwable $e) {
+                        $errors[] = 'Upload-Verzeichnis konnte nicht erstellt werden: '.$e->getMessage();
                     }
                 }
-                // Check writability
-                if (!$preUploadErrors && !is_writable($uploadDestination)) {
-                    $preUploadErrors[] = 'Upload directory is not writable: '.$uploadDestination.'. Please adjust permissions (e.g., chown/chmod) for the web server user.';
+
+                if (!$errors && !is_writable($targetDir)) {
+                    $errors[] = 'Upload-Verzeichnis ist nicht schreibbar: '.$targetDir;
+                }
+
+                if (!$errors) {
+                    $safeName = bin2hex(random_bytes(8)).'__'.preg_replace('~[^A-Za-z0-9._-]+~', '_', (string) $uploadedFile->getClientOriginalName());
+                    try {
+                        $uploadedFile->move($targetDir, $safeName);
+                    } catch (\Throwable $e) {
+                        $errors[] = 'Upload fehlgeschlagen: '.$e->getMessage();
+                    }
+
+                    if (!$errors) {
+                        $notifier->send(new Notification('Upload erfolgreich!', ['browser']));
+                        $this->addFlash('success', 'Upload erfolgreich!');
+
+                        // Build processing URL with file path (URL-encoded) and optional geraet
+                        $params = ['path' => $safeName];
+                        if ($geraet !== '') { $params['geraet'] = $geraet; }
+                        $processUrl = $this->generateUrl('process_upload', $params);
+
+                        if ($request->isXmlHttpRequest()) {
+                            return new JsonResponse([
+                                'status' => 'ok',
+                                'processUrl' => $processUrl,
+                                'path' => $safeName,
+                            ], 200);
+                        }
+
+                        return $this->redirect($processUrl);
+                    }
                 }
             }
 
-            if ($preUploadErrors) {
-                return $this->render('protomuncher/upload.html.twig', [
-                    'form' => $form->createView(),
-                    'protocol' => $protocol,
-                    'errors' => $preUploadErrors,
-                    'controller_name' => 'ProtomuncherController',
-                ]);
-            }
-
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
-            $entityManager->persist($protocol);
-            $entityManager->flush();
-
-            $notifier->send(new Notification('Upload erfolgreich!', ['browser']));
-
-            $this->addFlash(
-                'success', 'Upload erfolgreich!'
-            );
-
-            return $this->redirectToRoute('process_upload', ['id' => $protocol->getId()]);
+            return $this->render('protomuncher/upload.html.twig', [
+                'form' => $form->createView(),
+                'protocol' => null,
+                'errors' => $errors,
+                'controller_name' => 'ProtomuncherController',
+            ]);
         }
 
         $notifier->send(new Notification('Bitte eine Datei hochladen!', ['browser']));
 
         return $this->render('protomuncher/upload.html.twig', [
             'form' => $form->createView(),
-            'protocol' => $protocol,
+            'protocol' => null,
             'errors' => $errors,
             'controller_name' => 'ConferenceController',
         ]);

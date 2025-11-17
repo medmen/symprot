@@ -19,11 +19,13 @@ class CtXmlConverter implements StrategyInterface
 
     private $target_params;
 
-    private $filepath; // holds full path to input pdf
+    private $filepath; // holds full path to input xml
+    private string $appUploadsDir;
 
-    public function __construct(private EntityManagerInterface $entityManager, private ContainerBagInterface $params, private LoggerInterface $logger, KernelInterface $kernel)
+    public function __construct(private EntityManagerInterface $entityManager, private ContainerBagInterface $params, private LoggerInterface $logger, KernelInterface $kernel, string $appUploadsDir)
     {
         $this->kernel = $kernel->getProjectDir();
+        $this->appUploadsDir = $appUploadsDir;
     }
 
     public function canProcess($data)
@@ -66,10 +68,8 @@ class CtXmlConverter implements StrategyInterface
 
         $this->logger->info('doing CT XML conversion with parameters '.implode(' | ', $target_params));
 
-        // get paths
-        $protocol_path = $this->params->get('app.path.protocols');
-        $target_path = $this->kernel.'/public'.$protocol_path;
-        $this->filepath = $this->kernel.'/public'.$data->filepath;
+        // resolve path of uploaded file from configured uploads dir and provided filename
+        $this->filepath = rtrim($this->appUploadsDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $data->filename;
 
         $return_arr = [];
         $countIx = 0;

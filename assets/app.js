@@ -7,6 +7,5 @@
 import './styles/app.css';
 import './styles/fonts_nunito_local.css';
 import './toast.js';
-import 'upload_progress';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

@@ -5,13 +5,14 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     cache_adapter: cache.adapter.apcu
-    app.path.protocols: /uploads/products
+    app.uploads_dir: '%kernel.project_dir%/var/uploads'
     app.csp_enabled: '%env(bool:APP_CSP_ENABLED)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         bind:
+            $appUploadsDir: '%app.uploads_dir%'
 
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

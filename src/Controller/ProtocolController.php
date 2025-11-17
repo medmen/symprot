@@ -2,146 +2,160 @@
 
 namespace App\Controller;
 
-use App\Entity\Protocol;
 use App\Formatter\FormatterContext;
 use App\Strategy\ConverterContext;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Vich\UploaderBundle\Storage\StorageInterface;
 
 class ProtocolController extends AbstractController
 {
-    private $kernel;
+    private string $projectDir;
+    private string $uploadDir;
+    private string $format;
 
-    private $format;
-
-    public function __construct(private ConverterContext $convertercontext, private FormatterContext $formattercontext, private StorageInterface $storage, private LoggerInterface $logger, KernelInterface $kernel)
+    public function __construct(private ConverterContext $convertercontext, private FormatterContext $formattercontext, private LoggerInterface $logger, KernelInterface $kernel)
     {
-        $this->kernel = $kernel->getProjectDir();
+        $this->projectDir = $kernel->getProjectDir();
     }
 
-    #[Route(path: '/process_upload/{id}', name: 'process_upload', methods: ['GET'])]
-    public function index(Request $request, int $id, ConverterContext $converterContext, FormatterContext $formattercontext, NotifierInterface $notifier, EntityManagerInterface $entityManager, SessionInterface $session): Response
+    // Process by file path (no DB, no Vich)
+    #[Route(path: '/process_upload', name: 'process_upload', methods: ['GET'])]
+    public function index(Request $request, SessionInterface $session): Response
     {
-        $this->format = $request->query->get('format') ?? 'html'; // make sure we have a default
+        // Use configured uploads directory as absolute path
+        $this->uploadDir = (string) $this->getParameter('app.uploads_dir');
+        $this->format = $request->query->get('format') ?? 'html';
 
-        $protocol = $entityManager
-            ->getRepository(Protocol::class)
-            ->find($id);
+        $path = (string) ($request->query->get('path') ?? '');
+        $geraet = (string) ($request->query->get('geraet') ?? '');
 
-        // Handle missing protocol gracefully
-        if (!$protocol) {
-            return $this->render('protocol/index.html.twig', [
-                'geraet' => '',
-                'protocol' => null,
-                'errors' => ['Protocol not found.'],
-                'output' => '',
-                'controller_name' => 'ProtocolController',
-            ]);
+        $fullfilepath = '';
+        $mime = '';
+        $filetype = '';
+
+        $fullfilepath = rtrim($this->uploadDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+
+        if (is_file($fullfilepath)) {
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mime = (string) ($finfo->file($fullfilepath) ?: 'application/octet-stream');
+            $filetype = ($mime && str_contains($mime, '/')) ? ucfirst(explode('/', $mime)[1]) : pathinfo($fullfilepath, PATHINFO_EXTENSION);
         }
-
-        $geraetEntity = $protocol->getGeraet();
-        $geraet = $geraetEntity ? ucfirst((string) $geraetEntity->getGeraetName()) : '';
-
-        $mime = (string) $protocol->getProtocolMimeType();
-        $filetype = ($mime && str_contains($mime, '/')) ? ucfirst(explode('/', $mime)[1]) : '';
-
-        // Resolve both public URI and absolute filesystem path using Vich storage
-        // Use injected Vich storage to resolve paths
-        $filepath = (string) $this->storage->resolveUri($protocol, 'protocolFile'); // public URI
-        $fullfilepath = (string) $this->storage->resolvePath($protocol, 'protocolFile'); // absolute filesystem path
 
         // diagnostics
         try {
-            $this->logger->info('ProtocolController: resolved upload paths', [
-                'protocol_id' => $protocol->getId(),
-                'protocol_name' => $protocol->getProtocolName(),
-                'mime' => $mime,
-                'public_uri' => $filepath,
+            $this->logger->info('ProtocolController: input resolved', [
+                'query_path' => $path,
                 'absolute_path' => $fullfilepath,
                 'is_file' => $fullfilepath ? is_file($fullfilepath) : null,
                 'is_readable' => $fullfilepath ? is_readable($fullfilepath) : null,
+                'mime' => $mime,
             ]);
         } catch (\Throwable $e) {
             // ignore logging errors
         }
 
-        // make very sure file exists (retry a few times to handle slow FS)
         if (!$fullfilepath) {
             $errors = ['No file was uploaded or upload failed - please ask the Admin to check permissions for file upload!'];
 
             return $this->render('protocol/index.html.twig', [
                 'geraet' => $geraet,
-                'protocol' => $protocol ? $protocol->getProtocolName() : '',
+                'protocol' => ($path ? basename($path) : ''),
                 'errors' => $errors,
-                'output' => 'Umwandlung fehlgeschlagen, erwartete Datei nicht gefunden: (leer) | Public URI: '.($filepath ?: '(leer)'),
+                'output' => 'Umwandlung fehlgeschlagen, erwartete Datei nicht gefunden: '.($fullfilepath ?: '(leer)'),
                 'controller_name' => 'ProtocolController',
             ]);
-        }
-
-        $attempts = 0;
-        while (!is_file($fullfilepath) && $attempts < 10) { // up to ~2s total
-            usleep(200000); // 200ms
-            $attempts++;
         }
 
         if (!is_file($fullfilepath)) {
-            $errors = ['No file was uploaded or upload failed - please ask the Admin to check permissions for file upload!'];
+            // Small retry/backoff in case filesystem is slow to finalize the move
+            $attempts = 0;
+            $maxAttempts = 5; // ~500ms total (5 x 100ms)
+            while ($attempts < $maxAttempts && !is_file($fullfilepath)) {
+                usleep(100_000); // 100ms
+                clearstatcache(true, $fullfilepath);
+                $attempts++;
+            }
 
-            return $this->render('protocol/index.html.twig', [
-                'geraet' => $geraet,
-                'protocol' => $protocol ? $protocol->getProtocolName() : '',
-                'errors' => $errors,
-                'output' => 'Umwandlung fehlgeschlagen, erwartete Datei nicht gefunden: '.($fullfilepath ?: '(leer)').' | Public URI: '.($filepath ?: '(leer)') . ' | Waited attempts: '.$attempts,
-                'controller_name' => 'ProtocolController',
-            ]);
+            if (!is_file($fullfilepath)) {
+                $errors = ['No file was uploaded or upload failed - please ask the Admin to check permissions for file upload!'];
+
+                try {
+                    $this->logger->error('ProtocolController: file not found after retries', [
+                        'absolute_path' => $fullfilepath,
+                        'attempts' => $attempts,
+                        'dir_exists' => is_dir(dirname($fullfilepath)),
+                        'dir_writable' => is_writable(dirname($fullfilepath)),
+                    ]);
+                } catch (\Throwable $ignore) {}
+
+                return $this->render('protocol/index.html.twig', [
+                    'geraet' => $geraet,
+                    'protocol' => ($path ? basename($path) : ''),
+                    'errors' => $errors,
+                    'output' => 'Umwandlung fehlgeschlagen, erwartete Datei nicht gefunden: '.($fullfilepath ?: '(leer)'),
+                    'controller_name' => 'ProtocolController',
+                ]);
+            }
         }
 
         // define new plain object for transport of necessary values
         $data = new \stdClass();
         $data->geraet = $geraet;
         $data->mimetype = $mime;
-        $data->filepath = $filepath; // public URI used by formatters/templates
-        $data->absoluteFile = $fullfilepath; // pass absolute path downstream for robustness
+        // Only transmit the uploaded file name; strategies will resolve full path via appUploadsDir
+        $data->filename = ($path ? basename($path) : '');
 
-        $serialized_and_parsed_data = $this->convertercontext->handle($data);
+        $deleteAfterSuccess = false;
+        $formatted_data = '';
+        $errors = [ 'filetype' => $filetype ];
 
-        // store serialized and parsed data in session for later use by formatters
-        if (!$session->isStarted()) {
-            $session->start();
-        }
-        $session->set('serialized_and_parsed_data', $serialized_and_parsed_data);
-
-        $this->addFlash(
-            'success',
-            'Die Datei wurde hochgeladen. Sie wird nun im Hintergrund analysiert und umgewandelt. Die Ausgabe erfolgt im Fenster unten.',
-        );
-
-        $errors = [
-            'filetype' => $filetype,
-        ];
-
-        $formatted_data = $this->formattercontext->handle($data, $serialized_and_parsed_data, $this->format);
-
-        // Clean up the uploaded file after conversion
         try {
-            if (is_file($fullfilepath)) {
-                @unlink($fullfilepath);
+            $serialized_and_parsed_data = $this->convertercontext->handle($data);
+
+            if (!$session->isStarted()) {
+                $session->start();
             }
+            $session->set('serialized_and_parsed_data', $serialized_and_parsed_data);
+
+            $this->addFlash(
+                'success',
+                'Die Datei wurde hochgeladen. Sie wird nun im Hintergrund analysiert und umgewandelt. Die Ausgabe erfolgt im Fenster unten.',
+            );
+
+            $formatted_data = $this->formattercontext->handle($data, $serialized_and_parsed_data, $this->format);
+
+            // if both converter and formatter completed, we can delete afterwards
+            $deleteAfterSuccess = true;
         } catch (\Throwable $e) {
-            // ignore file deletion errors but log later if logger available
+            try {
+                $this->logger->error('ProtocolController: processing failed', [
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                ]);
+            } catch (\Throwable $ignore) {}
+            $errors[] = 'Verarbeitung fehlgeschlagen: '.$e->getMessage();
+            $formatted_data = 'Fehler bei der Verarbeitung: '.$e->getMessage();
+        } finally {
+            // Delete the uploaded file only on success
+            if ($deleteAfterSuccess) {
+                try {
+                    if ($path && is_file($fullfilepath)) {
+                        @unlink($fullfilepath);
+                    }
+                } catch (\Throwable $e) {
+                    // ignore file deletion errors
+                }
+            }
         }
 
         return $this->render('protocol/index.html.twig', [
             'geraet' => $geraet,
-            'protocol' => $protocol,
+            'protocol' => ($path ? basename($path) : ''),
             'errors' => $errors,
             'output' => $formatted_data,
             'controller_name' => 'ProtocolController',
