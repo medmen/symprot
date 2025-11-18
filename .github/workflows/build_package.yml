@@ -1,6 +1,6 @@
-name: Nightly Build & Release
+name: Build & Deploy Symfony Package
 permissions:
-  contents: write
+  contents: read
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - '**'
 
 jobs:
-  build-and-release:
+  build-and-deploy:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
@@ -22,77 +22,78 @@ jobs:
           tools: composer, symfony
 
       - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist --no-progress
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Build assets (production)
+      - name: Build assets and preseed DB in production mode
         run: |
           composer dump-env prod
-          # The following commands are best-effort to avoid CI failures if DB/services are not available
-          bin/console about --env=prod || true
-          vendor/bin/requirements-checker || true
+          bin/console about --env=prod
+          vendor/bin/requirements-checker
           bin/console doctrine:database:create
           bin/console doctrine:migrations:migrate
           bin/console seed:load
-          bin/console asset-map:compile || true
-          bin/console cache:clear --env=prod || true
+          bin/console asset-map:compile
+          bin/console cache:clear --env=prod
 
-      - name: Compute metadata
-        id: meta
-        shell: bash
-        run: |
-          DATE=$(date -u +%Y%m%d)
-          TIME=$(date -u +%H%M%S)
-          SHORT_SHA=${GITHUB_SHA::7}
-          TAG="nightly-$DATE"
-          REL_NAME="Nightly $DATE"
-          PKG_NAME="symprot-nightly-${DATE}-${TIME}-${SHORT_SHA}.zip"
-          echo "date=$DATE" >> "$GITHUB_OUTPUT"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-          echo "release_name=$REL_NAME" >> "$GITHUB_OUTPUT"
-          echo "package_name=$PKG_NAME" >> "$GITHUB_OUTPUT"
-
-      - name: Create package archive
+      - name: Build Symfony package (customize as needed)
         run: |
           mkdir -p build
-          zip -r "build/${{ steps.meta.outputs.package_name }}" . \
-            -x ".git/*" "vendor/*" "build/*" "node_modules/*" \
-               ".github/*" "var/*"
+          VERSION=$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::7}
+          PACKAGE_NAME="symfony-package-${VERSION}.zip"
+          zip -r "build/$PACKAGE_NAME" . -x ".git/*" "vendor/*" "build/*"
+          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
 
-      - name: Create/update nightly release and upload asset
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.meta.outputs.tag }}
-          name: ${{ steps.meta.outputs.release_name }}
-          make_latest: false
-          prerelease: true
-          files: |
-            build/${{ steps.meta.outputs.package_name }}
-          generate_release_notes: false
-          fail_on_unmatched_files: true
+      - name: Publish nightly artifact to GitHub Packages
+        run: |
+          echo "Publishing $PACKAGE_NAME to GitHub Packages as nightly..."
+          curl -X PUT \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary "@build/${{ env.PACKAGE_NAME }}" \
+            "https://uploads.github.com/repos/${{ github.repository }}/packages?name=${{ env.PACKAGE_NAME }}&label=nightly"
+        # Note: This uses the GitHub REST API for generic package uploads.
+        # For advanced Composer (PHP) package publishing, consider using Composer+auth.json or other package registries.
+
+      - name: Cleanup old nightly packages (keep only latest 10)
+        run: |
+          # Install jq and gh if missing
+          sudo apt-get install jq -y
+          sudo apt-get install gh -y
+
+          REPO="${{ github.repository }}"
+          PACKAGE_NAME="symfony-package"
+
+          # List all package versions for the repository
+          gh api "repos/$REPO/packages?package_type=generic" > packages.json
+
+          # Find the package ID for our package
+          PKG_ID=$(jq '[.[] | select(.name == "'$PACKAGE_NAME'")] | first | .id' packages.json)
+          if [ -z "$PKG_ID" ]; then
+            echo "No package named $PACKAGE_NAME found."
+            exit 0
+          fi
+
+          # List all versions of our package
+          gh api "repos/$REPO/packages/generic/$PACKAGE_NAME/versions" > versions.json
+
+          # Filter only nightly versions (name contains 'nightly')
+          NIGHTLY_VERSIONS=$(jq '[.[] | select(.name | test("nightly"))]' versions.json)
+          COUNT=$(echo $NIGHTLY_VERSIONS | jq 'length')
+
+          if [ "$COUNT" -le 10 ]; then
+            echo "Nothing to clean up, nightly versions: $COUNT"
+            exit 0
+          fi
+
+          # Get IDs of older nightly versions (all except 10 newest)
+          IDS=$(echo $NIGHTLY_VERSIONS | jq 'sort_by(.created_at) | reverse | .[10:] | .[].id')
+
+          for ID in $IDS; do
+            echo "Deleting old nightly package version ID: $ID"
+            gh api --method DELETE "repos/$REPO/packages/generic/$PACKAGE_NAME/versions/$ID"
+          done
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
 
-      - name: Cleanup old nightly releases (keep latest 10)
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const releases = await github.paginate(github.rest.repos.listReleases, { owner, repo, per_page: 100 });
-            const nightlies = releases.filter(r => r.tag_name && r.tag_name.startsWith('nightly-'))
-                                      .sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-            const toDelete = nightlies.slice(10);
-            for (const rel of toDelete) {
-              core.info(`Deleting old nightly release: ${rel.tag_name} (${rel.id})`);
-              await github.rest.repos.deleteRelease({ owner, repo, release_id: rel.id });
-              // try delete tag
-              const ref = `tags/${rel.tag_name}`;
-              try {
-                await github.rest.git.deleteRef({ owner, repo, ref });
-              } catch (e) {
-                core.warning(`Could not delete ref ${ref}: ${e.message}`);
-              }
-            }
-
-    # Optional: Add further deployment steps if needed
+    # Optional: Deploy step can be added here if you need to publish somewhere

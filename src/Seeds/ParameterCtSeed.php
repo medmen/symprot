@@ -31,39 +31,39 @@ class ParameterCtSeed extends Seed
         $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT_Siemens']);
 
         //Access doctrine through $this->doctrine
-        $ParameterRepository = $this->getManager()->getRepository(Parameter::class);
+		$ParameterRepository = $this->getManager()->getRepository(Parameter::class);
 
-        $order = 0;
+		$order = 0;
+		
+		foreach ($this->getData() as $name) {
 
-        foreach ($this->getData() as $name) {
+			if($ParameterRepository->findOneBy(array('parameter_name' => $name, 'geraet' => $geraet->getGeraetId()))) {
+				continue;
+			}
+			$order++;
 
-            if($ParameterRepository->findOneBy(array('parameter_name' => $name, 'geraet' => $geraet->getGeraetId()))) {
-                continue;
-            }
-            $order++;
+			$em = new Parameter();
+			$em->setParameterName($name);
 
-            $em = new Parameter();
-            $em->setParameterName($name);
+			if(in_array($name, $this->getSelected())) {
+				$em->setParameterSelected(true);	
+			}
+			
+			$em->setSortPosition($order);
+      $em->setGeraet($geraet);
+            
+			//Doctrine manager is also available
+			$this->getManager()->persist($em);
 
-            if(in_array($name, $this->getSelected())) {
-                $em->setParameterSelected(true);
-            }
+			$this->getManager()->flush();
+			
+		}
 
-            $em->setSortPosition($order);
-            $em->setGeraet($geraet);
+		$this->getManager()->clear();
+		return 0;
+	}
 
-            //Doctrine manager is also available
-            $this->getManager()->persist($em);
-
-            $this->getManager()->flush();
-
-        }
-
-        $this->getManager()->clear();
-        return 0;
-    }
-
-    public function unload(InputInterface $input, OutputInterface $output): int
+	public function unload(InputInterface $input, OutputInterface $output): int
     {
         $className = $this->getManager()->getClassMetadata(Parameter::class)->getName();
         $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT_Siemens']);
@@ -119,9 +119,9 @@ class ParameterCtSeed extends Seed
             'PhaseStart',
             'Multiphase'
         );
-    }
-
-    public function getSelected(): array
+	}
+	
+	public function getSelected(): array
     {
         return array (
             'PitchFactor',
@@ -140,5 +140,5 @@ class ParameterCtSeed extends Seed
             'Kernel',
             'Window'
         );
-    }
+	}	
 }
