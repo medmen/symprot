@@ -38,8 +38,9 @@ jobs:
       - name: Build Symfony package (customize as needed)
         run: |
           mkdir -p build
+          BRANCH="${GITHUB_REF##*/}"
           VERSION=$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::7}
-          PACKAGE_NAME="symfony-package-${VERSION}.zip"
+          PACKAGE_NAME="symprot-${BRANCH}-${VERSION}.zip"
           zip -r "build/$PACKAGE_NAME" . -x ".git/*" "vendor/*" "build/*"
           echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
 
@@ -61,7 +62,7 @@ jobs:
           sudo apt-get install gh -y
 
           REPO="${{ github.repository }}"
-          PACKAGE_NAME="symfony-package"
+          PACKAGE_NAME="symprot"
 
           # List all package versions for the repository
           gh api "repos/$REPO/packages?package_type=generic" > packages.json

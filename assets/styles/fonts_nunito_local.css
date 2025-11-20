@@ -1,0 +1,19 @@
+/* Local Nunito fonts to avoid external CSP issues */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  /* Use relative path so Symfony AssetMapper fingerprints & rewrites the URL */
+  src: url('../fonts/nunito/Nunito-Regular.woff2') format('woff2');
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  /* Use relative path so Symfony AssetMapper fingerprints & rewrites the URL */
+  src: url('../fonts/nunito/Nunito-Bold.woff2') format('woff2');
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}

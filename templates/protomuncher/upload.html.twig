@@ -4,21 +4,24 @@
 
 {% block title %}Bitte Protokoll-Datei hochladen!{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script nonce="{{ csp_nonce('script') }}" type="module">
+        import 'upload_progress';
+    </script>
+{% endblock %}
+
 {% block body %}
 
-    <div id="messagecontainer" class="container dx-4 justify-content-center text-white mx-auto mt-2 mb-5">
-        {% block flash %}
-            <h6>Messages:</h6>
-        {% endblock%}
-
-        {{ protocol.protocolFile }}
+    <div id="progress_bar">
+        <!-- this is a progress bar. Its filled by JS when a file gets uploaded.-->
     </div>
 
     <div id="uploadcontainer" class="d-table dx-4 text-white mx-auto mt-2 mb-5">
 
         <h2>Protokoll hochladen</h2>
 
-        {{ form_start(form, {'method': 'POST'}) }}
+        {{ form_start(form, {'method': 'POST', 'attr': {'id': 'file-upload-form'}}) }}
         <div class="list-group-item-danger">
             {{ form_errors(form) }}
         </div>
@@ -56,8 +59,6 @@
         </div>
 
         {{ form_end(form) }}
-
-        {# {{ form(form) }} #}
 
     </div>
 

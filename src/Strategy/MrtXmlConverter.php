@@ -23,17 +23,19 @@ class MrtXmlConverter implements StrategyInterface
     private array $target_params = [];
     private string $filepath;
     private string $format;
+    private string $appUploadsDir;
 
     private ParameterRepository $parameterRepository;
 
     private array $can_process_mimetype = ['application/xml', 'text/xml'];
 
-    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernelif)
+    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernelif, string $appUploadsDir)
     {
         $this->entityManager = $entityManager;
         $this->params = $params;
         $this->logger = $procLogger;
         $this->kernel = $kernelif->getProjectDir();
+        $this->appUploadsDir = $appUploadsDir;
     }
 
     public function canProcess($data)
@@ -93,10 +95,14 @@ class MrtXmlConverter implements StrategyInterface
         // clean up
         unset($target_elements, $target_params);
 
-        // get paths
-        $protocol_path = $this->params->get('app.path.protocols');
-        $target_path = $this->kernel.'/public'.$protocol_path;
-        $this->filepath = $this->kernel.$data->filepath;
+        // get paths: resolve full path from uploads dir and provided filename
+        $this->filepath = rtrim($this->appUploadsDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $data->filename;
+
+        // check if file exists!
+        if (!file_exists($this->filepath)) {
+                $this->logger->error('Target XML file not found at '.$this->filepath);
+                 return(serialize(array('error' => 'No file found for MRT XML conversion')));
+        }
 
         $this->logger->info('doing MRT XML conversion with parameters '.implode(' | ', $this->target_params));
 
@@ -106,13 +112,17 @@ class MrtXmlConverter implements StrategyInterface
         $last_protocol = '';
 
         $xml = new \XMLReader();
-        $xml->open($this->filepath);
+        $success = $xml->open($this->filepath);
+        if (!$success) {
+            return serialize(['error' => 'Could not open XML file '.$this->filepath]);
+        }
 
         /*
          * To use xmlReader easily we have to make sure we parse at the outermost level of repeating elements.
          * This is because xmlReaders next() option does not behave as one would think by intuition
          */
         while ($xml->read() && $xml->name != 'PrintProtocol') {
+            // doeing nothin here skips to the first PrintProtocol element
         }
 
         while ($xml->name == 'PrintProtocol') {

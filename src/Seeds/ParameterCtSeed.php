@@ -20,11 +20,11 @@ class ParameterCtSeed extends Seed
         return 2; // Ensure this runs after GeraeteSeed (which should be 1)
     }
 
-	public function load(InputInterface $input, OutputInterface $output): int
+    public function load(InputInterface $input, OutputInterface $output): int
     {
 
-		//Doctrine logging eats a lot of memory, this is a wrapper to disable logging
-		$this->disableDoctrineLogging();
+        //Doctrine logging eats a lot of memory, this is a wrapper to disable logging
+        $this->disableDoctrineLogging();
 
         // Fetch the user by email or any unique identifier
 
@@ -65,80 +65,80 @@ class ParameterCtSeed extends Seed
 
 	public function unload(InputInterface $input, OutputInterface $output): int
     {
-		$className = $this->getManager()->getClassMetadata(Parameter::class)->getName();
+        $className = $this->getManager()->getClassMetadata(Parameter::class)->getName();
         $geraet = $this->manager->getRepository(Geraet::class)->findOneBy(['geraet_name' => 'CT_Siemens']);
         $this->getManager()->createQuery('DELETE FROM '.$className.' WHERE geraet_id = '.$geraet->getId)->execute();
-		return 0;
-	}
+        return 0;
+    }
 
-	public function getData(): array
+    public function getData(): array
     {
         return array (
-			'PitchFactor',
-			'QualityRefMAs',
-			'RefKV',
-			'Voltage',
-			'CustomMAs',
-			'CustomMAsA',
-			'CustomMAsB',
-			'CarekV',
-			'OptimizeSliderPosition',
-			'Care',
-			'CareDoseType',
-			'CTDIw',
-			'DLP',
-			'FastAdjustLimitScanTime',
-			'FastAdjustLimitMaxMAs',
-			'DoseNotificationValueCTDIvol',
-			'oseNotificationValueDLP',
-			'RotTime',
-			'ScanTime',
-			'Delay',
-			'Feed',
-			'SliceEffective',
-			'Acq.',
-			'ReconSliceEffective',
-			'ReconIncrR',
-			'NoOfImages',
-			'Kernel',
-			'Window',
-			'ApiId',
-			'Comment1',
-			'Comment2',
-			'Transfer1',
-			'Transfer2',
-			'Transfer3',
-			'SyngoViaTaskflow',
-			'SyngoViaProcessingID',
-			'ScanStart',
-			'ScanEnd',
-			'Pulsing',
-			'PulsingStart',
-			'PulsingEnd',
-			'BestPhase',
-			'PhaseStart',
-			'Multiphase'
+            'PitchFactor',
+            'QualityRefMAs',
+            'RefKV',
+            'Voltage',
+            'CustomMAs',
+            'CustomMAsA',
+            'CustomMAsB',
+            'CarekV',
+            'OptimizeSliderPosition',
+            'Care',
+            'CareDoseType',
+            'CTDIw',
+            'DLP',
+            'FastAdjustLimitScanTime',
+            'FastAdjustLimitMaxMAs',
+            'DoseNotificationValueCTDIvol',
+            'oseNotificationValueDLP',
+            'RotTime',
+            'ScanTime',
+            'Delay',
+            'Feed',
+            'SliceEffective',
+            'Acq.',
+            'ReconSliceEffective',
+            'ReconIncrR',
+            'NoOfImages',
+            'Kernel',
+            'Window',
+            'ApiId',
+            'Comment1',
+            'Comment2',
+            'Transfer1',
+            'Transfer2',
+            'Transfer3',
+            'SyngoViaTaskflow',
+            'SyngoViaProcessingID',
+            'ScanStart',
+            'ScanEnd',
+            'Pulsing',
+            'PulsingStart',
+            'PulsingEnd',
+            'BestPhase',
+            'PhaseStart',
+            'Multiphase'
         );
 	}
 	
 	public function getSelected(): array
     {
         return array (
-			'PitchFactor',
-			'QualityRefMAs',
-			'RefKV',
-			'CareDoseType',
-			'CTDIw',
-			'DLP',
-			'ScanTime',
-			'Delay',
-			'SliceEffective',
-			'Acq.',
-			'ReconSliceEffective',
-			'ReconIncrR',
-			'NoOfImages',
-			'Kernel',
-			'Window'
+            'PitchFactor',
+            'QualityRefMAs',
+            'RefKV',
+            'CareDoseType',
+            'CTDIw',
+            'DLP',
+            'ScanTime',
+            'Delay',
+            'SliceEffective',
+            'Acq.',
+            'ReconSliceEffective',
+            'ReconIncrR',
+            'NoOfImages',
+            'Kernel',
+            'Window'
         );
 	}	
 }

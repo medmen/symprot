@@ -21,12 +21,14 @@ class MrtPdfConverter implements StrategyInterface
     private $target_params;
 
     private $filepath; // holds full path to input pdf
+    private string $appUploadsDir;
 
     private Config $config;
 
-    public function __construct(private EntityManagerInterface $entityManager, private ContainerBagInterface $params, private LoggerInterface $logger, KernelInterface $kernel)
+    public function __construct(private EntityManagerInterface $entityManager, private ContainerBagInterface $params, private LoggerInterface $logger, KernelInterface $kernel, string $appUploadsDir)
     {
         $this->kernel = $kernel->getProjectDir();
+        $this->appUploadsDir = $appUploadsDir;
     }
 
     /**
@@ -129,10 +131,8 @@ class MrtPdfConverter implements StrategyInterface
 
         $this->logger->info('doing MRT PDF conversion with paraeters '.implode(' | ', $target_params));
 
-        // get paths
-        $protocol_path = $this->params->get('app.path.protocols');
-        $target_path = $this->kernel.'/public'.$protocol_path;
-        $this->filepath = $this->kernel.'/public'.$data->filepath;
+        // resolve input pdf path from uploads dir and provided filename
+        $this->filepath = rtrim($this->appUploadsDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $data->filename;
 
         $return = [];
 
@@ -159,8 +159,8 @@ class MrtPdfConverter implements StrategyInterface
 
         $pdfInfo = $pdf->getInfo();
         if (!is_array($pdfInfo) or (count($pdfInfo) < 1)) {
-            $this->logger->critical($target_path.' contains no valid file');
-            throw new FileNotFoundException($target_path.' contains no valid file');
+            $this->logger->critical($this->filepath.' contains no valid file');
+            throw new FileNotFoundException($this->filepath.' contains no valid file');
         }
 
         $numofPages = $pdf->countPages();

@@ -122,7 +122,7 @@ class ParameterMrSeed extends Seed
             "b-Wert >=",
             "Atemkontrolle",
             "Voxelgröße",
-            );
+        );
     }
 
     public function getSelected(): array
