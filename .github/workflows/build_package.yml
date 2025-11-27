@@ -1,6 +1,7 @@
 name: Build & Deploy Symfony Package
 permissions:
   contents: read
+  packages: write
 
 on:
   push:
@@ -37,32 +38,48 @@ jobs:
 
       - name: Build Symfony package (customize as needed)
         run: |
+          set -euo pipefail
           mkdir -p build
           BRANCH="${GITHUB_REF##*/}"
-          VERSION=$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::7}
-          PACKAGE_NAME="symprot-${BRANCH}-${VERSION}.zip"
-          zip -r "build/$PACKAGE_NAME" . -x ".git/*" "vendor/*" "build/*"
-          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
+          # Sanitize branch for package name (replace slashes and spaces)
+          SAFE_BRANCH=$(echo "$BRANCH" | sed -E 's#[^A-Za-z0-9._-]#-#g')
+          # Include 'nightly' in version so cleanup can filter correctly
+          VERSION="nightly-$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::7}"
+          PKG_NAME="symprot-${SAFE_BRANCH}"
+          ASSET_NAME="${PKG_NAME}-${VERSION}.zip"
+
+          zip -r "build/$ASSET_NAME" . -x ".git/*" "vendor/*" "build/*"
+
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+          echo "SAFE_BRANCH=$SAFE_BRANCH" >> "$GITHUB_ENV"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "PKG_NAME=$PKG_NAME" >> "$GITHUB_ENV"
+          echo "ASSET_NAME=$ASSET_NAME" >> "$GITHUB_ENV"
 
       - name: Publish nightly artifact to GitHub Packages
         run: |
-          echo "Publishing $PACKAGE_NAME to GitHub Packages as nightly..."
-          curl -X PUT \
+          set -euo pipefail
+          echo "Publishing $ASSET_NAME to GitHub Packages (generic) as nightly..."
+          URL="https://uploads.github.com/repos/${{ github.repository }}/packages/generic/${{ env.PKG_NAME }}/${{ env.VERSION }}/${{ env.ASSET_NAME }}"
+          echo "PUT $URL"
+          curl -sS -X PUT \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/zip" \
-            --data-binary "@build/${{ env.PACKAGE_NAME }}" \
-            "https://uploads.github.com/repos/${{ github.repository }}/packages?name=${{ env.PACKAGE_NAME }}&label=nightly"
+            --data-binary "@build/${{ env.ASSET_NAME }}" \
+            "$URL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # Note: This uses the GitHub REST API for generic package uploads.
         # For advanced Composer (PHP) package publishing, consider using Composer+auth.json or other package registries.
 
       - name: Cleanup old nightly packages (keep only latest 10)
         run: |
           # Install jq and gh if missing
-          sudo apt-get install jq -y
-          sudo apt-get install gh -y
+          sudo apt-get update -y
+          sudo apt-get install -y jq gh
 
           REPO="${{ github.repository }}"
-          PACKAGE_NAME="symprot"
+          PACKAGE_NAME="${{ env.PKG_NAME }}"
 
           # List all package versions for the repository
           gh api "repos/$REPO/packages?package_type=generic" > packages.json
@@ -95,6 +112,6 @@ jobs:
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
 
     # Optional: Deploy step can be added here if you need to publish somewhere
