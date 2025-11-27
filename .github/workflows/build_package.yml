@@ -74,41 +74,52 @@ jobs:
 
       - name: Cleanup old nightly packages (keep only latest 10)
         run: |
+          set -euo pipefail
           # Install jq and gh if missing
           sudo apt-get update -y
           sudo apt-get install -y jq gh
 
           REPO="${{ github.repository }}"
+          OWNER="${{ github.repository_owner }}"
           PACKAGE_NAME="${{ env.PKG_NAME }}"
 
-          # List all package versions for the repository
-          gh api "repos/$REPO/packages?package_type=generic" > packages.json
+          echo "Repository: $REPO"
+          echo "Owner: $OWNER"
+          echo "Package: $PACKAGE_NAME"
 
-          # Find the package ID for our package
-          PKG_ID=$(jq '[.[] | select(.name == "'$PACKAGE_NAME'")] | first | .id' packages.json)
-          if [ -z "$PKG_ID" ]; then
-            echo "No package named $PACKAGE_NAME found."
+          # Determine owner type (Organization or User) via repo metadata
+          OWNER_TYPE=$(gh api "repos/$REPO" | jq -r '.owner.type')
+          if [ "$OWNER_TYPE" = "Organization" ]; then
+            BASE="orgs/$OWNER"
+          else
+            BASE="users/$OWNER"
+          fi
+          echo "Resolved API base: $BASE"
+
+          # List all versions of our package (owner-scoped); skip cleanup if unsupported/not found
+          if ! gh api "$BASE/packages/generic/$PACKAGE_NAME/versions" > versions.json; then
+            echo "Package $PACKAGE_NAME not found under $BASE or generic package listing unsupported. Skipping cleanup."
             exit 0
           fi
 
-          # List all versions of our package
-          gh api "repos/$REPO/packages/generic/$PACKAGE_NAME/versions" > versions.json
-
           # Filter only nightly versions (name contains 'nightly')
           NIGHTLY_VERSIONS=$(jq '[.[] | select(.name | test("nightly"))]' versions.json)
-          COUNT=$(echo $NIGHTLY_VERSIONS | jq 'length')
+          COUNT=$(echo "$NIGHTLY_VERSIONS" | jq 'length')
 
+          echo "Nightly versions found: $COUNT"
           if [ "$COUNT" -le 10 ]; then
             echo "Nothing to clean up, nightly versions: $COUNT"
             exit 0
           fi
 
           # Get IDs of older nightly versions (all except 10 newest)
-          IDS=$(echo $NIGHTLY_VERSIONS | jq 'sort_by(.created_at) | reverse | .[10:] | .[].id')
+          IDS=$(echo "$NIGHTLY_VERSIONS" | jq 'sort_by(.created_at) | reverse | .[10:] | .[].id')
 
           for ID in $IDS; do
             echo "Deleting old nightly package version ID: $ID"
-            gh api --method DELETE "repos/$REPO/packages/generic/$PACKAGE_NAME/versions/$ID"
+            if ! gh api --method DELETE "$BASE/packages/generic/$PACKAGE_NAME/versions/$ID"; then
+              echo "Warning: failed to delete version ID $ID (may not exist or insufficient permissions). Continuing..."
+            fi
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
