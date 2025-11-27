@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Formatter\FormatterContext;
+use App\Service\JobManager;
 use App\Strategy\ConverterContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProtocolController extends AbstractController
@@ -103,61 +105,45 @@ class ProtocolController extends AbstractController
             }
         }
 
-        // define new plain object for transport of necessary values
-        $data = new \stdClass();
-        $data->geraet = $geraet;
-        $data->mimetype = $mime;
-        // Only transmit the uploaded file name; strategies will resolve full path via appUploadsDir
-        $data->filename = ($path ? basename($path) : '');
+        // Build job payload and start background processing
+        $payload = [
+            'geraet' => $geraet,
+            'mimetype' => $mime,
+            'filename' => ($path ? basename($path) : ''),
+            'format' => $this->format,
+        ];
 
-        $deleteAfterSuccess = false;
-        $formatted_data = '';
-        $errors = [ 'filetype' => $filetype ];
+        // Create job
+        $jobManager = $this->container->get(JobManager::class);
+        $jobId = $jobManager->createJob($payload);
 
+        // Start background Symfony command
         try {
-            $serialized_and_parsed_data = $this->convertercontext->handle($data);
-
-            if (!$session->isStarted()) {
-                $session->start();
-            }
-            $session->set('serialized_and_parsed_data', $serialized_and_parsed_data);
-
-            $this->addFlash(
-                'success',
-                'Die Datei wurde hochgeladen. Sie wird nun im Hintergrund analysiert und umgewandelt. Die Ausgabe erfolgt im Fenster unten.',
-            );
-
-            $formatted_data = $this->formattercontext->handle($data, $serialized_and_parsed_data, $this->format);
-
-            // if both converter and formatter completed, we can delete afterwards
-            $deleteAfterSuccess = true;
+            $console = $this->projectDir . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'console';
+            $process = new Process([PHP_BINARY, $console, 'app:process-protocol-job', $jobId]);
+            $process->disableOutput();
+            $process->start();
         } catch (\Throwable $e) {
             try {
-                $this->logger->error('ProtocolController: processing failed', [
+                $this->logger->error('ProtocolController: failed to start background process', [
                     'exception' => get_class($e),
                     'message' => $e->getMessage(),
                 ]);
             } catch (\Throwable $ignore) {}
-            $errors[] = 'Verarbeitung fehlgeschlagen: '.$e->getMessage();
-            $formatted_data = 'Fehler bei der Verarbeitung: '.$e->getMessage();
-        } finally {
-            // Delete the uploaded file only on success
-            if ($deleteAfterSuccess) {
-                try {
-                    if ($path && is_file($fullfilepath)) {
-                        @unlink($fullfilepath);
-                    }
-                } catch (\Throwable $e) {
-                    // ignore file deletion errors
-                }
-            }
+            $errors[] = 'Hintergrundprozess konnte nicht gestartet werden: '.$e->getMessage();
         }
+
+        $this->addFlash(
+            'success',
+            'Die Datei wurde hochgeladen. Sie wird nun im Hintergrund analysiert und umgewandelt. Fortschritt wird unten angezeigt.',
+        );
 
         return $this->render('protocol/index.html.twig', [
             'geraet' => $geraet,
             'protocol' => ($path ? basename($path) : ''),
-            'errors' => $errors,
-            'output' => $formatted_data,
+            'errors' => [ 'filetype' => $filetype ],
+            'output' => '',
+            'jobId' => $jobId,
             'controller_name' => 'ProtocolController',
         ]);
     }
