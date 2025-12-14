@@ -103,7 +103,7 @@ class MrtPdfConverter implements StrategyInterface
         ;
     }
 
-    public function process($data)
+    public function process($data, ?callable $onProgress = null)
     {
         // get all parameters we selected for chosen geraet
         $target_elements = $this->entityManager

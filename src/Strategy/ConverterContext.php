@@ -13,11 +13,17 @@ class ConverterContext
         $this->strategies[] = $strategy;
     }
 
-    public function handle($data)
+    /**
+     * Handle conversion by delegating to the matching strategy.
+     *
+     * @param mixed $data
+     * @param callable|null $onProgress optional callback receiving integer percent (0-100)
+     */
+    public function handle($data, ?callable $onProgress = null)
     {
         foreach ($this->strategies as $strategy) {
             if ($strategy->canProcess($data)) {
-                return $strategy->process($data);
+                return $strategy->process($data, $onProgress);
             }
         }
 

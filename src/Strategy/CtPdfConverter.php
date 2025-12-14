@@ -101,7 +101,7 @@ class CtPdfConverter implements StrategyInterface
         return range(1, $max);
     }
 
-    public function process($data)
+    public function process($data, ?callable $onProgress = null)
     {
         /*
          * So far i could not find a PDF file to implement this parser

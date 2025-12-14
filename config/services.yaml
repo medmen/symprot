@@ -7,6 +7,7 @@ parameters:
     cache_adapter: cache.adapter.apcu
     app.uploads_dir: '%kernel.project_dir%/var/uploads'
     app.csp_enabled: '%env(bool:APP_CSP_ENABLED)%'
+    app.job_max_seconds: 900
 
 services:
     # default configuration for services in *this* file
@@ -14,6 +15,7 @@ services:
         bind:
             $appUploadsDir: '%app.uploads_dir%'
             $projectDir: '%kernel.project_dir%'
+            $jobMaxSeconds: '%app.job_max_seconds%'
 
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

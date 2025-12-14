@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProtocolController extends AbstractController
@@ -20,7 +21,7 @@ class ProtocolController extends AbstractController
     private string $uploadDir;
     private string $format;
 
-    public function __construct(private ConverterContext $convertercontext, private FormatterContext $formattercontext, private LoggerInterface $logger, KernelInterface $kernel)
+    public function __construct(private ConverterContext $convertercontext, private FormatterContext $formattercontext, private LoggerInterface $logger, KernelInterface $kernel, private JobManager $jobManager)
     {
         $this->projectDir = $kernel->getProjectDir();
     }
@@ -29,6 +30,8 @@ class ProtocolController extends AbstractController
     #[Route(path: '/process_upload', name: 'process_upload', methods: ['GET'])]
     public function index(Request $request, SessionInterface $session): Response
     {
+        $this->logger->debug('in ProtocolController::index function got called.');
+
         // Use configured uploads directory as absolute path
         $this->uploadDir = (string) $this->getParameter('app.uploads_dir');
         $this->format = $request->query->get('format') ?? 'html';
@@ -36,7 +39,6 @@ class ProtocolController extends AbstractController
         $path = (string) ($request->query->get('path') ?? '');
         $geraet = (string) ($request->query->get('geraet') ?? '');
 
-        $fullfilepath = '';
         $mime = '';
         $filetype = '';
 
@@ -62,6 +64,7 @@ class ProtocolController extends AbstractController
         }
 
         if (!$fullfilepath) {
+            $this->logger->error('in ProtocolController::index no file was found.');
             $errors = ['No file was uploaded or upload failed - please ask the Admin to check permissions for file upload!'];
 
             return $this->render('protocol/index.html.twig', [
@@ -114,22 +117,61 @@ class ProtocolController extends AbstractController
         ];
 
         // Create job
-        $jobManager = $this->container->get(JobManager::class);
+        // $jobManager = $this->container->get(JobManager::class);
+        $jobManager = $this->jobManager;
         $jobId = $jobManager->createJob($payload);
 
         // Start background Symfony command
         try {
+            $this->logger->debug('in ProtocolController::index starting background process for job: '.$jobId);
+
             $console = $this->projectDir . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'console';
-            $process = new Process([PHP_BINARY, $console, 'app:process-protocol-job', $jobId]);
-            $process->disableOutput();
-            $process->start();
+
+            // Resolve PHP CLI binary reliably
+            $phpBinaryFinder = new PhpExecutableFinder();
+            $php = $phpBinaryFinder->find();
+            if (!$php) {
+                throw new \RuntimeException('Kein PHP-CLI Binary gefunden. Setzen Sie die Umgebungsvariable PHP_PATH.');
+            }
+
+            $this->logger->debug('in ProtocolController::index running bg-job with runtime: '.$php.' '.$console.' app:process-protocol-job '.$jobId, []);
+
+            $process = new Process([$php, $console, 'app:process-protocol-job', $jobId], $this->projectDir);
+            // $process->disableOutput(); // uncomment unless you need to debug
+            $logPath = $this->jobManager->dir($jobId) . '/spawn.log';
+            $process->setTimeout(null); // allow long-running job, internal watchdog handles timeout
+
+            $this->logger->debug('About to start background process', [
+                'cmd' => [$php, $console, 'app:process-protocol-job', $jobId],
+                'cwd' => $this->projectDir,
+            ]);
+
+            $process->start(); // temporarily without callback for isolation
+
+            usleep(50_000); // 50ms
+            $this->logger->debug('Process start() returned', [
+                'running' => $process->isRunning(),
+                'pid' => method_exists($process, 'getPid') ? $process->getPid() : null,
+            ]);
+
+            // Nudge status so UI doesn't stay at 0% if worker startup is slow
+            try {
+                $pid = method_exists($process, 'getPid') ? (int) $process->getPid() : 0;
+                $this->jobManager->update($jobId, 1, 'Hintergrundprozess gestartet' . ($pid ? ' (PID: ' . $pid . ')' : ''));
+            } catch (\Throwable $ignore) {}
         } catch (\Throwable $e) {
             try {
                 $this->logger->error('ProtocolController: failed to start background process', [
                     'exception' => get_class($e),
                     'message' => $e->getMessage(),
+                    'console' => $console ?? null,
                 ]);
             } catch (\Throwable $ignore) {}
+
+            try {
+                $this->jobManager->fail($jobId, 'Hintergrundprozess konnte nicht gestartet werden: ' . $e->getMessage());
+            } catch (\Throwable $ignore) {}
+
             $errors[] = 'Hintergrundprozess konnte nicht gestartet werden: '.$e->getMessage();
         }
 
@@ -141,7 +183,7 @@ class ProtocolController extends AbstractController
         return $this->render('protocol/index.html.twig', [
             'geraet' => $geraet,
             'protocol' => ($path ? basename($path) : ''),
-            'errors' => [ 'filetype' => $filetype ],
+            'errors' => $errors ?? [],
             'output' => '',
             'jobId' => $jobId,
             'controller_name' => 'ProtocolController',

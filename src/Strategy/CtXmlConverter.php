@@ -37,7 +37,7 @@ class CtXmlConverter implements StrategyInterface
         ;
     }
 
-    public function process($data)
+    public function process($data, ?callable $onProgress = null)
     {
         /**
          * Preparation.

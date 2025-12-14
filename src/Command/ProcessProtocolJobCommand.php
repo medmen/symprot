@@ -21,6 +21,7 @@ class ProcessProtocolJobCommand extends Command
         private readonly FormatterContext $formatter,
         private readonly LoggerInterface $logger,
         private readonly string $appUploadsDir,
+        private readonly int $jobMaxSeconds,
     ) {
         parent::__construct();
     }
@@ -28,16 +29,24 @@ class ProcessProtocolJobCommand extends Command
     protected function configure(): void
     {
         $this->addArgument('id', InputArgument::REQUIRED, 'Job ID');
+        $this->logger->debug('ProcessProtocolJobCommand::configure was called.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->logger->debug('ProcessProtocolJobCommand::execute was called.');
+        $output->writeln("worker booting..."); // for debugging
+
         $id = (string) $input->getArgument('id');
         $payload = $this->jobs->payload($id);
         if (!$payload) {
+            $this->logger->error('ProcessProtocolJobCommand::configure payload not found for job with id '.$id.' !');
             $output->writeln('<error>Payload not found</error>');
             return Command::FAILURE;
         }
+
+        $startedAt = time();
+        $deadline = $startedAt + max(60, $this->jobMaxSeconds);
 
         try {
             $this->jobs->update($id, 5, 'Starte Verarbeitung');
@@ -57,10 +66,30 @@ class ProcessProtocolJobCommand extends Command
 
             $this->jobs->update($id, 20, 'Datei eingelesen');
 
-            $serialized = $this->converter->handle($data);
+            $lastReported = -1;
+            $serialized = $this->converter->handle($data, function (int $percent) use (&$lastReported, $id, $deadline) {
+                if (time() > $deadline) {
+                    throw new \RuntimeException('Zeitüberschreitung: Verarbeitung länger als erlaubt.');
+                }
+                // Map converter 0-100% to job 20-60%
+                $jobPercent = 20 + (int) floor($percent * 0.4);
+                if ($jobPercent > 60) { $jobPercent = 60; }
+                if ($jobPercent !== $lastReported) {
+                    $lastReported = $jobPercent;
+                    try {
+                        $this->jobs->update($id, $jobPercent, 'Umwandlung läuft: ' . $percent . '%');
+                    } catch (\Throwable $ignore) {}
+                }
+            });
+            if (time() > $deadline) {
+                throw new \RuntimeException('Zeitüberschreitung nach der Umwandlung.');
+            }
             $this->jobs->update($id, 60, 'Umwandlung abgeschlossen');
 
             $formatted = $this->formatter->handle($data, $serialized, $format);
+            if (time() > $deadline) {
+                throw new \RuntimeException('Zeitüberschreitung bei der Formatierung.');
+            }
             $this->jobs->update($id, 90, 'Formatierung abgeschlossen');
 
             $outPath = $this->jobs->outputPath($id);
@@ -68,23 +97,28 @@ class ProcessProtocolJobCommand extends Command
             $this->jobs->complete($id, $outPath, [
                 'filename' => $data->filename,
                 'format' => $format,
+                'durationSeconds' => time() - $startedAt,
             ]);
 
             // Delete uploaded file after success
             try {
-                if (is_file($fullFile)) { @unlink($fullFile); }
+                // if (is_file($fullFile)) { @unlink($fullFile); }
+                $this->jobs->update($id, 99, 'jetzt würde ich das XML löschen');
             } catch (\Throwable $ignore) {}
 
+            $this->logger->info('ProcessProtocolJobCommand::execute was run successfully for job ' . $id . '!');
             return Command::SUCCESS;
+
         } catch (\Throwable $e) {
+            $msg = $e->getMessage();
             try {
                 $this->logger->error('Background job failed', [
                     'job' => $id,
                     'exception' => get_class($e),
-                    'message' => $e->getMessage(),
+                    'message' => $msg,
                 ]);
             } catch (\Throwable $ignore) {}
-            $this->jobs->fail($id, $e->getMessage());
+            $this->jobs->fail($id, $msg);
             return Command::FAILURE;
         }
     }

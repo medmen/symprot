@@ -30,6 +30,7 @@ class JobManager
             'percent' => 0,
             'message' => 'Queued',
             'error' => null,
+            'createdAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
             'startedAt' => null,
             'finishedAt' => null,
         ]);

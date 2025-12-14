@@ -21,6 +21,27 @@ class ProtocolJobController extends AbstractController
         if (!$status) {
             return new JsonResponse(['error' => 'not_found'], 404);
         }
+
+        // Watchdog: mark as failed only if truly stuck at start
+        try {
+            $now = time();
+            $createdAtTs = isset($status['createdAt']) ? strtotime((string)$status['createdAt']) : null;
+            $startedAtTs = isset($status['startedAt']) ? strtotime((string)$status['startedAt']) : null;
+            $st = (string)($status['status'] ?? 'queued');
+            $pct = (int)($status['percent'] ?? 0);
+
+            // Case 1: never started (still queued) for > 60s since creation
+            if ($st === 'queued' && $createdAtTs && ($now - $createdAtTs) > 60) {
+                $this->jobs->fail($id, 'Hintergrundprozess konnte nicht gestartet werden (Start-Timeout).');
+                $status = $this->jobs->status($id) ?? $status;
+            }
+            // Case 2: started but still <5% for a long time (e.g. cold start) -> be more lenient (5 minutes)
+            elseif ($st !== 'failed' && $pct < 5 && $startedAtTs && ($now - $startedAtTs) > 300) {
+                $this->jobs->fail($id, 'Hintergrundprozess hängt beim Start (Timeout nach 5 Minuten).');
+                $status = $this->jobs->status($id) ?? $status;
+            }
+        } catch (\Throwable $ignore) {}
+
         return new JsonResponse([
             'id' => $status['id'] ?? $id,
             'status' => $status['status'] ?? 'unknown',

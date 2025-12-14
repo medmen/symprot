@@ -52,7 +52,7 @@ class MrtXmlConverter implements StrategyInterface
         return trim(str_replace('*', '', $value));
     }
 
-    public function process($data): string
+    public function process($data, ?callable $onProgress = null): string
     {
         // return(serialize(array('error' => 'MRT XML conversion is not_yet_implemented')));
 
@@ -110,6 +110,17 @@ class MrtXmlConverter implements StrategyInterface
         $proto_cnt = 0;
         $last_sequence = '';
         $last_protocol = '';
+        $totalSize = @filesize($this->filepath) ?: 0;
+        $lastReported = -1;
+        // init onProgress callback, this writes back progress status
+        if (null !== $onProgress && $totalSize > 0) {
+            $onProgress(0);
+        }
+
+        $fp = fopen($this->filepath, 'rb');
+        if (false === $fp) {
+            return serialize(['error' => 'Could not open XML file ' . $this->filepath]);
+        }
 
         $xml = new \XMLReader();
         $success = $xml->open($this->filepath);
@@ -126,9 +137,38 @@ class MrtXmlConverter implements StrategyInterface
         }
 
         while ($xml->name == 'PrintProtocol') {
+
+            // Report progress via ftell/totalSize
+            if ($totalSize > 0) {
+                $pos = ftell($fp);
+                if ($pos !== false) {
+                    $percent = (int) floor(($pos / $totalSize) * 100);
+                    if ($percent !== $lastReported && $percent <= 100) {
+                        $lastReported = $percent;
+                        if (null !== $onProgress) { $onProgress($percent); }
+                    }
+                }
+            }
+
             $element = new \SimpleXMLElement($xml->readInnerXML());
+            $element_id = (string) $element['ID'] ?: '0815';
 
             // Step 1: extract protocol info from header
+            if(!isset($element->SubStep->ProtHeaderInfo->HeaderProtPath)) {
+                // no header found, log and continue
+                $this->logger->warning('ne header found in current Protocol with ID: '.$element_id.', skipping..');
+                $xml->next('PrintProtocol');
+            }
+
+            $header = strval($element->SubStep->ProtHeaderInfo->HeaderProtPath);
+
+            /**
+            if(strpos(strval($header), '\\') == false) {
+                $this->logger->warning('malformed header found (without backslash) in current Protocol with ID: '.$element_id.', skipping..');
+                $xml->next('PrintProtocol');
+            }
+             */
+
             $proto_path = explode('\\', strval($element->SubStep->ProtHeaderInfo->HeaderProtPath));
             $region = trim((string)($proto_path[3] ?? ''));
             $actual_sequence = trim(str_replace('*', '', (string)($proto_path[6] ?? '')));
@@ -208,6 +248,10 @@ class MrtXmlConverter implements StrategyInterface
             $xml->next('PrintProtocol');
             unset($element);
         }
+
+        // clean up
+        if (is_resource($fp)) { fclose($fp); }
+        if (null !== $onProgress && $totalSize > 0) { $onProgress(100); }
 
         return serialize($return_arr);
     }

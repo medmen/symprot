@@ -5,6 +5,12 @@ monolog:
 when@dev:
     monolog:
         handlers:
+            request_filtered:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.log"
+                level: warning     # drop info/debug for request channel
+                channels: [ request ]
+                bubble: false      # prevent the record from also going to main
             main:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
