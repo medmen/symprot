@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Symprot — Data Flow, Processing Steps, and Security Measures</title>
+  <meta name="description" content="Documentation of data flow, processing pipeline, and security measures in Symprot.">
+  <meta name="robots" content="noindex,follow">
+</head>
+<body>
+  <header>
+    <h1>Symprot — Data Flow, Processing Steps, and Security Measures</h1>
+    <p><em>Last updated: 2025-12-16 22:38</em></p>
+  </header>
+
+  <nav>
+    <h2>Table of Contents</h2>
+    <ul>
+      <li><a href="#overview">High‑level Overview</a></li>
+      <li><a href="#components">Components and Responsibilities</a></li>
+      <li><a href="#steps">Detailed Processing Steps</a></li>
+      <li><a href="#storage">Data Stored on Disk</a></li>
+      <li><a href="#endpoints">Endpoints Summary</a></li>
+      <li><a href="#security-implemented">Security Measures (Implemented)</a></li>
+      <li><a href="#security-recommendations">Security Recommendations (Further Hardening)</a></li>
+      <li><a href="#ops">Operations &amp; Troubleshooting</a></li>
+      <li><a href="#refs">References (Code Paths)</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="overview">
+      <h2>High‑level Overview</h2>
+      <p>
+        A client triggers processing via the controller action <code>ProtocolController::index()</code>
+        on route <code>/process_upload</code>. The controller validates input and creates a background job
+        under <code>var/procjobs/&lt;jobId&gt;</code>. The background console command
+        <code>app:process-protocol-job &lt;jobId&gt;</code> performs conversion and formatting and writes
+        <code>output.html</code>. The UI polls status and loads the final output when ready.
+      </p>
+      <pre><code>Client
+  │
+  │ 1. GET /process_upload?path=&lt;file&gt;&amp;geraet=&lt;...&gt;&amp;format=html|md
+  ▼
+ProtocolController::index()
+  ├─ Resolve uploads dir + file path
+  ├─ Create job in var/procjobs/&lt;jobId&gt;
+  ├─ Start background process: php bin/console app:process-protocol-job &lt;jobId&gt;
+  └─ Render protocol/index.html.twig with jobId
+
+Browser (CSP-safe external JS module)
+  ├─ Polls GET /process_status/{id}
+  └─ When done: GET /process_output/{id} → injects HTML
+
+Background worker: app:process-protocol-job
+  ├─ Read payload.json
+  ├─ ConverterContext::handle(...) → serialized data (reports progress 20-60%)
+  ├─ FormatterContext::handle(...) → final HTML/MD (progress 60-90%)
+  ├─ Write output.html
+  └─ JobManager::complete(...)
+</code></pre>
+    </section>
+
+    <section id="components">
+      <h2>Components and Responsibilities</h2>
+      <ul>
+        <li>
+          <strong>Controller:</strong> <code>App\Controller\ProtocolController</code>
+          <ul>
+            <li>Route: <code>/process_upload</code> (GET)</li>
+            <li>Creates job; starts background process using <code>Symfony\Component\Process\Process</code> and <code>PhpExecutableFinder</code>.</li>
+            <li>Writes initial status (1%).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Job lifecycle service:</strong> <code>App\Service\JobManager</code>
+          <ul>
+            <li>Job directory: <code>var/procjobs/&lt;jobId&gt;/</code></li>
+            <li>Files: <code>payload.json</code>, <code>status.json</code>, <code>output.html</code></li>
+          </ul>
+        </li>
+        <li>
+          <strong>Background worker command:</strong> <code>App\Command\ProcessProtocolJobCommand</code>
+          <ul>
+            <li>Console name: <code>app:process-protocol-job</code></li>
+            <li>Reads payload, validates source file, converts and formats.</li>
+            <li>Updates status; calls <code>complete()</code> on success or <code>fail()</code> on error.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Job API controller:</strong> <code>App\Controller\ProtocolJobController</code>
+          <ul>
+            <li><code>/process_status/{id}</code> → JSON status</li>
+            <li><code>/process_output/{id}</code> → final HTML (202 until available)</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Frontend:</strong> <code>assets/protocol-polling.js</code> (CSP-safe, no inline JS)
+          <ul>
+            <li>Auto-initialized by <code>assets/app.js</code> when the page contains the <code>#job-root</code> marker.</li>
+            <li>Updates progress bar; injects final HTML into <code>#protocol_output</code>.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section id="steps">
+      <h2>Detailed Processing Steps</h2>
+      <ol>
+        <li>
+          <strong>Client request:</strong>
+          <code>GET /process_upload?path=&lt;relative-path&gt;&amp;geraet=&lt;name&gt;&amp;format=html|md</code>.
+          Absolute path resolved from <code>app.uploads_dir</code>.
+        </li>
+        <li>
+          <strong>Input checks:</strong> Missing/invalid files cause an error response; a short retry loop mitigates slow filesystem finalization.
+        </li>
+        <li>
+          <strong>Job creation:</strong> <code>JobManager::createJob</code> writes <code>payload.json</code> and initial <code>status.json</code>.
+        </li>
+        <li>
+          <strong>Start background worker:</strong> Resolve PHP CLI; execute <code>php bin/console app:process-protocol-job &lt;jobId&gt;</code>; set early status to 1%.
+        </li>
+        <li>
+          <strong>Conversion and formatting:</strong> Update to 5% then 20%; map converter progress to 20–60%; formatting to 90%; write <code>output.html</code>; mark <em>done</em> (100%).
+        </li>
+        <li>
+          <strong>Display result:</strong> UI polls <code>/process_status/{id}</code> and then fetches <code>/process_output/{id}</code> to display the result.
+        </li>
+        <li>
+          <strong>Cleanup:</strong> Input deletion is currently disabled; enable by policy if desired.
+        </li>
+      </ol>
+    </section>
+
+    <section id="storage">
+      <h2>Data Stored on Disk</h2>
+      <ul>
+        <li><code>var/procjobs/&lt;jobId&gt;/payload.json</code></li>
+        <li><code>var/procjobs/&lt;jobId&gt;/status.json</code></li>
+        <li><code>var/procjobs/&lt;jobId&gt;/output.html</code></li>
+      </ul>
+      <p>Retention is not currently enforced; consider a scheduled cleanup task for old jobs.</p>
+    </section>
+
+    <section id="endpoints">
+      <h2>Endpoints Summary</h2>
+      <ul>
+        <li><code>/process_upload</code> (GET) — starts processing, returns page with progress bar.</li>
+        <li><code>/process_status/{id}</code> (GET, JSON) — job state: <em>queued</em> | <em>running</em> | <em>done</em> | <em>failed</em>.</li>
+        <li><code>/process_output/{id}</code> (GET, HTML) — final HTML; <code>202 Accepted</code> until available.</li>
+      </ul>
+    </section>
+
+    <section id="security-implemented">
+      <h2>Security Measures (Implemented)</h2>
+      <ul>
+        <li><strong>Content Security Policy (CSP):</strong> No inline JavaScript on processing page; external ES module loaded via ImportMap with nonce.</li>
+        <li><strong>Background execution hardening:</strong> Explicit PHP binary resolution; defensive logging; early status nudge for UX.</li>
+        <li><strong>Uploads &amp; path handling:</strong> Absolute path from configured uploads dir; existence/readability checks with retry.</li>
+        <li><strong>Job isolation on disk:</strong> Per-job directory under <code>var/procjobs/&lt;jobId&gt;</code>.</li>
+        <li><strong>Watchdog for stuck jobs:</strong> Status endpoint downgrades clearly stuck jobs to <em>failed</em> with a message.</li>
+        <li><strong>Logging:</strong> Structured logs in controller and worker; Monolog tuned in dev/prod.</li>
+      </ul>
+    </section>
+
+    <section id="security-recommendations">
+      <h2>Security Recommendations (Further Hardening)</h2>
+      <ol>
+        <li><strong>Input validation and authorization:</strong> Authenticate/authorize; strictly validate relative paths; prevent traversal.</li>
+        <li><strong>HTTP method and CSRF:</strong> Prefer POST for state changes and include CSRF protection.</li>
+        <li><strong>MIME/type checks:</strong> Whitelist allowed types (e.g., XML only).</li>
+        <li><strong>Output sanitization:</strong> If user content can appear, sanitize before injecting HTML.</li>
+        <li><strong>Rate limiting and quotas:</strong> Prevent DoS and disk exhaustion.</li>
+        <li><strong>Retention and cleanup:</strong> Scheduled cleanup for old job dirs; cap disk usage.</li>
+        <li><strong>Permissions and environment:</strong> Least-privilege FS permissions; ensure required <code>proc_*</code> functions available.</li>
+        <li><strong>Observability:</strong> Correlate logs by <code>jobId</code>; dashboards for job health.</li>
+        <li><strong>Error handling UX:</strong> Clear user guidance on failure; include support code (jobId).</li>
+        <li><strong>Transport security:</strong> Enforce HTTPS; strict CSP; add <code>X-Content-Type-Options: nosniff</code>, <code>Referrer-Policy</code>, <code>Permissions-Policy</code>.</li>
+      </ol>
+    </section>
+
+    <section id="ops">
+      <h2>Operations &amp; Troubleshooting</h2>
+      <ul>
+        <li>Verify CLI: <code>php -v</code>, <code>php bin/console -V</code>, <code>php bin/console app:process-protocol-job &lt;jobId&gt;</code></li>
+        <li>Check logs: <code>var/log/dev.log</code> or <code>var/log/prod.log</code></li>
+        <li>Inspect job directory: <code>var/procjobs/&lt;jobId&gt;/payload.json</code>, <code>status.json</code>, <code>output.html</code></li>
+      </ul>
+    </section>
+
+    <section id="refs">
+      <h2>References (Code Paths)</h2>
+      <ul>
+        <li>Controller: <code>src/Controller/ProtocolController.php</code></li>
+        <li>Background worker: <code>src/Command/ProcessProtocolJobCommand.php</code></li>
+        <li>Job service: <code>src/Service/JobManager.php</code></li>
+        <li>Job APIs: <code>src/Controller/ProtocolJobController.php</code></li>
+        <li>Frontend module: <code>assets/protocol-polling.js</code> and <code>assets/app.js</code></li>
+        <li>Template: <code>templates/protocol/index.html.twig</code></li>
+        <li>Monolog config: <code>config/packages/monolog.yaml</code></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; Symprot Documentation</p>
+  </footer>
+</body>
+</html>

@@ -10,20 +10,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProtocolController extends AbstractController
 {
-    private string $projectDir;
     private string $uploadDir;
     private string $format;
 
-    public function __construct(private ConverterContext $convertercontext, private FormatterContext $formattercontext, private LoggerInterface $logger, KernelInterface $kernel, private JobManager $jobManager)
-    {
-        $this->projectDir = $kernel->getProjectDir();
+    public function __construct(
+        private ConverterContext $convertercontext,
+        private FormatterContext $formattercontext,
+        private LoggerInterface $logger,
+        private string $projectDir,
+        private JobManager $jobManager
+    ) {
+        // $projectDir wird via services.yaml bind ($projectDir: '%kernel.project_dir%') injiziert
     }
 
     // Process by file path (no DB, no Vich)
@@ -116,10 +118,7 @@ class ProtocolController extends AbstractController
             'format' => $this->format,
         ];
 
-        // Create job
-        // $jobManager = $this->container->get(JobManager::class);
-        $jobManager = $this->jobManager;
-        $jobId = $jobManager->createJob($payload);
+        $jobId = $this->jobManager->createJob($payload);
 
         // Start background Symfony command
         try {
@@ -137,8 +136,6 @@ class ProtocolController extends AbstractController
             $this->logger->debug('in ProtocolController::index running bg-job with runtime: '.$php.' '.$console.' app:process-protocol-job '.$jobId, []);
 
             $process = new Process([$php, $console, 'app:process-protocol-job', $jobId], $this->projectDir);
-            // $process->disableOutput(); // uncomment unless you need to debug
-            $logPath = $this->jobManager->dir($jobId) . '/spawn.log';
             $process->setTimeout(null); // allow long-running job, internal watchdog handles timeout
 
             $this->logger->debug('About to start background process', [
@@ -146,7 +143,7 @@ class ProtocolController extends AbstractController
                 'cwd' => $this->projectDir,
             ]);
 
-            $process->start(); // temporarily without callback for isolation
+            $process->start();
 
             usleep(50_000); // 50ms
             $this->logger->debug('Process start() returned', [

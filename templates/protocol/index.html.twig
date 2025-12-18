@@ -24,41 +24,11 @@
     </div>
 
     {% if jobId is defined %}
-        <script nonce="{{ csp_nonce('script') }}">
-            (function(){
-                var jobId = {{ jobId|json_encode|raw }};
-                var bar = document.getElementById('progress_bar');
-                var fill = bar ? bar.querySelector('.fill') : null;
-                var label = bar ? bar.querySelector('.label') : null;
-                var msg = document.getElementById('progress_msg');
-                var out = document.getElementById('protocol_output');
-                var done = false;
-                function setPct(p){ if(!fill||!label)return; var pct=Math.max(0,Math.min(100,Math.round(p))); fill.style.width=pct+'%'; label.textContent=pct+'%'; }
-                function poll(){
-                    if(done) return;
-                    fetch('{{ path('process_status', {'id':'__ID__'})|e('js') }}'.replace('__ID__', jobId), {credentials:'same-origin'})
-                        .then(function(r){ return r.json(); })
-                        .then(function(s){
-                            if(s.percent!=null) setPct(s.percent);
-                            if(msg && s.message) msg.textContent = s.message;
-                            if(s.status === 'done'){
-                                done = true;
-                                if(msg) msg.textContent = 'Fertig';
-                                fetch('{{ path('process_output', {'id':'__ID__'})|e('js') }}'.replace('__ID__', jobId), {credentials:'same-origin'})
-                                    .then(function(r){ return r.text(); })
-                                    .then(function(html){ if(out){ out.innerHTML = html; } });
-                            } else if(s.status === 'failed'){
-                                done = true;
-                                if(msg) msg.textContent = 'Fehler: ' + (s.error || 'Unbekannt');
-                                if(out){ out.innerHTML = '<div class="alert alert-danger">Verarbeitung fehlgeschlagen: '+(s.error||'Unbekannt')+'</div>'; }
-                            } else {
-                                setTimeout(poll, 1000);
-                            }
-                        })
-                        .catch(function(){ setTimeout(poll, 1500); });
-                }
-                poll();
-            })();
-        </script>
+        {# CSP-safe: external module will read these data attributes #}
+        <div id="job-root"
+             data-job-id="{{ jobId }}"
+             data-status-url="{{ path('process_status', {id: jobId}) }}"
+             data-output-url="{{ path('process_output', {id: jobId}) }}"
+             hidden></div>
     {% endif %}
 {% endblock %}
