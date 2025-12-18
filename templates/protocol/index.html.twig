@@ -3,18 +3,12 @@
 {% block title %}Protokoll Ausgabe - {{ geraet }}{% endblock %}
 
 {% block body %}
-    <form method="get" target="./">
-        <input type="submit" name="format"
-               class="button" value="html" />
-
-        <input type="submit" name="format"
-               class="button" value="md" label="markdown" />
+    <form method="get" action="{{ path('process_upload') }}">
+        <input type="submit" name="format" class="button" value="html" />
+        <input type="submit" name="format" class="button" value="md" />
     </form>
 
-
 <div class="output-wrapper">
-
     {{ output|raw }}
-
 </div>
 {% endblock %}

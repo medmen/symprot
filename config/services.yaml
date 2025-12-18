@@ -13,6 +13,7 @@ services:
     _defaults:
         bind:
             $appUploadsDir: '%app.uploads_dir%'
+            $projectDir: '%kernel.project_dir%'
 
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
