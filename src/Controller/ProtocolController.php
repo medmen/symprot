@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Formatter\FormatterContext;
 use App\Strategy\ConverterContext;
+use App\Service\StatusLogger;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,7 +20,11 @@ class ProtocolController extends AbstractController
     private string $format;
 
     public function __construct(
-        private ConverterContext $convertercontext, private FormatterContext $formattercontext, private LoggerInterface $logger, KernelInterface $kernel)
+        private ConverterContext $convertercontext,
+        private FormatterContext $formattercontext,
+        private LoggerInterface $logger,
+        private StatusLogger $statusLogger,
+        KernelInterface $kernel)
     {
         // $projectDir wird via services.yaml bind ($projectDir: '%kernel.project_dir%') injiziert
     }
@@ -31,10 +37,25 @@ class ProtocolController extends AbstractController
         $this->uploadDir = (string) $this->getParameter('app.uploads_dir');
         $this->format = $request->query->get('format') ?? 'html';
 
+        // Create a new status token for this request and init the status log
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+        $token = bin2hex(random_bytes(12));
+        $session->set('status_token', $token);
+
         $path = (string) ($request->query->get('path') ?? '');
         $geraet = (string) ($request->query->get('geraet') ?? '');
         $mime = '';
         $filetype = '';
+
+        // initialize status file
+        $this->statusLogger->init($token, [
+            'path' => $path,
+            'geraet' => $geraet,
+            'format' => $this->format,
+        ]);
+        $this->statusLogger->append($token, 'Request received and initialized');
 
         // If no path is provided, try to re-apply a formatter on existing session data
         if ($path === '') {
@@ -48,7 +69,9 @@ class ProtocolController extends AbstractController
 
             if ($serialized_and_parsed_data && $modality_and_mime) {
                 try {
-                    $formatted_data = $this->formattercontext->handle($modality_and_mime, $serialized_and_parsed_data, $this->format);
+                    $this->statusLogger->append($token, 'Re-formatting existing session data');
+                    $formatted_data = $this->formattercontext->withStatus($this->statusLogger, $token)->handle($modality_and_mime, $serialized_and_parsed_data, $this->format);
+                    $this->statusLogger->complete($token, true, 'Re-formatting done');
 
                     return $this->render('protocol/index.html.twig', [
                         'geraet' => $modality_and_mime->geraet ?? $geraet,
@@ -56,6 +79,8 @@ class ProtocolController extends AbstractController
                         'errors' => [ 'filetype' => $last_filetype ],
                         'output' => $formatted_data,
                         'controller_name' => 'ProtocolController',
+                        'status_token' => $token,
+                        'status_url' => $this->generateUrl('status_poll', ['token' => $token]),
                     ]);
                 } catch (\Throwable $e) {
                     try {
@@ -64,6 +89,8 @@ class ProtocolController extends AbstractController
                             'message' => $e->getMessage(),
                         ]);
                     } catch (\Throwable $ignore) {}
+                    $this->statusLogger->append($token, 'Re-formatting failed: ' . $e->getMessage());
+                    $this->statusLogger->complete($token, false, 'Re-formatting error');
 
                     return $this->render('protocol/index.html.twig', [
                         'geraet' => $modality_and_mime->geraet ?? $geraet,
@@ -71,6 +98,8 @@ class ProtocolController extends AbstractController
                         'errors' => ['Reformatting failed: '.$e->getMessage()],
                         'output' => 'Fehler bei der Neuformatierung: '.$e->getMessage(),
                         'controller_name' => 'ProtocolController',
+                        'status_token' => $token,
+                        'status_url' => $this->generateUrl('status_poll', ['token' => $token]),
                     ]);
                 }
             }
@@ -81,6 +110,8 @@ class ProtocolController extends AbstractController
                 'errors' => ['Kein gespeichertes Protokoll vorhanden. Bitte zuerst eine Datei verarbeiten.'],
                 'output' => '',
                 'controller_name' => 'ProtocolController',
+                'status_token' => $token,
+                'status_url' => $this->generateUrl('status_poll', ['token' => $token]),
             ]);
         }
 
@@ -127,15 +158,22 @@ class ProtocolController extends AbstractController
                     ]);
                 } catch (\Throwable $ignore) {}
 
+                // progress log
+                $this->statusLogger->append($token, 'File not found: ' . ($fullfilepath ?: '(leer)'));
+                $this->statusLogger->complete($token, false, 'Upload missing');
+
                 return $this->render('protocol/index.html.twig', [
                     'geraet' => $geraet,
                     'protocol' => ($path ? basename($path) : ''),
                     'errors' => $errors,
                     'output' => 'Umwandlung fehlgeschlagen, erwartete Datei nicht gefunden: '.($fullfilepath ?: '(leer)'),
                     'controller_name' => 'ProtocolController',
+                    'status_token' => $token,
+                    'status_url' => $this->generateUrl('status_poll', ['token' => $token]),
                 ]);
             }
         }
+        $this->statusLogger->append($token, 'Upload located: ' . basename($fullfilepath));
 
         // define new plain object for transport of necessary values
         $modality_and_mime = new \stdClass();
@@ -149,7 +187,8 @@ class ProtocolController extends AbstractController
         $errors = [ 'filetype' => $filetype ];
 
         try {
-            $serialized_and_parsed_data = $this->convertercontext->handle($modality_and_mime);
+            $this->statusLogger->append($token, 'Starting conversion');
+            $serialized_and_parsed_data = $this->convertercontext->withStatus($this->statusLogger, $token)->handle($modality_and_mime);
 
             if (!$session->isStarted()) {
                 $session->start();
@@ -165,7 +204,10 @@ class ProtocolController extends AbstractController
                 'Die Datei wurde hochgeladen. Sie wird nun im Hintergrund analysiert und umgewandelt. Die Ausgabe erfolgt im Fenster unten.',
             );
 
-            $formatted_data = $this->formattercontext->handle($modality_and_mime, $serialized_and_parsed_data, $this->format);
+            $this->statusLogger->append($token, 'Starting formatting');
+            $formatted_data = $this->formattercontext->withStatus($this->statusLogger, $token)->handle($modality_and_mime, $serialized_and_parsed_data, $this->format);
+
+            $this->statusLogger->complete($token, true, 'Processing finished');
 
             // if both converter and formatter completed, we can delete afterwards
             $deleteAfterSuccess = true;
@@ -176,6 +218,8 @@ class ProtocolController extends AbstractController
                     'message' => $e->getMessage(),
                 ]);
             } catch (\Throwable $ignore) {}
+            $this->statusLogger->append($token, 'Processing failed: ' . $e->getMessage());
+            $this->statusLogger->complete($token, false, 'Processing error');
             $errors[] = 'Verarbeitung fehlgeschlagen: '.$e->getMessage();
             $formatted_data = 'Fehler bei der Verarbeitung: '.$e->getMessage();
         } finally {
@@ -197,6 +241,22 @@ class ProtocolController extends AbstractController
             'errors' => $errors,
             'output' => $formatted_data,
             'controller_name' => 'ProtocolController',
+            'status_token' => $token,
+            'status_url' => $this->generateUrl('status_poll', ['token' => $token]),
         ]);
+    }
+
+    #[Route(path: '/status/{token}', name: 'status_poll', methods: ['GET'])]
+    public function pollStatus(string $token, SessionInterface $session): JsonResponse
+    {
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+        $expected = (string) ($session->get('status_token') ?? '');
+        if (!$expected || !hash_equals($expected, $token)) {
+            return new JsonResponse(['error' => 'invalid token'], 403);
+        }
+        $data = $this->statusLogger->read($token);
+        return new JsonResponse($data);
     }
 }

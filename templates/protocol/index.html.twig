@@ -8,7 +8,17 @@
         <input type="submit" name="format" class="button" value="md" />
     </form>
 
+<div id="protocol-status" data-url="{{ status_url|default('') }}" data-token="{{ status_token|default('') }}">
+    <h5>Status</h5>
+    <pre id="status-log" style="min-height: 6em; max-height: 14em; overflow: auto; background: #111; color: #9f9; padding: .5em; border-radius: .25em;">Warte auf Aktualisierungen...</pre>
+</div>
+
 <div class="output-wrapper">
     {{ output|raw }}
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/protocol-status.js') }}" nonce="{{ csp_nonce('script') }}" defer></script>
 {% endblock %}

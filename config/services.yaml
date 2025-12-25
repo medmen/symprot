@@ -49,3 +49,5 @@ services:
         arguments:
             - !tagged_iterator app.formatter_strategy
             - '@request_stack'
+
+    App\Service\StatusLogger: ~
