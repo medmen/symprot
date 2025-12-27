@@ -67,6 +67,10 @@ class ProtocolController extends AbstractController
             $last_filename = (string) ($session->get('last_protocol_filename') ?? '');
             $last_filetype = (string) ($session->get('last_filetype') ?? '');
 
+            if (!$serialized_and_parsed_data && !$modality_and_mime) {
+                return $this->redirectToRoute('index');
+            }
+
             if ($serialized_and_parsed_data && $modality_and_mime) {
                 try {
                     $this->statusLogger->append($token, 'Re-formatting existing session data');
