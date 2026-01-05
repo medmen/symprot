@@ -90,6 +90,11 @@ class MrtXmlConverter implements StrategyInterface
             }
             // store target params in object so we can retrieve from other functions
             $this->target_params = $target_params;
+            // treat some special cases: for TE Fields TE 1 and TE 2 can also be valid
+            if(in_array('TE', $target_params)) {
+                $this->target_params[] = 'TE 1';
+                $this->target_params[] = 'TE 2';
+            }
         }
 
         // clean up

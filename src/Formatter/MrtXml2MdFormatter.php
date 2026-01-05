@@ -99,7 +99,16 @@ class MrtXml2MdFormatter implements FormatterStrategyInterface
                 // build row cells only for display keys (omit region and protocol)
                 $cells = [];
                 foreach ($displayKeys as $k) {
-                    $cells[] = isset($row[$k]) ? (string)$row[$k] : '';
+                    $value = isset($row[$k]) ? (string)$row[$k] : '';
+                    // Special case: if 'TE' is empty, try to concat 'TE 1' and 'TE 2' with a slash
+                    if ($value === '' && strtoupper((string)$k) === 'TE') {
+                        $te1 = trim((string)($row['TE 1'] ?? ''));
+                        $te2 = trim((string)($row['TE 2'] ?? ''));
+                        if ($te1 !== '' || $te2 !== '') {
+                            $value = $te1 !== '' && $te2 !== '' ? ($te1.'/'.$te2) : ($te1 !== '' ? $te1 : $te2);
+                        }
+                    }
+                    $cells[] = $value;
                 }
                 $tbody .= '<tr><td>'.implode('</td><td>', $cells).'</td></tr>';
                 $seqCount++;

@@ -41,8 +41,18 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
             return '<div class="alert alert-warning">No data</div>';
         }
 
-        // Build a single header from the first row, but omit region and protocol columns
-        $allKeys = array_keys($proto_arr[0]);
+        // Build a single header from the row with largest field count, but omit region and protocol columns
+        $allKeys = [];
+        $maxSize = -1;
+        foreach ($proto_arr as $row) {
+            if (!is_array($row)) { continue; }
+            $size = count($row);
+            if ($size > $maxSize) {
+                $maxSize = $size;
+                $allKeys = array_keys($row);
+            }
+        }
+
         $displayKeys = array_values(array_filter($allKeys, function ($k) {
             $lk = strtolower((string)$k);
             return $lk !== 'region' && $lk !== 'protocol';
@@ -101,11 +111,20 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
                 // build row cells only for display keys (omit region and protocol)
                 $cells = [];
                 foreach ($displayKeys as $k) {
-                    $cells[] = isset($row[$k]) ? (string)$row[$k] : '';
+                    $value = isset($row[$k]) ? (string)$row[$k] : '';
+                    // Special case: if 'TE' is empty, try to concat 'TE 1' and 'TE 2' with a slash
+                    if ($value === '' && strtoupper((string)$k) === 'TE') {
+                        $te1 = trim((string)($row['TE 1'] ?? ''));
+                        $te2 = trim((string)($row['TE 2'] ?? ''));
+                        if ($te1 !== '' || $te2 !== '') {
+                            $value = $te1 !== '' && $te2 !== '' ? ($te1.'/'.$te2) : ($te1 !== '' ? $te1 : $te2);
+                        }
+                    }
+                    $cells[] = $value;
                 }
                 $tbody .= '<tr><td>'.implode('</td><td>', $cells).'</td></tr>';
                 $seqCount++;
-                $taVal = isset($row['ta']) ? (string)$row['ta'] : '';
+                $taVal = isset($row['TA']) ? (string)$row['TA'] : '';
                 $totalTaSeconds += $this->parseTaToSeconds($taVal);
             }
 
