@@ -88,13 +88,14 @@ class MrtXmlConverter implements StrategyInterface
                     $target_params[] = strtolower((string)$name);
                 }
             }
+            // treat some special cases: for TE Fields TE 1 and TE 2 can also be valid
+            if(in_array('te', $target_params)) {
+                $target_params[] = 'te 1';
+                $target_params[] = 'te 2';
+            }
             // store target params in object so we can retrieve from other functions
             $this->target_params = $target_params;
-            // treat some special cases: for TE Fields TE 1 and TE 2 can also be valid
-            if(in_array('TE', $target_params)) {
-                $this->target_params[] = 'TE 1';
-                $this->target_params[] = 'TE 2';
-            }
+
         }
 
         // clean up
@@ -192,6 +193,15 @@ class MrtXmlConverter implements StrategyInterface
                 }
             }
 
+            // if TE is in target_params but empty --> fill with TE1/TE2
+            if(in_array('te', $this->target_params)) {
+                if (!isset($prod['TE']) and isset($prod['TE 1']) and isset($prod['TE 2'])) {
+                    $prod['TE'] = $prod['TE 1'].'/'.$prod['TE 2'];
+                    unset($prod['TE 1'], $prod['TE 2']);
+                }
+            }
+
+
             // Reorder collected parameters according to admin-defined order ($this->target_params)
             $meta = [
                 'region' => $prod['region'] ?? null,
@@ -209,6 +219,7 @@ class MrtXmlConverter implements StrategyInterface
                     }
                 }
             }
+
             $return_arr[] = $meta + $ordered;
             $xml->next('PrintProtocol');
             unset($element);

@@ -112,14 +112,6 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
                 $cells = [];
                 foreach ($displayKeys as $k) {
                     $value = isset($row[$k]) ? (string)$row[$k] : '';
-                    // Special case: if 'TE' is empty, try to concat 'TE 1' and 'TE 2' with a slash
-                    if ($value === '' && strtoupper((string)$k) === 'TE') {
-                        $te1 = trim((string)($row['TE 1'] ?? ''));
-                        $te2 = trim((string)($row['TE 2'] ?? ''));
-                        if ($te1 !== '' || $te2 !== '') {
-                            $value = $te1 !== '' && $te2 !== '' ? ($te1.'/'.$te2) : ($te1 !== '' ? $te1 : $te2);
-                        }
-                    }
                     $cells[] = $value;
                 }
                 $tbody .= '<tr><td>'.implode('</td><td>', $cells).'</td></tr>';
@@ -182,6 +174,6 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
         if ($seq === '') {
             return false;
         }
-        return str_contains($seq, 'localizer') || str_contains($seq, 'scout') || str_contains($seq, 'topo');
+        return str_contains($seq, 'localizer') || str_contains($seq, 'scout') || str_contains($seq, 'topo') || str_contains($seq, 'fastview');
     }
 }
