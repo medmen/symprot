@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use XMLReader;
+use App\Service\StatusLogger;
 
 class MrtXmlConverter implements StrategyInterface
 {
@@ -24,18 +25,29 @@ class MrtXmlConverter implements StrategyInterface
     private string $filepath;
     private string $format;
     private string $appUploadsDir;
-
     private ParameterRepository $parameterRepository;
-
     private array $can_process_mimetype = ['application/xml', 'text/xml'];
+    private ?string $statusToken = null;
 
-    public function __construct(EntityManagerInterface $entityManager, ContainerBagInterface $params, LoggerInterface $procLogger, KernelInterface $kernelif, string $appUploadsDir)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ContainerBagInterface $params,
+        LoggerInterface $procLogger,
+        KernelInterface $kernelif,
+        string $appUploadsDir,
+        private StatusLogger $statusLogger)
     {
         $this->entityManager = $entityManager;
         $this->params = $params;
         $this->logger = $procLogger;
         $this->kernel = $kernelif->getProjectDir();
         $this->appUploadsDir = $appUploadsDir;
+    }
+
+    public function withStatus(StatusLogger $logger, string $token): void
+    {
+        // Logger already injected via constructor; only store token for appends
+        $this->statusToken = $token;
     }
 
     public function canProcess($data)
@@ -54,6 +66,10 @@ class MrtXmlConverter implements StrategyInterface
 
     public function process($data): string
     {
+        // sample status entry at the very start of processing
+        if ($this->statusToken) {
+            try { $this->statusLogger->append($this->statusToken, 'processing started'); } catch (\Throwable $e) { /* ignore logging errors */ }
+        }
         // return(serialize(array('error' => 'MRT XML conversion is not_yet_implemented')));
 
         // get all parameters we selected for chosen geraet (unless already preset)
@@ -221,6 +237,14 @@ class MrtXmlConverter implements StrategyInterface
             }
 
             $return_arr[] = $meta + $ordered;
+            // debug: sleep to slow down and test async processing
+            // usleep(100000);
+
+            // add message for every 10 sequences processed (using modulo operator)
+            if (count($return_arr) % 10 == 0) {
+                try { $this->statusLogger->append($this->statusToken, 'processed '.count($return_arr).' sequences'); } catch (\Throwable $e) { /* ignore logging errors */ }
+            }
+
             $xml->next('PrintProtocol');
             unset($element);
         }

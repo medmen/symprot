@@ -85,7 +85,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (payload && payload.status === 'ok' && payload.processUrl) {
                         renderProgress(100);
                         // Automatically start processing by navigating to the process URL
-                        window.location.href = payload.processUrl;
+                        var u1 = new URL(payload.processUrl, window.location.origin);
+                        if (u1.pathname.indexOf('/process_upload') !== -1 && !u1.searchParams.has('async') && !u1.searchParams.has('token')) {
+                            u1.searchParams.set('async', '1');
+                        }
+                        window.location.href = u1.toString();
                         return;
                     }
                 } catch (e) {
@@ -97,7 +101,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (xhr.status >= 300 && xhr.status < 400) {
                 var locationHeader = xhr.getResponseHeader('Location');
                 if (locationHeader) {
-                    window.location.href = locationHeader;
+                    try {
+                        var u2 = new URL(locationHeader, window.location.origin);
+                        if (u2.pathname.indexOf('/process_upload') !== -1 && !u2.searchParams.has('async') && !u2.searchParams.has('token')) {
+                            u2.searchParams.set('async', '1');
+                        }
+                        window.location.href = u2.toString();
+                    } catch (e) {
+                        window.location.href = locationHeader;
+                    }
                     return;
                 }
             }
@@ -105,7 +117,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (xhr.status >= 200 && xhr.status < 400) {
                 // If server redirected, responseURL points to final URL
                 if (xhr.responseURL && xhr.responseURL !== window.location.href) {
-                    window.location.href = xhr.responseURL;
+                    try {
+                        var u3 = new URL(xhr.responseURL, window.location.origin);
+                        if (u3.pathname.indexOf('/process_upload') !== -1 && !u3.searchParams.has('async') && !u3.searchParams.has('token')) {
+                            u3.searchParams.set('async', '1');
+                        }
+                        window.location.href = u3.toString();
+                    } catch (e) {
+                        window.location.href = xhr.responseURL;
+                    }
                 } else {
                     // Fallback: if the response seems to be an HTML page with the form (validation errors),
                     // replace the main content so the user sees errors instead of silent reload

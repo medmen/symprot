@@ -19,6 +19,9 @@ return [
     'upload_progress' => [
         'path' => './assets/upload_progress.js',
     ],
+    'protocol-status' => [
+        'path' => './assets/protocol-status.js',
+    ],
     'bootstrap' => [
         'version' => '5.3.8',
     ],

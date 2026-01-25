@@ -37,11 +37,12 @@ class ProtocolController extends AbstractController
         $this->uploadDir = (string) $this->getParameter('app.uploads_dir');
         $this->format = $request->query->get('format') ?? 'html';
 
-        // Create a new status token for this request and init the status log
+        // Reuse token from query if present (async redirect), otherwise create a new one
         if (!$session->isStarted()) {
             $session->start();
         }
-        $token = bin2hex(random_bytes(12));
+        $existingToken = (string) ($request->query->get('token') ?? '');
+        $token = $existingToken !== '' ? $existingToken : bin2hex(random_bytes(12));
         $session->set('status_token', $token);
 
         $path = (string) ($request->query->get('path') ?? '');
@@ -49,16 +50,74 @@ class ProtocolController extends AbstractController
         $mime = '';
         $filetype = '';
 
-        // initialize status file
-        $this->statusLogger->init($token, [
-            'path' => $path,
-            'geraet' => $geraet,
-            'format' => $this->format,
-        ]);
-        $this->statusLogger->append($token, 'Request received and initialized');
+        // Async progressive enhancement: if async=1 and a path is provided, return the page immediately and let JS start processing
+        $async = (string) ($request->query->get('async') ?? '0');
+        if ($path !== '' && $async === '1') {
+            // Initialize status for this run
+            $this->statusLogger->init($token, [
+                'path' => $path,
+                'geraet' => $geraet,
+                'format' => $this->format,
+            ]);
+            $this->statusLogger->append($token, 'Async mode: page rendered, starting background processing via XHR');
 
-        // If no path is provided, try to re-apply a formatter on existing session data
+            return $this->render('protocol/index.html.twig', [
+                'geraet' => $geraet,
+                'protocol' => ($path ? basename($path) : ''),
+                'errors' => [],
+                'output' => '',
+                'controller_name' => 'ProtocolController',
+                'status_token' => $token,
+                'status_url' => $this->generateUrl('status_poll', ['token' => $token]),
+                'status_start' => $this->generateUrl('process_upload_start', [
+                    'token' => $token,
+                    'path' => $path,
+                    'geraet' => $geraet,
+                    'format' => $this->format,
+                ]),
+                'status_redirect' => $this->generateUrl('process_upload', [
+                    'token' => $token,
+                    'format' => $this->format,
+                ]),
+            ]);
+        }
+
+        // Only (re-)initialize status file when a new processing run is requested (path provided)
+        if ($path !== '') {
+            $this->statusLogger->init($token, [
+                'path' => $path,
+                'geraet' => $geraet,
+                'format' => $this->format,
+            ]);
+            $this->statusLogger->append($token, 'Request received and initialized');
+        }
+
+        // If no path is provided, attempt to render from cached output (async redirect), else re-apply formatter on session data
         if ($path === '') {
+            // 1) Prefer cached final output written by async start
+            $cachedOutput = $this->statusLogger->readOutput($token);
+            if ($cachedOutput !== null) {
+                // Try to retrieve meta for display
+                $last_filename = (string) ($session->get('last_protocol_filename') ?? '');
+                $last_filetype = (string) ($session->get('last_filetype') ?? '');
+                $modality_and_mime = $session->get('modality_and_mime');
+                $geraetName = is_object($modality_and_mime) && property_exists($modality_and_mime, 'geraet') ? $modality_and_mime->geraet : $geraet;
+
+                // Clear only the cached output; keep the log for user to read if needed
+                $this->statusLogger->clearOutput($token);
+
+                return $this->render('protocol/index.html.twig', [
+                    'geraet' => $geraetName,
+                    'protocol' => $last_filename,
+                    'errors' => [ 'filetype' => $last_filetype ],
+                    'output' => $cachedOutput,
+                    'controller_name' => 'ProtocolController',
+                    'status_token' => $token,
+                    'status_url' => $this->generateUrl('status_poll', ['token' => $token]),
+                ]);
+            }
+
+            // 2) Re-apply formatter on existing session data (legacy path)
             if (!$session->isStarted()) {
                 $session->start();
             }
@@ -203,10 +262,13 @@ class ProtocolController extends AbstractController
             $session->set('last_protocol_filename', ($path ? basename($path) : ''));
             $session->set('last_filetype', $filetype);
 
-            $this->addFlash(
-                'success',
-                'Die Datei wurde hochgeladen. Sie wird nun im Hintergrund analysiert und umgewandelt. Die Ausgabe erfolgt im Fenster unten.',
-            );
+            /**
+             **** No need for flash message if we use statusloger with XHR
+             * $this->addFlash(
+             *    'success',
+             *    'Die Datei wurde hochgeladen. Sie wird nun im Hintergrund analysiert und umgewandelt. Die Ausgabe erfolgt im Fenster unten.',
+             * );
+             */
 
             $this->statusLogger->append($token, 'Starting formatting');
             $formatted_data = $this->formattercontext->withStatus($this->statusLogger, $token)->handle($modality_and_mime, $serialized_and_parsed_data, $this->format);
@@ -248,6 +310,95 @@ class ProtocolController extends AbstractController
             'status_token' => $token,
             'status_url' => $this->generateUrl('status_poll', ['token' => $token]),
         ]);
+    }
+
+    #[Route(path: '/process_upload/start/{token}', name: 'process_upload_start', methods: ['GET'])]
+    public function startProcessing(string $token, Request $request, SessionInterface $session): JsonResponse
+    {
+        // Validate token
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+        $expected = (string) ($session->get('status_token') ?? '');
+        if (!$expected || !hash_equals($expected, $token)) {
+            return new JsonResponse(['error' => 'invalid token'], 403);
+        }
+
+        // Release the session lock so polling can read concurrently
+        $session->save();
+
+        $path = (string) ($request->query->get('path') ?? '');
+        $geraet = (string) ($request->query->get('geraet') ?? '');
+        $format = (string) ($request->query->get('format') ?? 'html');
+
+        // Resolve file
+        $this->uploadDir = (string) $this->getParameter('app.uploads_dir');
+        $fullfilepath = rtrim($this->uploadDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+
+        $mime = '';
+        $filetype = '';
+        if (is_file($fullfilepath)) {
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mime = (string) ($finfo->file($fullfilepath) ?: 'application/octet-stream');
+            $filetype = ($mime && str_contains($mime, '/')) ? ucfirst(explode('/', $mime)[1]) : pathinfo($fullfilepath, PATHINFO_EXTENSION);
+        }
+
+        $this->statusLogger->append($token, 'Background: starting conversion');
+
+        $deleteAfterSuccess = false;
+        try {
+            if (!is_file($fullfilepath)) {
+                $this->statusLogger->append($token, 'File not found: ' . ($fullfilepath ?: '(leer)'));
+                $this->statusLogger->complete($token, false, 'Upload missing');
+                return new JsonResponse(['status' => 'fail', 'reason' => 'file missing'], 404);
+            }
+
+            // Prepare transport object
+            $modality_and_mime = new \stdClass();
+            $modality_and_mime->geraet = $geraet;
+            $modality_and_mime->mimetype = $mime;
+            $modality_and_mime->filename = ($path ? basename($path) : '');
+
+            // Convert
+            $serialized_and_parsed_data = $this->convertercontext->withStatus($this->statusLogger, $token)->handle($modality_and_mime);
+
+            // Briefly reopen session to store small meta for later reformatting
+            if (!$session->isStarted()) { $session->start(); }
+            $session->set('serialized_and_parsed_data', $serialized_and_parsed_data);
+            $session->set('modality_and_mime', $modality_and_mime);
+            $session->set('last_protocol_filename', ($path ? basename($path) : ''));
+            $session->set('last_filetype', $filetype);
+            $session->save(); // close again
+
+            // Format (primary output)
+            $this->statusLogger->append($token, 'Background: starting formatting');
+            $formatted_data = $this->formattercontext->withStatus($this->statusLogger, $token)->handle($modality_and_mime, $serialized_and_parsed_data, $format);
+
+            // Write final HTML output to cache for redirect rendering
+            $this->statusLogger->writeOutput($token, (string) $formatted_data);
+
+            $this->statusLogger->complete($token, true, 'Processing finished');
+            $deleteAfterSuccess = true;
+
+            // Attempt to delete uploaded file after successful end
+            try {
+                if ($path && is_file($fullfilepath)) {
+                    @unlink($fullfilepath);
+                }
+            } catch (\Throwable $e) { /* ignore */ }
+
+            return new JsonResponse(['status' => 'ok']);
+        } catch (\Throwable $e) {
+            try {
+                $this->logger->error('ProtocolController start: processing failed', [
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                ]);
+            } catch (\Throwable $ignore) {}
+            $this->statusLogger->append($token, 'Processing failed: ' . $e->getMessage());
+            $this->statusLogger->complete($token, false, 'Processing error');
+            return new JsonResponse(['status' => 'fail', 'error' => $e->getMessage()], 500);
+        }
     }
 
     #[Route(path: '/status/{token}', name: 'status_poll', methods: ['GET'])]

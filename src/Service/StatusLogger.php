@@ -20,6 +20,12 @@ class StatusLogger
         return $this->statusDir . DIRECTORY_SEPARATOR . $token . '.log';
     }
 
+    private function getOutputPath(string $token): string
+    {
+        $token = preg_replace('/[^a-zA-Z0-9_-]/', '_', $token);
+        return $this->statusDir . DIRECTORY_SEPARATOR . $token . '.out.html';
+    }
+
     public function init(string $token, array $meta = []): void
     {
         $path = $this->getFilePath($token);
@@ -66,11 +72,38 @@ class StatusLogger
         return ['lines' => $lines, 'done' => $done];
     }
 
+    public function writeOutput(string $token, string $html): void
+    {
+        $path = $this->getOutputPath($token);
+        file_put_contents($path, $html);
+    }
+
+    public function readOutput(string $token): ?string
+    {
+        $path = $this->getOutputPath($token);
+        if (is_file($path)) {
+            return (string) file_get_contents($path);
+        }
+        return null;
+    }
+
+    public function clearOutput(string $token): void
+    {
+        $path = $this->getOutputPath($token);
+        if (is_file($path)) {
+            @unlink($path);
+        }
+    }
+
     public function clear(string $token): void
     {
         $path = $this->getFilePath($token);
         if (is_file($path)) {
             @unlink($path);
+        }
+        $out = $this->getOutputPath($token);
+        if (is_file($out)) {
+            @unlink($out);
         }
     }
 }
