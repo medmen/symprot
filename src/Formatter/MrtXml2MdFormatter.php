@@ -30,7 +30,7 @@ class MrtXml2MdFormatter implements FormatterStrategyInterface
 
     public function format($serialized_payload, $format)
     {
-        $this->logger->debug('MrtXml2MdFormatter::format was called');
+        $this->logger->debug('MrtXml2HtmlFormatter::format was called');
         $proto_arr = unserialize($serialized_payload);
 
         // treat errors
@@ -42,32 +42,45 @@ class MrtXml2MdFormatter implements FormatterStrategyInterface
             return '<div class="alert alert-warning">No data</div>';
         }
 
-        // Build a single header from the first row (same header for all tables), omitting region and protocol
-        $allKeys = array_keys($proto_arr[0]);
+        // Build a single header from the row with largest field count, but omit region and protocol columns
+        $allKeys = [];
+        $maxSize = -1;
+        foreach ($proto_arr as $row) {
+            if (!is_array($row)) { continue; }
+            $size = count($row);
+            if ($size > $maxSize) {
+                $maxSize = $size;
+                $allKeys = array_keys($row);
+            }
+        }
+
         $displayKeys = array_values(array_filter($allKeys, function ($k) {
             $lk = strtolower((string)$k);
             return $lk !== 'region' && $lk !== 'protocol';
         }));
         $td_count = count($displayKeys);
-        $thead = '<tr><th>'.implode('</th><th>', $displayKeys).'</th></tr>';
+        $thead = '<tr><th> ^ '.implode('</th><th> ^ ', $displayKeys).' ^ </th></tr>';
 
         // Segment rows into protocol groups using starter sequences in the 'sequence' field
         $groups = [];
         $current = [];
-        $inStarterRun = false;
+        $inStarterRun = false; // true while we are inside a run of consecutive starters
 
         foreach ($proto_arr as $row) {
             if (!is_array($row)) { continue; }
-            $starter = $this->isStarter($row);
+            $starter = HelperFunctions::isStarter($row);
 
             if ($starter) {
+                // If we encounter a starter and the current group exists and was not a starter run, split
                 if (!empty($current) && $inStarterRun === false) {
                     $groups[] = $current;
                     $current = [];
                 }
+                // Add starter to current group (consecutive starters remain in same group)
                 $current[] = $row;
                 $inStarterRun = true;
             } else {
+                // Non-starter rows just join the current group
                 $current[] = $row;
                 $inStarterRun = false;
             }
@@ -100,23 +113,15 @@ class MrtXml2MdFormatter implements FormatterStrategyInterface
                 $cells = [];
                 foreach ($displayKeys as $k) {
                     $value = isset($row[$k]) ? (string)$row[$k] : '';
-                    // Special case: if 'TE' is empty, try to concat 'TE 1' and 'TE 2' with a slash
-                    if ($value === '' && strtoupper((string)$k) === 'TE') {
-                        $te1 = trim((string)($row['TE 1'] ?? ''));
-                        $te2 = trim((string)($row['TE 2'] ?? ''));
-                        if ($te1 !== '' || $te2 !== '') {
-                            $value = $te1 !== '' && $te2 !== '' ? ($te1.'/'.$te2) : ($te1 !== '' ? $te1 : $te2);
-                        }
-                    }
                     $cells[] = $value;
                 }
-                $tbody .= '<tr><td>'.implode('</td><td>', $cells).'</td></tr>';
+                $tbody .= '<tr><td class="text-left"> | '.implode('</td><td class="text-left"> | ', $cells).' | </td></tr>';
                 $seqCount++;
-                $taVal = isset($row['ta']) ? (string)$row['ta'] : '';
-                $totalTaSeconds += $this->parseTaToSeconds($taVal);
+                $taVal = isset($row['TA']) ? (string)$row['TA'] : '';
+                $totalTaSeconds += HelperFunctions::parseTaToSeconds($taVal);
             }
 
-            $totalTaFormatted = $this->formatSeconds($totalTaSeconds);
+            $totalTaFormatted = HelperFunctions::formatSeconds($totalTaSeconds);
             $titleProtocol = htmlspecialchars((string)$protocol, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
             $titleRegion = htmlspecialchars((string)$regionLabel, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
             $heading = $titleRegion !== ''
@@ -124,50 +129,13 @@ class MrtXml2MdFormatter implements FormatterStrategyInterface
                 : "Protocol: {$titleProtocol}";
 
             $html .= "<h5 class='mt-3 mb-2'>{$heading}</h5>";
-            $html .= "<table class='table-dark table-responsive output-table bordered'>"
-                  .  "<thead>{$thead}</thead>"
-                  .  "<tfoot><td colspan={$td_count}>sequences: {$seqCount} • total TA: {$totalTaFormatted}</td></tfoot>"
-                  .  "<tbody>{$tbody}</tbody>"
-                  .  "</table>";
+            $html .= "<table class='table-dark table-responsive output-table '>"
+                .  "<thead>{$thead}</thead>"
+                .  "<tbody>{$tbody}</tbody>"
+                .  "<tfoot><td colspan={$td_count}> | sequences: {$seqCount} • total TA: {$totalTaFormatted}".str_repeat('|', $td_count)."</td></tfoot>"
+                .  "</table>";
         }
 
         return $html;
-    }
-
-    private function parseTaToSeconds(string $value): int
-    {
-        $value = trim($value);
-        if ($value === '') {
-            return 0;
-        }
-        if (str_contains($value, ':')) {
-            [$m, $s] = array_pad(explode(':', $value, 2), 2, '0');
-            $m = (int)trim($m);
-            $s = (int)trim($s);
-            if ($m < 0) { $m = 0; }
-            if ($s < 0) { $s = 0; }
-            return $m * 60 + $s;
-        }
-        if (is_numeric($value)) {
-            $sec = (int)$value;
-            return $sec > 0 ? $sec : 0;
-        }
-        return 0;
-    }
-
-    private function formatSeconds(int $seconds): string
-    {
-        $minutes = intdiv($seconds, 60);
-        $secs = $seconds % 60;
-        return sprintf('%d:%02d', $minutes, $secs);
-    }
-
-    private function isStarter(array $row): bool
-    {
-        $seq = strtolower(trim((string)($row['sequence'] ?? '')));
-        if ($seq === '') {
-            return false;
-        }
-        return str_contains($seq, 'localizer') || str_contains($seq, 'scout') || str_contains($seq, 'topo');
     }
 }

@@ -30,6 +30,7 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
 
     public function format($serialized_payload, $format)
     {
+        $this->logger->debug('MrtXml2HtmlFormatter::format was called');
         $proto_arr = unserialize($serialized_payload);
 
         // treat errors
@@ -67,7 +68,7 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
 
         foreach ($proto_arr as $row) {
             if (!is_array($row)) { continue; }
-            $starter = $this->isStarter($row);
+            $starter = HelperFunctions::isStarter($row);
 
             if ($starter) {
                 // If we encounter a starter and the current group exists and was not a starter run, split
@@ -117,10 +118,10 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
                 $tbody .= '<tr><td>'.implode('</td><td>', $cells).'</td></tr>';
                 $seqCount++;
                 $taVal = isset($row['TA']) ? (string)$row['TA'] : '';
-                $totalTaSeconds += $this->parseTaToSeconds($taVal);
+                $totalTaSeconds += HelperFunctions::parseTaToSeconds($taVal);
             }
 
-            $totalTaFormatted = $this->formatSeconds($totalTaSeconds);
+            $totalTaFormatted = HelperFunctions::formatSeconds($totalTaSeconds);
             $titleProtocol = htmlspecialchars((string)$protocol, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
             $titleRegion = htmlspecialchars((string)$regionLabel, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
             $heading = $titleRegion !== ''
@@ -138,35 +139,6 @@ class MrtXml2HtmlFormatter implements FormatterStrategyInterface
         return $html;
     }
 
-    private function parseTaToSeconds(string $value): int
-    {
-        $value = trim($value);
-        if ($value === '') {
-            return 0;
-        }
-        // handle mm:ss
-        if (str_contains($value, ':')) {
-            [$m, $s] = array_pad(explode(':', $value, 2), 2, '0');
-            $m = (int)trim($m);
-            $s = (int)trim($s);
-            if ($m < 0) { $m = 0; }
-            if ($s < 0) { $s = 0; }
-            return $m * 60 + $s;
-        }
-        // plain seconds
-        if (is_numeric($value)) {
-            $sec = (int)$value;
-            return $sec > 0 ? $sec : 0;
-        }
-        return 0;
-    }
-
-    private function formatSeconds(int $seconds): string
-    {
-        $minutes = intdiv($seconds, 60);
-        $secs = $seconds % 60;
-        return sprintf('%d:%02d', $minutes, $secs);
-    }
 
     private function isStarter(array $row): bool
     {
