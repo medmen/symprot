@@ -1,10 +1,24 @@
+## node will update itself
 /node_modules/
+
+## subfolders in public 
 /public/build/
+/public/uploads/
+/public/bundles/
+
 /var/
 /vendor/
 /.composer-cache/
 /.idea/
-/public/uploads/
 php.xml
-.env.local*
+.env*.local
 /public/assets/
+
+# Composer PHAR
+/composer.phar
+
+# Backup entities generated with doctrine:generate:entities command
+**/Entity/*~
+
+# Embedded web-server pid file
+/.web-server-pid
