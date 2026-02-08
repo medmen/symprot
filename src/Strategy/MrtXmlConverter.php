@@ -217,6 +217,13 @@ class MrtXmlConverter implements StrategyInterface
                 }
             }
 
+            // if TA is in target_params and only holds seconds, format as 0:ss
+            if(in_array('ta', $this->target_params)) {
+                if(isset($prod['TA']) and str_contains($prod['TA'], ':') == false) {
+                    $prod['TA'] = '0:'.sprintf('%02d', $prod['TA']);
+                }
+            }
+
 
             // Reorder collected parameters according to admin-defined order ($this->target_params)
             $meta = [

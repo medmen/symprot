@@ -39,7 +39,7 @@ class StatusLogger
     public function append(string $token, string $message): void
     {
         $path = $this->getFilePath($token);
-        $line = '[' . date('H:i:s') . '] ' . $message . "\n";
+        $line = '[' . date('H:i:s') . '.' . sprintf('%03d', (int)(microtime(true) * 1000) % 1000) . '] ' . $message . "\n";
         file_put_contents($path, $line, FILE_APPEND);
     }
 

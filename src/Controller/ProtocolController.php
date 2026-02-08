@@ -331,6 +331,9 @@ class ProtocolController extends AbstractController
         $geraet = (string) ($request->query->get('geraet') ?? '');
         $format = (string) ($request->query->get('format') ?? 'html');
 
+        $this->statusLogger->append($token, 'Background: startProcessing call initiated');
+        $startTime = microtime(true);
+
         // Resolve file
         $this->uploadDir = (string) $this->getParameter('app.uploads_dir');
         $fullfilepath = rtrim($this->uploadDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
@@ -377,7 +380,7 @@ class ProtocolController extends AbstractController
             // Write final HTML output to cache for redirect rendering
             $this->statusLogger->writeOutput($token, (string) $formatted_data);
 
-            $this->statusLogger->complete($token, true, 'Processing finished');
+            $this->statusLogger->complete($token, true, 'Processing finished in ' . round(microtime(true) - $startTime, 3) . 's');
             $deleteAfterSuccess = true;
 
             // Attempt to delete uploaded file after successful end

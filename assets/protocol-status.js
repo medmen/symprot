@@ -27,11 +27,23 @@
     var lastRendered = [];
     var done = false;
     var started = false;
+    var startTimestamp = null;
+    var warnedAboutDelay = false;
     var redirected = false;
     var redirectUrl = container.getAttribute('data-redirect') || '';
 
     function render(lines){
       if(!Array.isArray(lines)) return;
+
+      // Check for delay if we have started but not done
+      if (startTimestamp && !done && !warnedAboutDelay) {
+        var elapsed = (Date.now() - startTimestamp) / 1000;
+        if (elapsed > 5 && lines.length <= 1) { // Only [START] or very few lines
+          lines.push("[WAIT] Scanning file... this may take a moment (external VM delay)");
+          warnedAboutDelay = true;
+        }
+      }
+
       if(lines.join('\n') === lastRendered.join('\n')) return;
       lastRendered = lines.slice();
       logEl.textContent = lines.join('\n');
@@ -52,6 +64,9 @@
           if(!data) return;
           if(Array.isArray(data.lines)){
             render(data.lines);
+          } else {
+            // If data.lines is missing but we're polling, still trigger render to check for timeout
+            render(lastRendered);
           }
           if(data.done){
             done = true;
@@ -79,6 +94,7 @@
     function startRemote(){
       if(started || !startUrl) return;
       started = true;
+      startTimestamp = Date.now();
       // Fire-and-forget to trigger processing on server; do not block UI
       fetch(startUrl, { credentials: 'same-origin' })
         .catch(function(){ /* ignore */ });
