@@ -1,0 +1,4 @@
+.ea-move-highlight {
+    background-color: #fff3cd !important;
+    transition: background-color 0.5s ease-out;
+}

@@ -20,5 +20,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/protocol-status.js') }}" nonce="{{ csp_nonce('script') }}" defer></script>
+    <script src="{{ asset('protocol-status.js') }}" nonce="{{ csp_nonce('script') }}" defer></script>
 {% endblock %}

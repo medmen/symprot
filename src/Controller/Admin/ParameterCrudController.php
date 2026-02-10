@@ -50,8 +50,8 @@ class ParameterCrudController extends AbstractCrudController
     {
         // Include external, non-inline assets to comply with CSP (no 'unsafe-inline').
         return $assets
-            ->addCssFile('build/ea-move-highlight.css')
-            ->addJsFile('build/ea-move-highlight.js');
+            ->addCssFile('styles/ea-move-highlight.css')
+            ->addJsFile('ea-move-highlight.js');
     }
 
     public function configureFilters(Filters $filters): Filters

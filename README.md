@@ -63,6 +63,8 @@ if the command fails, you can try to run `php bin/console doctrine:schema:update
 
 `php bin/console asset-map:compile` - will pack, arrange and order all required javascript, CSS and Image files for highest performance in live environment
 
+`php bin/console assets:install public` - will make sure assets fur bundled packages are packed and correctly placed 
+
 ### optional: populate the Database:
 `php bin/console seed:load` - this will load some example data into the database, so you can test the app
 
@@ -100,7 +102,7 @@ Symprot now logs the progress of protocol processing (converter and formatter) t
 - How the UI updates (AJAX polling)
   - The controller exposes a JSON endpoint at `GET /status/{token}` (route name `status_poll`).
   - The Protocol page renders a status container with `data-url` and `data-token` attributes.
-  - A separate, CSP-compliant JavaScript file `public/js/protocol-status.js` polls the endpoint every second and renders the lines into a `<pre>`.
+  - A separate, CSP-compliant JavaScript file `assets/protocol-status.js` polls the endpoint every second and renders the lines into a `<pre>`.
 
 - CSP compliance
   - No inline scripts are used for the polling logic; the script is served as an external file.
@@ -114,7 +116,7 @@ Symprot now logs the progress of protocol processing (converter and formatter) t
     - `src/Strategy/ConverterContext.php` and `src/Formatter/FormatterContext.php`: emit additional progress lines for selected strategies.
   - Frontend
     - `templates/protocol/index.html.twig`: includes a status panel and references the external JS file.
-    - `public/js/protocol-status.js`: polls the backend and updates the UI.
+    - `assets/protocol-status.js`: polls the backend and updates the UI.
 
 - How to test
   1. Process a file via the Protocol UI so that `ProtocolController::index` runs.
