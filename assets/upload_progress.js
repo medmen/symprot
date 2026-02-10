@@ -6,6 +6,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var progressBar = document.getElementById('progress_bar');
+    var logEl = document.getElementById('status-log');
+
+    function getTimestamp() {
+        var now = new Date();
+        var h = String(now.getHours()).padStart(2, '0');
+        var m = String(now.getMinutes()).padStart(2, '0');
+        var s = String(now.getSeconds()).padStart(2, '0');
+        var ms = String(now.getMilliseconds()).padStart(3, '0');
+        return '[' + h + ':' + m + ':' + s + '.' + ms + ']';
+    }
+
+    function log(msg) {
+        var ts = getTimestamp();
+        console.info(ts + ' ' + msg);
+        if (logEl) {
+            var line = document.createElement('div');
+            line.textContent = ts + ' ' + msg;
+            logEl.appendChild(line);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+    }
 
     // Helper to render progress into the existing <div id="progress_bar"> element
     function renderProgress(percent) {
@@ -60,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var xhr = new XMLHttpRequest();
         var data = new FormData(form); // includes CSRF token and all fields
 
+        log('Starting upload...');
+
         // Include the clicked submit button (Symfony may rely on it in certain setups)
         if (e.submitter && e.submitter.name) {
             data.append(e.submitter.name, e.submitter.value || '');
@@ -70,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
         xhr.upload.onprogress = function (event) {
             if (event.lengthComputable) {
                 var percent = (event.loaded / event.total) * 100;
-                console.info('Upload progress: ' + percent + '%');
+                log('Upload progress: ' + Math.round(percent) + '%');
                 renderProgress(percent);
             }
         };
@@ -83,9 +106,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 try {
                     var payload = JSON.parse(xhr.responseText);
                     if (payload && payload.status === 'ok' && payload.processUrl) {
+                        log('Upload successful, redirecting to processing...');
                         renderProgress(100);
                         // Automatically start processing by navigating to the process URL
-                        window.location.href = payload.processUrl;
+                        var u1 = new URL(payload.processUrl, window.location.origin);
+                        if (u1.pathname.indexOf('/process_upload') !== -1 && !u1.searchParams.has('async') && !u1.searchParams.has('token')) {
+                            u1.searchParams.set('async', '1');
+                        }
+                        window.location.href = u1.toString();
                         return;
                     }
                 } catch (e) {
@@ -97,7 +125,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (xhr.status >= 300 && xhr.status < 400) {
                 var locationHeader = xhr.getResponseHeader('Location');
                 if (locationHeader) {
-                    window.location.href = locationHeader;
+                    try {
+                        var u2 = new URL(locationHeader, window.location.origin);
+                        if (u2.pathname.indexOf('/process_upload') !== -1 && !u2.searchParams.has('async') && !u2.searchParams.has('token')) {
+                            u2.searchParams.set('async', '1');
+                        }
+                        window.location.href = u2.toString();
+                    } catch (e) {
+                        window.location.href = locationHeader;
+                    }
                     return;
                 }
             }
@@ -105,7 +141,16 @@ document.addEventListener('DOMContentLoaded', function () {
             if (xhr.status >= 200 && xhr.status < 400) {
                 // If server redirected, responseURL points to final URL
                 if (xhr.responseURL && xhr.responseURL !== window.location.href) {
-                    window.location.href = xhr.responseURL;
+                    try {
+                        log('Upload redirected to: ' + xhr.responseURL);
+                        var u3 = new URL(xhr.responseURL, window.location.origin);
+                        if (u3.pathname.indexOf('/process_upload') !== -1 && !u3.searchParams.has('async') && !u3.searchParams.has('token')) {
+                            u3.searchParams.set('async', '1');
+                        }
+                        window.location.href = u3.toString();
+                    } catch (e) {
+                        window.location.href = xhr.responseURL;
+                    }
                 } else {
                     // Fallback: if the response seems to be an HTML page with the form (validation errors),
                     // replace the main content so the user sees errors instead of silent reload
@@ -132,6 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         xhr.onerror = function () {
+            log('Network error during upload');
             console.error('Network error during upload');
             alert('Netzwerkfehler beim Upload. Bitte erneut versuchen.');
         };
