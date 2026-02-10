@@ -36,6 +36,10 @@ class ConverterContext
         foreach ($this->strategies as $strategy) {
             if ($strategy->canProcess($data)) {
                 if ($this->statusLogger && $this->statusToken) {
+                    // Give the selected strategy access to the status logger/token if it supports it
+                    if (method_exists($strategy, 'withStatus')) {
+                        try { $strategy->withStatus($this->statusLogger, $this->statusToken); } catch (\Throwable $e) { /* ignore optional hook */ }
+                    }
                     $this->statusLogger->append($this->statusToken, 'Converter selected: ' . get_class($strategy));
                 }
                 $result = $strategy->process($data);

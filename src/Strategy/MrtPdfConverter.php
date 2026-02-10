@@ -258,8 +258,14 @@ class MrtPdfConverter implements StrategyInterface
             // if we split by 1 or more blank spaces, first item is 'TA', second item holds time value
             $parts = preg_split("/\s+/", $arrival_time->innertext);
             if ('TA:' == trim($parts[0])) {
-                $output_array[$region_proto_sequence]['messdauer'] = trim($parts[1]);
-                $this->logger->debug(' measurement time is ..'.trim($parts[1])."<br>\n");
+                $ta = trim($parts[1]);
+                // if TA is in target_params and only holds seconds, format as 0:ss
+                if(str_contains($ta, ':') == false) {
+                    $ta = '0:'.sprintf('%02d', $ta);
+                }
+
+                $output_array[$region_proto_sequence]['messdauer'] = $ta;
+                $this->logger->debug(' measurement time is: '.$ta);
             }
             break; // ne need to search for other occurrences
         }

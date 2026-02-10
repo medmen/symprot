@@ -19,14 +19,17 @@ return [
     'upload_progress' => [
         'path' => './assets/upload_progress.js',
     ],
+    'protocol-status' => [
+        'path' => './assets/protocol-status.js',
+    ],
     'bootstrap' => [
-        'version' => '5.3.8',
+        'path' => 'vendor/bootstrap/bootstrap.index.js',
     ],
     '@popperjs/core' => [
-        'version' => '2.11.8',
+        'path' => 'vendor/@popperjs/core/core.index.js',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
-        'version' => '5.3.8',
+        'path' => 'vendor/bootstrap/dist/css/bootstrap.min.css',
         'type' => 'css',
     ],
 ];
