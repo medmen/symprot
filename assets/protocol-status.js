@@ -30,7 +30,17 @@
     var startTimestamp = null;
     var warnedAboutDelay = false;
     var redirected = false;
-    var redirectUrl = container.getAttribute('data-redirect') || '';
+    // Sanitize redirect URL: allow only same-origin http/https URLs and resolve relative paths safely
+    var redirectUrlRaw = container.getAttribute('data-redirect') || '';
+    var safeRedirectUrl = '';
+    try {
+      if (redirectUrlRaw) {
+        var parsedRedirect = new URL(redirectUrlRaw, window.location.origin);
+        if ((parsedRedirect.protocol === 'http:' || parsedRedirect.protocol === 'https:') && parsedRedirect.origin === window.location.origin) {
+          safeRedirectUrl = parsedRedirect.toString();
+        }
+      }
+    } catch (e) { /* ignore invalid redirect */ }
 
     function render(lines){
       if(!Array.isArray(lines)) return;
@@ -73,9 +83,9 @@
             // Decide based on last line
             try{
               var last = lastRendered.length ? lastRendered[lastRendered.length - 1] : '';
-              if(redirectUrl && typeof last === 'string' && last.indexOf('[END OK]') === 0 && !redirected){
+              if(safeRedirectUrl && typeof last === 'string' && last.indexOf('[END OK]') === 0 && !redirected){
                 redirected = true;
-                setTimeout(function(){ window.location.assign(redirectUrl); }, 500);
+                setTimeout(function(){ window.location.assign(safeRedirectUrl); }, 500);
               }
             } catch(e) {}
           }
