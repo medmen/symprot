@@ -1,6 +1,5 @@
+# folder public has its own gitignore!
 /node_modules/
-/public/
-!/public/index.php
 /var/
 /vendor/
 /.composer-cache/
