@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -75,6 +76,7 @@ class ParameterCrudController extends AbstractCrudController
         yield TextField::new('parameter_name');
         yield BooleanField::new('parameter_selected');
     }
+
     public function configureActions(Actions $actions): Actions
     {
         $moveTop = Action::new('moveTop', false, 'fa fa-arrow-up')
@@ -112,26 +114,31 @@ class ParameterCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, $moveTop);
     }
 
+    #[AdminRoute]
     public function moveTop(AdminContext $context): Response
     {
         return $this->move($context, Direction::Top);
     }
 
+    #[AdminRoute]
     public function moveUp(AdminContext $context): Response
     {
         return $this->move($context, Direction::Up);
     }
 
+    #[AdminRoute]
     public function moveDown(AdminContext $context): Response
     {
         return $this->move($context, Direction::Down);
     }
 
+    #[AdminRoute]
     public function moveBottom(AdminContext $context): Response
     {
         return $this->move($context, Direction::Bottom);
     }
 
+    #[AdminRoute]
     private function move(AdminContext $context, Direction $direction): Response
     {
         /** @var \App\Entity\Parameter $object */
