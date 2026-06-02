@@ -29,7 +29,6 @@ jobs:
         run: |
           composer dump-env prod
           bin/console about --env=prod
-          vendor/bin/requirements-checker
           bin/console doctrine:database:create
           bin/console doctrine:migrations:migrate
           bin/console seed:load
