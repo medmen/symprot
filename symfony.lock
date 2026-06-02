@@ -99,6 +99,9 @@
     "maximebf/debugbar": {
         "version": "v1.16.5"
     },
+    "medmen/seed-bundle": {
+        "version": "dev-master"
+    },
     "monolog/monolog": {
         "version": "2.3.1"
     },
